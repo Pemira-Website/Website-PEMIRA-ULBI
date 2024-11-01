@@ -10,7 +10,7 @@
 
 <body class="bg-white flex items-center justify-center min-h-screen">
     <!-- Container Utama -->
-    <div class="border p-8 rounded-lg shadow-lg w-full max-w-md">
+    <div class=" p-8 rounded-lg shadow-lg shadow-cyan-600 w-full max-w-md">
         <!-- Title -->
         <h2 class="text-center text-xl font-semibold text-blue-900 mb-6">Login <span class="text-orange-500">Pemilih</span></h2>
 
