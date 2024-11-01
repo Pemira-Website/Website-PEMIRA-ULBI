@@ -61,7 +61,7 @@
             Pemira adalah momen penting bagi kita semua. Suara Anda adalah kekuatan untuk membentuk masa depan kampus yang lebih baik dan adil. Pilihlah dengan bijak, karena setiap suara memiliki dampak nyata.
           </p>
           <div class="mt-6">
-            <a href="#" class="bg-blue-900 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-700">Ayo Voting</a>
+            <a href="/login" class="bg-blue-900 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-700">Ayo Voting</a>
           </div>
         </div>
 
