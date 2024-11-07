@@ -37,9 +37,10 @@ class AuthController extends Controller
                     Session::put('npm', $user->npm);
                     Session::put('nama', $user->nama);
                     Session::put('prodi', $user->prodi);
+                    
 
                     // Redirect ke halaman utama atau dashboard
-                    return redirect()->route('home');
+                    return redirect()->route('menuvote');
                 }
             } else {
                 return redirect()->back()->withErrors(['error' => 'Password tidak sesuai!']);
@@ -53,5 +54,14 @@ class AuthController extends Controller
     {
         Session::flush();
         return redirect()->route('login');
+    }
+    public function menuvote()
+    {
+        return view('menu_vote');
+    }
+    
+    public function paslon()
+    {
+        return view('paslon');
     }
 }
