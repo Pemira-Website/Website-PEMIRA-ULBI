@@ -9,57 +9,77 @@
 </head>
 <body class=" flex items-center justify-center ">
     <div class="space-y-10">
+        <br>
         <!-- Card Component -->
-        <div class="bg-blue-900 text-white rounded-lg w-[700px] mx-auto overflow-hidden">
-            <!-- Title Section -->
-            <div class="text-center py-2 bg-blue-900">
-                <h2 class="text-xl font-semibold">Paslon 1</h2>
-            </div>
-            <!-- Content Section -->
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <!-- Capres Image Placeholder -->
-                    <div class="w-36 h-48 bg-gray-300 flex items-center justify-center">
-                        <span class="text-black font-semibold">Capres</span>
-                    </div>
-                    <!-- Cawapres Image Placeholder -->
-                    <div class="w-36 h-48 bg-gray-300 flex items-center justify-center">
-                        <span class="text-black font-semibold">Cawapres</span>
+          <!-- Card Component -->
+          <div class="bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 shadow- rounded-lg w-[700px]"[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]">
+            <div class="bg-text-white w-[700px]">
+                <br>
+                <div class="text-center py-2">
+                    <h2 class="text-xl text-white font-extrabold">Paslon 1</h2>
+                </div>
+                <!-- Content Section -->
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <!-- Capres Image Placeholder -->
+                        <div class="w-36 h-48 bg-gray-300 flex items-center justify-center">
+                            <span class="text-black font-semibold">Capres</span>
+                        </div>
+                        <!-- Cawapres Image Placeholder -->
+                        <div class="w-36 h-48 bg-gray-300 flex items-center justify-center">
+                            <span class="text-black font-semibold">Cawapres</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- Button Section with White Background -->
-            <div class="bg-white py-4 flex justify-center gap-4">
-                <button class="bg-blue-700 text-white py-2 px-6 rounded hover:bg-blue-800">Vote</button>
-                <button class="bg-orange-500 text-white py-2 px-6 rounded hover:bg-orange-600">Detail Profil</button>
+            <div class="py-4 flex justify-center gap-4">
+                <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-blue-700 hover:-translate-y-1 hover:scale-110 hover:bg-blue-900 duration-300">
+                    Vote
+                  </button>
+                <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-orange-500 hover:-translate-y-1 hover:scale-110 hover:bg-orange-600 duration-300">
+                    Detail Profil
+                  </button>
             </div>
+            <br>   
         </div>
 
-        <!-- Duplicate Card Component for the Second Card -->
-        <div class="bg-blue-900 text-white rounded-lg w-[700px] mx-auto overflow-hidden">
-            <!-- Title Section -->
-            <div class="text-center py-2 bg-blue-900">
-                <h2 class="text-xl font-semibold">Paslon 1</h2>
-            </div>
-            <!-- Content Section -->
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <!-- Capres Image Placeholder -->
-                    <div class="w-36 h-48 bg-gray-300 flex items-center justify-center">
-                        <span class="text-black font-semibold">Capres</span>
-                    </div>
-                    <!-- Cawapres Image Placeholder -->
-                    <div class="w-36 h-48 bg-gray-300 flex items-center justify-center">
-                        <span class="text-black font-semibold">Cawapres</span>
+        <br>
+        <!-- Card Component -->
+        <div class="bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 shadow- rounded-lg w-[700px]"[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]">
+            <div class="bg-text-white w-[700px]">
+                <br>
+                <div class="text-center py-2">
+                    <h2 class="text-xl text-white font-extrabold">Paslon 2</h2>
+                </div>
+                <!-- Content Section -->
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <!-- Capres Image Placeholder -->
+                        <div class="w-36 h-48 bg-gray-300 flex items-center justify-center">
+                            <span class="text-black font-semibold">Capres</span>
+                        </div>
+                        <!-- Cawapres Image Placeholder -->
+                        <div class="w-36 h-48 bg-gray-300 flex items-center justify-center">
+                            <span class="text-black font-semibold">Cawapres</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- Button Section with White Background -->
-            <div class="bg-white py-4 flex justify-center gap-4">
-                <button class="bg-blue-700 text-white py-2 px-6 rounded hover:bg-blue-800">Vote</button>
-                <button class="bg-orange-500 text-white py-2 px-6 rounded hover:bg-orange-600">Detail Profil</button>
+            <div class="py-4 flex justify-center gap-4">
+                <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-blue-700 hover:-translate-y-1 hover:scale-110 hover:bg-blue-900 duration-300">
+                    Vote
+                  </button>
+                <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-orange-500 hover:-translate-y-1 hover:scale-110 hover:bg-orange-600 duration-300">
+                    Detail Profil
+                  </button>
             </div>
+            <br>   
         </div>
+        <br>
     </div>
+
 </body>
+
 </html>
