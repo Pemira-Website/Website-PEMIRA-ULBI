@@ -6,8 +6,20 @@ export default {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: { 
+      boxShadow: {
+        'text': '2px 2px 4px rgba(0, 0, 0, 0.5)', // Kustom shadow untuk teks
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.text-shadow': {
+          textShadow: '10px 2px 4px rgba(0, 0, 0, 0.5)', // Kustom shadow untuk teks
+        },
+      })
+    },
+  ],
 }
 
