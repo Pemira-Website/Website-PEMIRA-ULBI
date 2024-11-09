@@ -1,3 +1,4 @@
+<!-- resources/views/paslon.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,11 +7,11 @@
     <title>Paslon 1</title>
     @vite('resources/css/app.css') <!-- Include Tailwind CSS -->
 </head>
-<body class="bg-gradient-to-r from-orange-200 to-blue-200 flex items-center justify-center">
+<body class="bg-gradient-to-r from-orange-200 to-blue-200 flex items-center justify-center ">
     <div class="space-y-10">
         <br>
-        <!-- Card Component -->
-        <div class="bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 shadow- rounded-lg w-[700px]"[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]">
+          <!-- Card Component -->
+          <div class="bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 shadow- rounded-lg w-[700px]"[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]">
             <div class="bg-text-white w-[700px]">
                 <br>
                 <div class="text-center py-2">
@@ -32,14 +33,12 @@
             </div>
             <!-- Button Section with White Background -->
             <div class="py-4 flex justify-center gap-4">
-                <!-- Vote Button -->
-                <button id="voteButton1" class="vote-btn text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-blue-700 hover:scale-110 hover:bg-white hover:text-blue-700 duration-300" onclick="vote('button1')">
+                <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-blue-700 hover:-translate-y-1 hover:scale-110 hover:bg-blue-900 duration-300">
                     Vote
-                </button>
-                <!-- Detail Profil Button -->
-                <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-orange-500 hover:scale-110 hover:bg-white hover:text-orange-500 duration-300">
+                  </button>
+                <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-orange-500 hover:-translate-y-1 hover:scale-110 hover:bg-orange-600 duration-300">
                     Detail Profil
-                </button>
+                  </button>
             </div>
             <br>   
         </div>
@@ -68,32 +67,18 @@
             </div>
             <!-- Button Section with White Background -->
             <div class="py-4 flex justify-center gap-4">
-                <!-- Vote Button -->
-                <button id="voteButton2" class="vote-btn text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-blue-700 hover:scale-110 hover:bg-white hover:text-blue-700 duration-300" onclick="vote('button2')">
+                <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-blue-700 hover:-translate-y-1 hover:scale-110 hover:bg-blue-900 duration-300">
                     Vote
-                </button>
-                <!-- Detail Profil Button -->
-                <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-orange-500 hover:scale-110 hover:bg-white hover:text-orange-500 duration-300">
+                  </button>
+                <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-orange-500 hover:-translate-y-1 hover:scale-110 hover:bg-orange-600 duration-300">
                     Detail Profil
-                </button>
+                  </button>
             </div>
             <br>   
         </div>
         <br>
     </div>
 
-    <script>
-        // Fungsi untuk menangani klik vote
-        function vote(buttonId) {
-            // Menyembunyikan tombol vote yang tidak dipilih
-            if (buttonId === 'button1') {
-                document.getElementById('voteButton2').style.display = 'none';
-                document.getElementById('voteButton2').disabled = true;  // Disable tombol lainnya
-            } else if (buttonId === 'button2') {
-                document.getElementById('voteButton1').style.display = 'none';
-                document.getElementById('voteButton1').disabled = true;  // Disable tombol lainnya
-            }
-        }
-    </script>
 </body>
+
 </html>

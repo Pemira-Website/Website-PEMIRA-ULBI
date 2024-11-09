@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Accounts;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -27,41 +28,28 @@ class AuthController extends Controller
         // Cari akun berdasarkan NPM
         $user = Accounts::where('npm', $npm)->first();
 
-        if ($user) {
-            // Verifikasi password tanpa hash
-            if ($password === $user->password) { // Langsung membandingkan plaintext password
-                if ($user->total_vote == 2) {
-                    return redirect()->back()->withErrors(['error' => 'Anda sudah menggunakan hak suara anda.']);
-                } else {
-                    // Simpan informasi ke session
-                    Session::put('npm', $user->npm);
-                    Session::put('nama', $user->nama);
-                    Session::put('prodi', $user->prodi);
-                    
-
-                    // Redirect ke halaman utama atau dashboard
-                    return redirect()->route('menuvote');
-                }
-            } else {
-                return redirect()->back()->withErrors(['error' => 'Password tidak sesuai!']);
+        if ($user && Hash::check($password, $user->password)) { // Verifikasi password dengan hash
+            if ($user->total_vote == 2) {
+                return redirect()->back()->withErrors(['error' => 'Anda sudah menggunakan hak suara anda.']);
             }
+
+            // Simpan informasi user ke dalam session
+            Session::put('npm', $user->npm);
+            Session::put('nama', $user->nama);
+            Session::put('prodi', $user->prodi);
+
+            // Redirect ke halaman menuvote sesuai prodi
+            return redirect()->route('menuvote', ['prodi' => $user->prodi]);
         } else {
-            return redirect()->back()->withErrors(['error' => 'NPM tidak sesuai!']);
+            return redirect()->back()->withErrors(['error' => 'NPM atau password tidak sesuai!']);
         }
     }
 
     public function logout()
     {
+        // Hapus session
         Session::flush();
         return redirect()->route('login');
     }
-    public function menuvote()
-    {
-        return view('menu_vote');
-    }
-    
-    public function paslon()
-    {
-        return view('paslon');
-    }
 }
+

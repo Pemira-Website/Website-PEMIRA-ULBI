@@ -2,13 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MenuVoteController;
+use App\Http\Controllers\PaslonController;
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/', function () {
-    return view('welcome'); // Pastikan Anda membuat file welcome.blade.php
+    return view('welcome');
 })->name('home');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/menuvote', [AuthController::class, 'menuvote']);
-Route::get('/paslon', [AuthController::class, 'paslon']);
+Route::get('/menuvote/{prodi}', [MenuVoteController::class, 'show'])->name('menuvote');
+Route::get('/paslon', [PaslonController::class, 'paslon']);
+
 ?>
