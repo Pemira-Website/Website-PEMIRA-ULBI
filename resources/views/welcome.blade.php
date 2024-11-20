@@ -67,8 +67,8 @@
 
         <!-- Placeholder Gambar -->
         <div class="flex items-center justify-center mt-8">
-          <div class="w-full h-64 bg-white- flex items-center justify-center">
-            <img class="w-full h-64 object-contain" src="{{ asset('images/LOGO ULBI - WIDE DARK (3).png') }}" alt="Logo Pemira">
+          <div class="w-full h-96 bg-white- flex items-center justify-center">
+            <img class="w-full h-96 object-contain" src="{{ asset('images/pemira.png') }}" alt="Logo Pemira">
           </div>
         </div>
       </div>
