@@ -45,8 +45,7 @@
         </div>
 
         <!-- Card untuk menu Ketua Himpunan -->
-        <div
-            class="bg-white flex items-center space-x-6 shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)] rounded-lg p-6">
+        <div class="bg-white flex items-center space-x-6 shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)] rounded-lg p-6">
             <!-- Logo Himpunan di sebelah kiri -->
             <div class="flex-shrink-0 w-14 h-14 flex items-center justify-center">
                 <img class="max-w-full h-auto text-gray-600" fill="currentColor" viewBox="0 0 20 20"

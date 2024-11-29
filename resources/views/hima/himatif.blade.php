@@ -29,7 +29,7 @@
             </div>
             <!-- Deskripsi teks untuk card Presma -->
             <div class="flex-grow">
-                <span class="text-orange-500 text-xl font-extrabold drop-shadow-md shadow-blue-600/50">Presma Kema</span> <span class="text-white font-semibold">ULBI Periode 2024/2025</span>
+                <span class="text-white text-xl font-extrabold drop-shadow-md shadow-blue-600/50">Presma Kema</span> <span class="text-white font-semibold">ULBI Periode 2024/2025</span>
             </div>
             <!-- Tombol untuk memilih Presma -->
             <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-orange-500 hover:scale-110 hover:bg-white hover:text-orange-500 duration-300">
@@ -52,7 +52,7 @@
             </div>
             <!-- Deskripsi teks untuk card Ketua Himpunan -->
             <div class="flex-grow">
-                <span class="text-red-500 text-xl font-extrabold drop-shadow-md shadow-blue-600/50">Ketua Himatif</span> <span class="text-white font-semibold">Periode 2025/2026</span>
+                <span class="text-white text-xl font-extrabold drop-shadow-md shadow-blue-600/50">Ketua Himatif</span> <span class="text-white font-semibold">Periode 2025/2026</span>
             </div>
             <!-- Tombol untuk memilih Ketua Himpunan -->
             <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-red-800 hover:scale-110 hover:bg-white hover:text-red-800 duration-300">
