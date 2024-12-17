@@ -40,7 +40,7 @@
                 </button>
                 <button
                     class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-orange-500 hover:scale-110 hover:bg-white hover:text-orange-500 duration-300"
-                    onclick="showDetailModal('Jane Doe', '123456', 'Teknik Informatika', '2020', 'Jane Smith', '654321', 'Sistem Informasi', '2021',
+                    onclick="showDetailModal('Jane Couk', '123456', 'Teknik Informatika', '2020', 'Jane Smith', '654321', 'Sistem Informasi', '2021',
     'Menjadi organisasi yang lebih transparan, efektif, dan berorientasi pada kepentingan mahasiswa.',
     '1. Meningkatkan kualitas pelayanan untuk mahasiswa.<br> 2. Menyediakan platform komunikasi yang lebih baik antara mahasiswa dan pihak kampus.<br> 3. Meningkatkan partisipasi aktif mahasiswa dalam kegiatan organisasi.')">
                     Detail Profil
@@ -187,13 +187,6 @@
         </div>
     </div>
     </div>
-
-
-
-
-
-
-
 
     <script>
         let selectedButtonId = null;
