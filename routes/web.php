@@ -3,8 +3,7 @@
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\AuthController;
     use App\Http\Controllers\MenuVoteController;
-    use App\Http\Controllers\PaslonHimaController;
-    use App\Http\Controllers\PaslonPresmaController;    
+    use App\Http\Controllers\PaslonController; 
 
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
@@ -13,9 +12,5 @@
     })->name('home');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/menuvote/{prodi}', [MenuVoteController::class, 'show'])->name('menuvote');
-    Route::get('/votehima/{prodi}', [PaslonHimaController::class, 'hima'])
-        ->name('vote.paslon');
-    Route::get('/votepresma/{prodi}', [PaslonPresmaController::class, 'presma'])
-        ->name('vote.presma');
-
+    Route::get('/vote/{jenis_pemilihan}', [PaslonController::class, 'index'])->name('vote.show');
 ?>
