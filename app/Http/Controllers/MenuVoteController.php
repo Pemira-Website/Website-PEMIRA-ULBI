@@ -11,13 +11,18 @@ class MenuVoteController extends Controller
         // Ambil prodi dari session
         $userProdi = Session::get('prodi');
 
-        // Pastikan user hanya bisa mengakses halaman sesuai prodi mereka
+        // Validasi: Pastikan user sudah login dan memiliki prodi
+        if (!$userProdi) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        // Validasi: Pastikan user hanya bisa mengakses halaman sesuai prodi mereka
         if ($userProdi !== $prodi) {
-            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+            return redirect()->route('menuvote', ['prodi' => $userProdi])
+                ->with('error', 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         // Kirim prodi ke view
         return view('menu_vote', compact('prodi'));
     }
 }
-

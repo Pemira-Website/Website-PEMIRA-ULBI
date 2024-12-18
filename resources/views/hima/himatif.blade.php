@@ -18,9 +18,9 @@
         <span class="text-white font-semibold">Periode 2025/2026</span>
     </div>
     <!-- Tombol untuk memilih Ketua Himpunan -->
-    <button class="text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 
-    bg-red-800 hover:scale-110 hover:bg-white hover:text-red-800 duration-300">
-        <a href="{{ route('vote.paslon', ['prodi' => Session::get('prodi')]) }}">Vote Sekarang</a>
+    <button class="text-white font-semibold py-2 px-6 rounded bg-red-800 hover:scale-110 hover:bg-white hover:text-red-800 duration-300">
+        <a href="{{ route('vote.show', ['jenis_pemilihan' => 'himatif']) }}">Vote Sekarang</a>
     </button>
+    
 </div>
         
