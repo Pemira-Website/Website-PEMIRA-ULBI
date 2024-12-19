@@ -50,7 +50,13 @@ class PaslonResource extends Resource
                 Forms\Components\TextInput::make('ang_ketua')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('jbt_ketua')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('ang_wakil')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('jbt_wakil')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('visi')
@@ -92,7 +98,11 @@ class PaslonResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('ang_ketua')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('jbt_ketua')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('ang_wakil')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('jbt_wakil')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('jenis_pemilihan')
                     ->searchable(),
