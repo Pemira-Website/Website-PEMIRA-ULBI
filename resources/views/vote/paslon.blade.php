@@ -23,15 +23,18 @@
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
                         <!-- Ketua -->
-                        <div class="w-36 h-48 bg-gray-300 flex items-center justify-center">
+                        <div class="w-36 h-48 bg-gray-300 flex flex-col items-center justify-center">
+                            <span class="text-black font-semibold">Ketua</span>
+                            <img src="{{ asset('storage/' . $paslon->foto_ketua) }}" alt="Foto Ketua" class="w-32 h-40 object-cover rounded-md mb-2">
                             <span class="text-black font-semibold">{{ $paslon->nm_ketua }}</span>
                         </div>
                         <!-- Wakil -->
-                        <div class="w-36 h-48 bg-gray-300 flex items-center justify-center">
+                        <div class="w-36 h-48 bg-gray-300 flex flex-col items-center justify-center">
+                            <img src="{{ asset('storage/' . $paslon->foto_wakil) }}" alt="Foto Wakil" class="w-32 h-40 object-cover rounded-md mb-2">
                             <span class="text-black font-semibold">{{ $paslon->nm_wakil }}</span>
                         </div>
                     </div>
-                </div>
+                </div>                
             </div>
             <!-- Button Section -->
             <div class="py-4 flex justify-center gap-4">
