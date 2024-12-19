@@ -24,14 +24,14 @@ class PaslonResource extends Resource
                 Forms\Components\TextInput::make('nm_ketua')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\FileUpload::make('foto_ketua') // Kolom untuk upload foto ketua
+                Forms\Components\FileUpload::make('ft_ketua') // Kolom untuk upload foto ketua
                     ->image()
                     ->directory('fotoPaslon')
                     ->required(),
                 Forms\Components\TextInput::make('nm_wakil')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\FileUpload::make('foto_wakil') // Kolom untuk upload foto wakil
+                Forms\Components\FileUpload::make('ft_wakil') // Kolom untuk upload foto wakil
                     ->image()
                     ->directory('fotoPaslon')
                     ->required(),
@@ -74,11 +74,11 @@ class PaslonResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('nm_ketua')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('foto_ketua') // Kolom gambar ketua
+                Tables\Columns\ImageColumn::make('ft_ketua') // Kolom gambar ketua
                     ->label('Foto Ketua'),
                 Tables\Columns\TextColumn::make('nm_wakil')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('foto_wakil') // Kolom gambar wakil
+                Tables\Columns\ImageColumn::make('ft_wakil') // Kolom gambar wakil
                     ->label('Foto Wakil'),
                 Tables\Columns\TextColumn::make('npm_ketua')
                     ->numeric()
