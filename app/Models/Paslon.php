@@ -17,6 +17,8 @@ class Paslon extends Model
         'paslon_ke',
         'nm_ketua',
         'nm_wakil',
+        'ft_ketua',
+        'ft_wakil',
         'npm_ketua',
         'npm_wakil',
         'pd_ketua',
