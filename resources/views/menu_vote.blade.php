@@ -9,9 +9,9 @@
 </head>
 
     {{-- Menampilkan konten berdasarkan prodi --}}
-    @include('hima.hima')
-    
     <div>
+        @include('hima.hima')
+        <br>
         <form method="get" action="{{ route('logout') }}">
             <button type="submit"
                 class="w-full text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-blue-900 hover:bg-orange-500 hover:text-white duration-300">
