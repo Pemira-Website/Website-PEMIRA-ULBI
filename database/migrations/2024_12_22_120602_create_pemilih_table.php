@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('pemilih', function (Blueprint $table) {
             $table->bigIncrements('id'); // Primary key auto-increment
             $table->string('nama');
             $table->string('npm')->unique();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('account');
+        Schema::dropIfExists('pemilih');
     }
 };
