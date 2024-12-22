@@ -9,7 +9,7 @@
     <div class="flex-grow text-center">
         <span class="text-3xl font-extrabold bg-gradient-to-r from-orange-500  to-yellow-500 bg-clip-text text-transparent">
             Presma Kema ULBI
-        </span>                            
+        </span>                   
         <br>
         <span class="text-gray-200 font-semibold">Periode 2025/2026</span>
     </div>
