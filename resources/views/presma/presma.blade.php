@@ -2,7 +2,7 @@
     <span class="text-blue-900">Gunakan Hak Suara Anda</span> <span class="text-orange-500">Dengan Bijak Ya..</span>
 </h1>
 <br>
-<div class="bg-gradient-to-r from-blue-700 to-blue-900 flex items-center justify-between space-x-6 shadow-lg rounded-xl p-6">
+<div class="bg-gradient-to-r from-blue-700 to-blue-900 flex items-center justify-between space-x-6  shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)] rounded-xl p-6">
     <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-full shadow-lg" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);">
         <img class="max-w-full" src="{{ asset('images/bem.png') }}" alt="Logo Bem">
     </div>

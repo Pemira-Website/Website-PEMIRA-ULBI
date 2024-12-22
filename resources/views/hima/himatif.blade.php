@@ -1,4 +1,4 @@
-<div class="bg-gradient-to-r from-zinc-700 to-zinc-900 flex items-center justify-between space-x-6 shadow-lg rounded-xl p-6">
+<div class="bg-gradient-to-r from-zinc-700 to-zinc-900 flex items-center justify-between space-x-6  shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)] rounded-xl p-6">
     <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-full bg-white">
         <img class="max-w-full" src="{{ asset('images/Logo_himatif.png') }}" alt="Logo Hima">
     </div>
