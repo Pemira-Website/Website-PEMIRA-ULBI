@@ -8,6 +8,6 @@
         <span class="text-blue-900 font-semibold">Periode 2025/2026</span>
     </div>
     <button class="text-white font-extrabold py-2 px-6 rounded-full bg-blue-900 hover:bg-blue-600 hover:scale-110 duration-300">
-        <a href="{{ route('vote.show', ['jenis_pemilihan' => 'hmm']) }}">Vote Sekarang</a>
+        <a href="{{ route('vote.show', ['jenis_pemilihan' => 'hmmi']) }}">Vote Sekarang</a>
     </button>
 </div>
