@@ -4,7 +4,6 @@
     use App\Http\Controllers\AuthController;
     use App\Http\Controllers\MenuVoteController;
     use App\Http\Controllers\PaslonController;
-    use App\Http\COntrollers\ChartController;
     use App\Http\COntrollers\VoteController;
     use App\Livewire\PresmaLiveChart; 
 
@@ -17,6 +16,5 @@
     Route::get('/menuvote/{prodi}', [MenuVoteController::class, 'show'])->name('menuvote');
     Route::get('/vote/{jenis_pemilihan}', [PaslonController::class, 'index'])->name('vote.show');
     Route::get('/hasilvote', PresmaLiveChart::class);
-    Route::post('/vote/add', [VoteController::class, 'addVote'])->name('vote.add');
-
+    Route::post('/vote/{npm}', [VoteController::class, 'addVote'])->name('vote.add');
 ?>

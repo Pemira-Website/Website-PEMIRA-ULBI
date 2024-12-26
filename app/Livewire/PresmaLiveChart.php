@@ -32,7 +32,10 @@ class PresmaLiveChart extends Component
     private function loadData()
     {
         $totalVote = Accounts::all();
-        $data = ['data' => $totalVote->pluck('total_vote')->map(fn($vote) => (int) $vote)->toArray()];
+        $data = [
+            'data' => $totalVote->pluck('total_vote')->map(fn($vote) => (int) $vote)->toArray(),
+            'total' => $totalVote->sum('total_vote') // Menambahkan total suara
+        ];
         $this->totalVote = json_encode($data);
     }
 }

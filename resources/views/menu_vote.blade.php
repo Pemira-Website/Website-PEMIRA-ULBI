@@ -7,7 +7,6 @@
     <title>Prodi {{ $prodi }}</title>
     @vite('resources/css/app.css')
 </head>
-
     {{-- Menampilkan konten berdasarkan prodi --}}
     <div>
         @include('hima.hima')
@@ -21,7 +20,7 @@
     </div>
 
     <div>
-        <form method="POST" action="{{ route('vote.add') }}">
+        <form method="POST" action="{{ route('vote.add', ['npm' => Session::get('npm')]) }}">
     @csrf
     <input type="hidden" name="account_id" value="1"> <!-- Ganti 1 dengan ID akun yang sesuai -->
     <button type="submit"

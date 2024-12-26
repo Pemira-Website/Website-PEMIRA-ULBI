@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Accounts;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class VoteController extends Controller
 {
@@ -13,16 +14,14 @@ class VoteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function addVote(Request $request)
+    public function addVote($npm)
     {
         // Validasi input
-        $request->validate([
-            'account_id' => 'required|exists:accounts,id', // Pastikan account_id valid
-        ]);
+        $userNPM = Session::get('npm');
 
         // Update total_vote di tabel account
         DB::table('accounts')
-            ->where('id', $request->account_id)
+            ->where('npm', $userNPM)
             ->increment('total_vote');
 
         // Redirect kembali dengan pesan sukses

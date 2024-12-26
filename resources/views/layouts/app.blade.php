@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hasil Voting</title>
+    <title>Pemira 2025</title>
     @vite('resources/css/app.css')
     @livewireStyles <!-- Tambahkan ini untuk Livewire -->
 </head>
-<body>
+<body class="bg-gradient-to-r from-orange-200 to-blue-200 flex items-center justify-center min-h-screen">
     <main>
         @yield('content')
     </main>
