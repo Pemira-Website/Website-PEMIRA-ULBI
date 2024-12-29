@@ -20,7 +20,7 @@ class VoteController extends Controller
         $userNPM = Session::get('npm');
 
         // Update total_vote di tabel account
-        DB::table('accounts')
+        DB::table('pemilih')
             ->where('npm', $userNPM)
             ->increment('total_vote');
 

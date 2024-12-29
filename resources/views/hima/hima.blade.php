@@ -9,36 +9,35 @@
 </head>
 
 <body class="bg-gradient-to-r from-orange-100 to-indigo-300 flex items-center justify-center min-h-screen">
-    
+
     <div class="space-y-8 w-full max-w-2xl">
         @include('presma.presma')
 
-            @if ($prodi == 'Teknik Informatika')
-                @include('hima.himatif')
-            @elseif ($prodi == 'Manajemen Logistik')
-                @include('hima.himagis')
-            @elseif ($prodi == 'Administrasi Logistik')
-                @include('hima.himalogbis')
-            @elseif ($prodi == 'Logistik Bisnis')
-                @include('hima.himalogbis')
-            @elseif ($prodi == 'Manajemen Transportasi')
-                @include('hima.himaporta')
-            @elseif ($prodi == 'Manajemen Perusahaan')
-                @include('hima.himanbis')
-            @elseif ($prodi == 'Manajemen Pemasaran')
-                @include('hima.himanbis')
-            @elseif ($prodi == 'Akuntansi')
-                @include('hima.hma')
-            @elseif ($prodi == 'Bisnis Digital')
-                @include('hima.himabig')
-            @elseif ($prodi == 'Ecommerce Logistics')
-                @include('hima.hicomlog')
-            @elseif ($prodi == 'Sains Data')
-                @include('hima.himasta')
-            @elseif ($prodi == 'Manajemen Rekayasa')
-                @include('hima.himamera')
-            @endif
-            
-        </div>
-    </body>
+        @if ($prodi == 'D3 Teknik Informatika' || $prodi == 'D4 Teknik Informatika')
+            @include('hima.himatif')
+        @elseif ($prodi == 'S1 Manajemen Logistik')
+            @include('hima.himagis')
+        @elseif ($prodi == 'D3 Administrasi Logistik' || $prodi == 'D4 Logistik Bisnis')
+            @include('hima.himalogbis')
+        @elseif ($prodi == 'S1 Manajemen Transportasi')
+            @include('hima.himaporta')
+        @elseif ($prodi == 'D3 Manajemen Pemasaran' || $prodi == 'D4 Manajemen Perusahaan' )
+            @include('hima.himanbis')
+        @elseif ($prodi == 'D3 Akuntansi' || $prodi == 'D4 Akuntansi Keuangan')
+            @include('hima.hma')
+        @elseif ($prodi == 'S1 Bisnis Digital')
+            @include('hima.himabig')
+        @elseif ($prodi == 'D4 Logistik Niaga-EL')
+            @include('hima.hicomlog')
+        @elseif ($prodi == 'S1 Sains Data')
+            @include('hima.himasta')
+        @elseif ($prodi == 'S1 Manajemen Rekayasa')
+            @include('hima.himamera')
+        @elseif ($prodi == 'D3 Manajemen Informatika')
+            @include('hima.hmmi')
+        @endif
+
+    </div>
+</body>
+
 </html>

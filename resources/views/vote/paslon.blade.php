@@ -30,9 +30,9 @@
             <div class="flex justify-center items-start gap-16">
                 <!-- Ketua -->
                 <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
-                    <!-- Gambar Wakil -->
-                    <div class="relative w-full h-64 overflow-hidden">
-                        <img src="{{ asset('storage/' . $paslon->ft_ketua) }}" alt="Foto Wakil" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                    <!-- Gambar Ketua -->
+                    <div class="relative w-64 h-64 overflow-hidden">
+                        <img src="{{ asset('storage/' . $paslon->ft_ketua) }}" alt="Foto ketua" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     </div>
                     <!-- Detail Wakil -->
                     <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
@@ -44,7 +44,7 @@
                 <!-- Wakil -->
                 <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                     <!-- Gambar Wakil -->
-                    <div class="relative w-full h-64 overflow-hidden">
+                    <div class="relative w-64 h-64 overflow-hidden">
                         <img src="{{ asset('storage/' . $paslon->ft_wakil) }}" alt="Foto Wakil" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     </div>
                     <!-- Detail Wakil -->
@@ -249,7 +249,7 @@
             document.getElementById('wakilJbt').innerText = wakilJbt;
 
             document.getElementById('visi').innerText = visi;
-            document.getElementById('misi').innerHTML = misi;
+            document.getElementById('misi').innerText = misi;
 
             document.getElementById('modalDetail').classList.remove('hidden');
         }
