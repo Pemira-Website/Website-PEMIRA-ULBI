@@ -41,33 +41,84 @@ class PaslonResource extends Resource
                 Forms\Components\TextInput::make('npm_wakil')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('pd_ketua')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('pd_wakil')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Select::make('pd_ketua') // Menjadikan pd_ketua enum
+                    ->options([
+                        'D3 Teknik Informatika' => 'D3 Teknik Informatika',
+                        'D4 Teknik Informatika' => 'D4 Teknik Informatika',
+                        'D3 Administrasi Logistik' => 'D3 Administrasi Logistik',
+                        'D4 Logistik Bisnis' => 'D4 Logistik Bisnis',
+                        'S1 Manajemen Logistik' => 'S1 Manajemen Logistik',
+                        'S1 Bisnis Digital' => 'S1 Bisnis Digital',
+                        'S1 Sains Data' => 'S1 Sains Data',
+                        'S1 Manajemen Rekayasa' => 'S1 Manajemen Rekayasa',
+                        'D4 Logistik Niaga-EL' => 'D4 Logistik Niaga-EL',
+                        'S1 Manajemen Transportasi' => 'S1 Manajemen Transportasi',
+                        'D4 Manajemen Perusahaan' => 'D4 Manajemen Perusahaan',
+                        'D3 Manajemen Pemasaran' => 'D3 Manajemen Pemasaran',
+                        'D3 Akuntansi' => 'D3 Akuntansi',
+                        'D4 Akuntansi Keuangan' => 'D4 Akuntansi Keuangan',
+                        'D3 Manajemen informatika' => 'D3 Manajemen informatika'
+                    ])
+                    ->required(),
+                Forms\Components\Select::make('pd_wakil') // Menjadikan pd_wakil enum
+                    ->options([
+                        'D3 Teknik Informatika' => 'D3 Teknik Informatika',
+                        'D4 Teknik Informatika' => 'D4 Teknik Informatika',
+                        'D3 Administrasi Logistik' => 'D3 Administrasi Logistik',
+                        'D4 Logistik Bisnis' => 'D4 Logistik Bisnis',
+                        'S1 Manajemen Logistik' => 'S1 Manajemen Logistik',
+                        'S1 Bisnis Digital' => 'S1 Bisnis Digital',
+                        'S1 Sains Data' => 'S1 Sains Data',
+                        'S1 Manajemen Rekayasa' => 'S1 Manajemen Rekayasa',
+                        'D4 Logistik Niaga-EL' => 'D4 Logistik Niaga-EL',
+                        'S1 Manajemen Transportasi' => 'S1 Manajemen Transportasi',
+                        'D4 Manajemen Perusahaan' => 'D4 Manajemen Perusahaan',
+                        'D3 Manajemen Pemasaran' => 'D3 Manajemen Pemasaran',
+                        'D3 Akuntansi' => 'D3 Akuntansi',
+                        'D4 Akuntansi Keuangan' => 'D4 Akuntansi Keuangan',
+                        'D3 Manajemen informatika' => 'D3 Manajemen informatika'
+                    ])
+                    ->required(),
                 Forms\Components\TextInput::make('ang_ketua')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('jbt_ketua')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Select::make('jbt_ketua') // Menjadikan jbt_ketua enum
+                    ->options([
+                        'Presiden Mahasiswa' => 'Presiden Mahasiswa',
+                        'Ketua Himpunan' => 'Ketua Himpunan',
+                    ])
+                    ->required(),
                 Forms\Components\TextInput::make('ang_wakil')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('jbt_wakil')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Select::make('jbt_wakil') // Menjadikan jbt_wakil enum
+                    ->options([
+                        'Wakil Presiden Mahasiswa' => 'Wakil Presiden Mahasiswa',
+                        'Wakil Ketua Himpunan' => 'Wakil Ketua Himpunan',
+                    ])
+                    ->required(),
                 Forms\Components\Textarea::make('visi')
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('misi')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('jenis_pemilihan')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Select::make('jenis_pemilihan') // Menjadikan jenis_pemilihan enum
+                    ->options([
+                        'himatif' => 'Himatif',
+                        'himagis' => 'Himagis',
+                        'himalogbis' => 'Himalogbis',
+                        'himaporta' => 'Himaporta',
+                        'himanbis' => 'Himanbis',
+                        'hma' => 'HMA',
+                        'himabig' => 'Himabig',
+                        'hicomlog' => 'Hicomlog',
+                        'himasta' => 'Himasta',
+                        'himamera' => 'Himamera',
+                        'hmmi' => 'Hmmi',
+                        'presma' => 'Presma',
+                    ])
+                    ->required(),
             ]);
     }
 

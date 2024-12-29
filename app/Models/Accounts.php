@@ -9,6 +9,6 @@ class Accounts extends Model
 {
     use HasFactory;
 
-    protected $table = 'accounts';
+    protected $table = 'pemilih';
     protected $fillable = ['npm', 'nama', 'prodi', 'password', 'total_vote'];
 }
