@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Paslon;
+use App\Models\Pemilih;
 use Illuminate\Support\Facades\Session;
 
 class PaslonController extends Controller
@@ -45,7 +46,6 @@ class PaslonController extends Controller
         // Ambil data paslon berdasarkan jenis pemilihan
         $dataPaslon = Paslon::where('jenis_pemilihan', $jenis_pemilihan)->get();
 
-        // Kirim data ke view
         return view('vote.paslon', compact('dataPaslon', 'jenis_pemilihan'));
     }
 }

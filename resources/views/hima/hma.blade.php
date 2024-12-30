@@ -10,6 +10,9 @@
         <span class="text-blue-800 font-semibold">Periode 2025/2026</span>
     </div>
     <button class="text-blue-600 font-extrabold py-2 px-6 rounded-full bg-yellow-400 hover:scale-110 hover:bg-yellow-300 duration-300">
-        <a href="{{ route('vote.show', ['jenis_pemilihan' => 'hma']) }}">Vote Sekarang</a>
+        <a href="{{ $pml_hima > 0 ? '#' : route('vote.show', ['jenis_pemilihan' => 'hma']) }}" 
+            class="block text-center {{ $pml_hima > 0 ? 'cursor-not-allowed' : '' }}">
+             @if($pml_hima > 0) Sudah Memilih @else Vote Sekarang @endif
+         </a>
     </button>
 </div>

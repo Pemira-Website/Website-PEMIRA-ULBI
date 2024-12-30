@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\On;
-use App\Models\Accounts;
+use App\Models\Paslon;
 
 class PresmaLiveChart extends Component
 {
@@ -31,7 +31,7 @@ class PresmaLiveChart extends Component
 
     private function loadData()
     {
-        $totalVote = Accounts::all();
+        $totalVote = Paslon::where('jenis_pemilihan', 'presma')->get();
         $data = [
             'data' => $totalVote->pluck('total_vote')->map(fn($vote) => (int) $vote)->toArray(),
             'total' => $totalVote->sum('total_vote') // Menambahkan total suara

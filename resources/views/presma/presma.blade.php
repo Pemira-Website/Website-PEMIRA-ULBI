@@ -13,7 +13,11 @@
         <br>
         <span class="text-gray-200 font-semibold">Periode 2025/2026</span>
     </div>
-    <button class="text-white font-extrabold py-2 px-6 rounded-full bg-orange-600 hover:bg-orange-500 hover:scale-110 duration-300">
-        <a href="{{ route('vote.show', ['jenis_pemilihan' => 'presma']) }}">Vote Sekarang</a>
-    </button>
+    <button 
+    class="text-white font-extrabold py-2 px-6 rounded-full bg-orange-600 hover:bg-orange-500 hover:scale-110 duration-300">
+    <a href="{{ $pml_presma > 0 ? '#' : route('vote.show', ['jenis_pemilihan' => 'presma']) }}" 
+       class="block text-center {{ $pml_presma > 0 ? 'cursor-not-allowed' : '' }}">
+        @if($pml_presma > 0) Sudah Memilih @else Vote Sekarang @endif
+    </a>
+</button>
 </div>

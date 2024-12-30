@@ -7,36 +7,9 @@
     <title>Prodi {{ $prodi }}</title>
     @vite('resources/css/app.css')
 </head>
-    {{-- Menampilkan konten berdasarkan prodi --}}
     <div>
         @include('hima.hima')
-        <br>
-        <form method="get" action="{{ route('logout') }}">
-            <button type="submit"
-                class="w-full text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-blue-900 hover:bg-orange-500 hover:text-white duration-300">
-                Log out
-            </button>
-        </form>
     </div>
-
-    <div>
-        <form method="POST" action="{{ route('vote.add', ['npm' => Session::get('npm')]) }}">
-    @csrf
-    <input type="hidden" name="account_id" value="1"> <!-- Ganti 1 dengan ID akun yang sesuai -->
-    <button type="submit"
-        class="w-full text-white font-semibold py-2 px-6 rounded transition ease-in-out delay-150 bg-green-600 hover:bg-green-800 hover:text-white duration-300">
-        Tambah Vote
-    </button>
-</form>
-@if (session('success'))
-<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-    <strong class="font-bold">Sukses!</strong>
-    <span class="block sm:inline">{{ session('success') }}</span>
-</div>
-@endif
-
-    </div>
-
      <!-- Modal Error -->
      @if (session('error'))
      <div id="errorModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">

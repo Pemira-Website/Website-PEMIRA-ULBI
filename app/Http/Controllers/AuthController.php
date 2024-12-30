@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Accounts;
+use App\Models\Pemilih;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 
@@ -26,7 +26,7 @@ class AuthController extends Controller
         $password = $request->input('password');
 
         // Cari akun berdasarkan NPM
-        $user = Accounts::where('npm', $npm)->first();
+        $user = Pemilih::where('npm', $npm)->first();
 
         if ($user && Hash::check($password, $user->password)) { // Verifikasi password dengan hash
             if ($user->total_vote == 2) {
@@ -37,6 +37,7 @@ class AuthController extends Controller
             Session::put('npm', $user->npm);
             Session::put('nama', $user->nama);
             Session::put('prodi', $user->prodi);
+            Session::put('jenis_pemilihan', $user->jenis_pemilihan);
 
             // Redirect ke halaman menuvote sesuai prodi
             return redirect()->route('menuvote', ['prodi' => $user->prodi]);

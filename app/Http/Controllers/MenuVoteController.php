@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pemilih;
 use Illuminate\Support\Facades\Session;
 
 class MenuVoteController extends Controller
@@ -22,7 +23,13 @@ class MenuVoteController extends Controller
                 ->with('error', 'Anda tidak memiliki akses ke halaman ini.');
         }
 
+        $pemilih = Pemilih::where('prodi', $prodi)->first();
+
         // Kirim prodi ke view
-        return view('menu_vote', compact('prodi'));
+        return view('menu_vote', [
+            'prodi' => $prodi,
+            'pml_presma' => $pemilih->pml_presma ?? 0,
+            'pml_hima' => $pemilih->pml_hima ?? 0,
+        ]);
     }
 }

@@ -30,5 +30,6 @@ class Paslon extends Model
         'visi',
         'misi',
         'jenis_pemilihan',
+        'total_vote',
     ];
 }
