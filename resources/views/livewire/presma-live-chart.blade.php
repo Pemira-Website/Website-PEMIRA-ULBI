@@ -36,14 +36,24 @@
                         y: {
                             beginAtZero: true,
                             max: 3458,
-                            ticks: { stepSize: 700, color: '#333' },
+                            ticks: {
+                                stepSize: 700,
+                                color: '#333'
+                            },
                             title: {
                                 display: true,
                                 text: '',
                                 color: '#333',
-                                font: { size: 14, family: 'Arial, sans-serif', weight: 'bold' },
+                                font: {
+                                    size: 14,
+                                    family: 'Arial, sans-serif',
+                                    weight: 'bold'
+                                },
                             },
-                            grid: { color: 'rgba(0, 0, 0, 0.1)', borderColor: 'rgba(0, 0, 0, 0.1)' },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                                borderColor: 'rgba(0, 0, 0, 0.1)'
+                            },
                         },
                         x: {
                             ticks: {
@@ -60,7 +70,11 @@
                             position: 'top',
                             labels: {
                                 color: '#333',
-                                font: { size: 14, family: 'Arial, sans-serif', weight: 'bold' },
+                                font: {
+                                    size: 14,
+                                    family: 'Arial, sans-serif',
+                                    weight: 'bold'
+                                },
                             }
                         },
                         tooltip: {
@@ -78,14 +92,20 @@
                         duration: 1000,
                         easing: 'easeInOutQuad',
                     },
-                    elements: { bar: { borderRadius: 3, borderSkipped: false } }
+                    elements: {
+                        bar: {
+                            borderRadius: 3,
+                            borderSkipped: false
+                        }
+                    }
                 },
                 plugins: [{
-                    afterDatasetsDraw: function(chart) {
+                    beforeDraw: function(
+                    chart) { // Menggunakan beforeDraw untuk menggambar gambar di belakang chart
                         const ctx = chart.ctx;
                         const images = [
-                            '{{ asset('images/bem.png') }}',
-                            '{{ asset('images/himatif.png') }}'
+                            '{{ asset('images/paslon1.png') }}',
+                            '{{ asset('images/paslon2.png') }}'
                         ];
                         images.forEach((src, index) => {
                             const image = new Image();
@@ -95,8 +115,8 @@
                                 meta.data.forEach((bar, barIndex) => {
                                     if (barIndex === index) {
                                         const x = bar.x;
-                                        const y = bar.y - 20;
-                                        ctx.drawImage(image, x - 15, y, 30, 30);
+                                        const y = bar.y - 80;
+                                        ctx.drawImage(image, x - 50, y, 90, 90);
                                     }
                                 });
                             };
@@ -104,6 +124,7 @@
                     }
                 }]
             };
+
 
             const myChart = new Chart(ctx, config);
 

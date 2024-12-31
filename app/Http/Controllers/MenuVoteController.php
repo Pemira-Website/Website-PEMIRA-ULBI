@@ -23,7 +23,8 @@ class MenuVoteController extends Controller
                 ->with('error', 'Anda tidak memiliki akses ke halaman ini.');
         }
 
-        $pemilih = Pemilih::where('prodi', $prodi)->first();
+        $npmPemilih = Session::get('npm');
+        $pemilih = Pemilih::where('npm', $npmPemilih)->first();
 
         // Kirim prodi ke view
         return view('menu_vote', [

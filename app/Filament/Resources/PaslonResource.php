@@ -12,7 +12,7 @@ class PaslonResource extends Resource
 {
     protected static ?string $model = Paslon::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Forms\Form $form): Forms\Form
     {
@@ -119,6 +119,9 @@ class PaslonResource extends Resource
                         'presma' => 'Presma',
                     ])
                     ->required(),
+                    Forms\Components\TextInput::make('total_vote')
+                    ->required()
+                    ->numeric(),
             ]);
     }
 
@@ -138,10 +141,8 @@ class PaslonResource extends Resource
                 Tables\Columns\ImageColumn::make('ft_wakil') // Kolom gambar wakil
                     ->label('Foto Wakil'),
                 Tables\Columns\TextColumn::make('npm_ketua')
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('npm_wakil')
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('pd_ketua')
                     ->searchable(),
@@ -157,6 +158,9 @@ class PaslonResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('jenis_pemilihan')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('total_vote')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

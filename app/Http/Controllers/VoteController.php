@@ -35,7 +35,7 @@ class VoteController extends Controller
         $user = Session::get('prodi');
 
         // Cek total_vote
-        if ($pemilih->total_vote == 2) {
+        if ($pemilih->total_vote >= 2) {
             // Logout dan redirect ke halaman logout
             Auth::logout();
             return redirect()->route('logout'); // Ganti 'logout' dengan route yang sesuai
