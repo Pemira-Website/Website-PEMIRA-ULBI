@@ -1,16 +1,6 @@
-<!doctype html>
-<html>
+@extends('layouts.app')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ asset('images/pemira.png') }}" type="image/x-icon">
-    <title>Login</title>
-    @vite('resources/css/app.css')
-    <script src="//unpkg.com/alpinejs" defer></script>
-</head>
-
-<body class="bg-gradient-to-r from-orange-200 to-blue-200 flex items-center justify-center min-h-screen">
+@section('content')
     <!-- Container Utama -->
     <div class="bg-white p-8 rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] w-full max-w-md">
         <!-- Title -->
@@ -87,6 +77,4 @@
             }
         </script>
     </div>
-</body>
-
-</html>
+@endsection

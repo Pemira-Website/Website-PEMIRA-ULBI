@@ -46,6 +46,6 @@ class PaslonController extends Controller
         // Ambil data paslon berdasarkan jenis pemilihan
         $dataPaslon = Paslon::where('jenis_pemilihan', $jenis_pemilihan)->get();
 
-        return view('vote.paslon', compact('dataPaslon', 'jenis_pemilihan'));
+        return view('vote.paslon', compact('dataPaslon', 'jenis_pemilihan'))->with('title', 'Pemilihan ' . ucwords($jenis_pemilihan));
     }
 }

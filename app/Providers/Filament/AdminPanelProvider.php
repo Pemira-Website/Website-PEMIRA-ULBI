@@ -28,11 +28,13 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Orange,
             ])
+            ->brandLogo(asset('images/pemira.png'))
+            ->brandLogoHeight('70px')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            ->favicon('images/pemira.png')
+            ->favicon(asset('images/pemira.png'))
             ->pages([
                 Pages\Dashboard::class,
             ])
