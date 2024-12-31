@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('login');
+        return view('login')->with('title', 'Login');
     }
 
     public function login(Request $request)

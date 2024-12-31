@@ -19,7 +19,7 @@ class PresmaLiveChart extends Component
     {
         return view('livewire.presma-live-chart')
             ->extends('layouts.app')
-            ->section('content');
+            ->section('livechart');
     }
 
     #[On('ubahData')]

@@ -32,6 +32,7 @@ class VoteController extends Controller
         }
 
         $pemilih->increment('total_vote');
+        
         $user = Session::get('prodi');
 
         // Cek total_vote

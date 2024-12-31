@@ -1,15 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ asset('images/pemira.png') }}" type="image/x-icon">
-    <title>Voting Page</title>
-    @vite('resources/css/app.css') <!-- Include Tailwind CSS -->
-</head>
-
-<body class="bg-gradient-to-r from-orange-200 to-blue-200 flex items-center justify-center">
+{{-- <body class="bg-gradient-to-r from-orange-200 to-blue-200 flex items-center justify-center"> --}}
+    @section('content')
     <div class="space-y-10">
         <br>
         @foreach ($dataPaslon as $key => $paslon)
@@ -221,7 +213,9 @@
         </div>
     </div>
     @endif
+    @endsection
 
+    @push('js')
     <script>
         let currentPaslonId = null;
 
@@ -267,6 +261,4 @@
             document.getElementById('errorModal').classList.add('hidden');
         }
     </script>
-</body>
-
-</html>
+    @endpush
