@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ asset('images/pemira.png') }}" type="image/x-icon">
-    <title>Prodi {{ $prodi }}</title>
-    @vite('resources/css/app.css')
-</head>
+@section('content')
     <div>
         @include('hima.hima')
     </div>
@@ -38,15 +31,14 @@
              </div>
          </div>
      </div>
-     
      @endif
+@endsection
 
-     <!-- Script Modal -->
-     <script>
-         function closeModal() {
-             document.getElementById('errorModal').classList.add('hidden');
-         }
-     </script>
-</div>
-
-</html>
+@push('js')
+    <!-- Script Modal -->
+    <script>
+        function closeModal() {
+            document.getElementById('errorModal').classList.add('hidden');
+        }
+    </script>
+@endpush

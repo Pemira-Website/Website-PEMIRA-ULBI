@@ -31,6 +31,6 @@ class MenuVoteController extends Controller
             'prodi' => $prodi,
             'pml_presma' => $pemilih->pml_presma ?? 0,
             'pml_hima' => $pemilih->pml_hima ?? 0,
-        ]);
+        ])->with('title', 'Prodi ' . $prodi);
     }
 }

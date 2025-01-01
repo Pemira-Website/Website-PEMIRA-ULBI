@@ -1,15 +1,6 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="{{ asset('images/pemira.png') }}" type="image/x-icon">
-  <title>Pemira 2025</title>
-  @vite('resources/css/app.css')
-  <!-- Tambahkan Alpine.js untuk interaktivitas -->
-  <script src="//unpkg.com/alpinejs" defer></script>
-</head>
-<body class="bg-white">
+@extends('layouts.app1')
+
+@section('content')
 <div class="min-h-full">
   <!-- Header / Body Content -->
   <header class="pt-16 mt-12">
@@ -39,5 +30,6 @@
   </header>
 
 </div>
-</body>
-</html>
+@endsection
+
+
