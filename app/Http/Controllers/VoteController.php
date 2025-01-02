@@ -21,6 +21,7 @@ class VoteController extends Controller
         $pemilih = Pemilih::where('npm', $npm)->first();
         $paslon = Paslon::find($request->input('paslon_id')); // Ambil ID paslon dari request
         $jenisPemilihan = Session::get('jenis_pemilihan');
+        $user = Session::get('prodi');
 
         // Tambah vote untuk jenis pemilihan
         if ($request->input('jenis_vote') == 'presma' && $pemilih->pml_presma == 0) {
@@ -31,11 +32,14 @@ class VoteController extends Controller
             $pemilih->increment('pml_hima');
             $pemilih->increment('total_vote');
             $paslon->increment('total_vote');
+        }elseif ($pemilih->total_vote >= 2) {
+            // Logout dan redirect ke halaman logout
+            Auth::logout();
+            return redirect()->route('logout');
         } else {
-            return redirect()->back()->with('error', 'Anda sudah memberikan vote.');
+            return redirect()->route('menuvote', ['prodi' => $user])->with('error', 'Anda sudah memberikan vote.');
         }
         
-        $user = Session::get('prodi');
 
         // Cek total_vote
         if ($pemilih->total_vote >= 2) {

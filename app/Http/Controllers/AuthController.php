@@ -50,7 +50,7 @@ class AuthController extends Controller
     {
         // Hapus session
         Session::flush();
-        return redirect()->route('logout');
+        return redirect()->route('login');
     }
 }
 

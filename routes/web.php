@@ -17,6 +17,3 @@
     Route::get('/vote/{jenis_pemilihan}', [PaslonController::class, 'index'])->name('vote.show');
     Route::get('/hasilvote', PresmaLiveChart::class);
     Route::post('/vote/{npm}', [VoteController::class, 'addVote'])->name('vote.add');
-    Route::get('/logout', function () {
-        return view('logout');
-    })->name('logout');
