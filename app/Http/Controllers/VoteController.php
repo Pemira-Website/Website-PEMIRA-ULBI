@@ -22,16 +22,18 @@ class VoteController extends Controller
         $paslon = Paslon::find($request->input('paslon_id')); // Ambil ID paslon dari request
         $jenisPemilihan = Session::get('jenis_pemilihan');
 
-        // Tambah vote sesuai jenis voting
-        if ($request->input('jenis_vote') == 'presma') {
+        // Tambah vote untuk jenis pemilihan
+        if ($request->input('jenis_vote') == 'presma' && $pemilih->pml_presma == 0) {
             $pemilih->increment('pml_presma');
+            $pemilih->increment('total_vote');
             $paslon->increment('total_vote');
-        } elseif ($request->input('jenis_vote') == $jenisPemilihan) {
+        } elseif ($request->input('jenis_vote') == $jenisPemilihan && $pemilih->pml_hima == 0) {
             $pemilih->increment('pml_hima');
+            $pemilih->increment('total_vote');
             $paslon->increment('total_vote');
+        } else {
+            return redirect()->back()->with('error', 'Anda sudah memberikan vote.');
         }
-
-        $pemilih->increment('total_vote');
         
         $user = Session::get('prodi');
 
