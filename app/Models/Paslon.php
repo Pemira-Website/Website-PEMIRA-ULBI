@@ -9,10 +9,9 @@ class Paslon extends Model
 {
     use HasFactory;
 
-    // Tentukan nama tabel jika tidak menggunakan konvensi Laravel
     protected $table = 'paslon';
 
-    // Tentukan kolom yang bisa diisi
+    // Kolom yang dapat diisi (mass assignment)
     protected $fillable = [
         'paslon_ke',
         'nm_ketua',
@@ -32,4 +31,33 @@ class Paslon extends Model
         'jenis_pemilihan',
         'total_vote',
     ];
+
+    // Tipe data bawaan untuk casting atribut tertentu
+    protected $casts = [
+        'total_vote' => 'integer',
+    ];
+
+    // Relasi ke model Pemilih (opsional, tambahkan jika ada hubungan antar tabel)
+    public function pemilih()
+    {
+        return $this->hasMany(Pemilih::class, 'jenis_pemilihan', 'jenis_pemilihan');
+    }
+
+    /**
+     * Increment the total vote dynamically.
+     */
+    public function incrementTotalVote()
+    {
+        $this->increment('total_vote');
+    }
+
+    /**
+     * Decrement the total vote dynamically.
+     */
+    public function decrementTotalVote()
+    {
+        if ($this->total_vote > 0) {
+            $this->decrement('total_vote');
+        }
+    }
 }
