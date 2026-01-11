@@ -102,6 +102,14 @@ jobs:
             --set-env-vars "CACHE_STORE=database" \
             --set-env-vars "QUEUE_CONNECTION=database"
 
+      - name: Update APP_URL with deployed URL
+        run: |
+          SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region $REGION --format 'value(status.url)')
+          echo "Service URL: $SERVICE_URL"
+          gcloud run services update $SERVICE_NAME \
+            --region $REGION \
+            --update-env-vars "APP_URL=$SERVICE_URL,ASSET_URL=$SERVICE_URL"
+
       - name: Show deployment URL
         run: |
           echo "🚀 Application deployed to:"
