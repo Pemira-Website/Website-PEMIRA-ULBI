@@ -22,8 +22,9 @@ RUN apk add --no-cache \
     freetype-dev \
     libzip-dev \
     oniguruma-dev \
+    icu-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql gd zip mbstring bcmath opcache
+    && docker-php-ext-install pdo pdo_mysql gd zip mbstring bcmath opcache intl
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
