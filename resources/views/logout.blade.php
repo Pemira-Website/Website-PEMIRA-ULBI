@@ -29,7 +29,7 @@
                 <!-- Placeholder Gambar -->
                 <div class="flex items-center justify-center mt-8">
                     <div class="w-full h-96 bg-white- flex items-center justify-center">
-                        <img class="w-full h-96 object-contain" src="{{ asset('images/pemira.png') }}"
+                        <img class="w-full h-96 object-contain" src="https://github.com/user-attachments/assets/6c156f10-b646-4a46-9157-a6829dd91d0c"
                             alt="Logo Pemira">
                     </div>
                 </div>
