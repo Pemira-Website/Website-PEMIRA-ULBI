@@ -25,6 +25,10 @@ php artisan view:clear || true
 echo "📦 Running migrations..."
 php artisan migrate --force || echo "⚠️ Migration failed or skipped"
 
+# Seed admin user
+echo "👤 Seeding admin user..."
+php artisan db:seed --force || echo "⚠️ Seeding failed or skipped"
+
 # Setup storage link for file uploads
 echo "📁 Creating storage link..."
 php artisan storage:link --force || true
