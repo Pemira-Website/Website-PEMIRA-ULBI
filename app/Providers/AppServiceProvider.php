@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Filesystem\CloudinaryAdapter;
 use Cloudinary\Cloudinary;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -35,21 +36,29 @@ class AppServiceProvider extends ServiceProvider
             $cloudinaryUrl = env('CLOUDINARY_URL');
             
             if (!$cloudinaryUrl) {
-                throw new \Exception('CLOUDINARY_URL environment variable is not set');
+                Log::warning('CLOUDINARY_URL not set, falling back to public disk');
+                // Fallback to public disk if Cloudinary not configured
+                return Storage::disk('public');
             }
 
-            $cloudinary = new Cloudinary($cloudinaryUrl);
-            
-            $adapter = new CloudinaryAdapter(
-                $cloudinary,
-                $config['folder'] ?? 'pemira'
-            );
+            try {
+                $cloudinary = new Cloudinary($cloudinaryUrl);
+                
+                $adapter = new CloudinaryAdapter(
+                    $cloudinary,
+                    $config['folder'] ?? 'pemira'
+                );
 
-            return new FilesystemAdapter(
-                new Filesystem($adapter, $config),
-                $adapter,
-                $config
-            );
+                return new FilesystemAdapter(
+                    new Filesystem($adapter, $config),
+                    $adapter,
+                    $config
+                );
+            } catch (\Exception $e) {
+                Log::error('Failed to initialize Cloudinary: ' . $e->getMessage());
+                // Fallback to public disk on error
+                return Storage::disk('public');
+            }
         });
     }
 }
