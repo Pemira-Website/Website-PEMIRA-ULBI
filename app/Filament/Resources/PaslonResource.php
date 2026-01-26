@@ -27,7 +27,7 @@ class PaslonResource extends Resource
                 Forms\Components\FileUpload::make('ft_ketua')
                     ->image()
                     ->disk('cloudinary')
-                    ->directory('pemira/paslon')
+                    ->directory('paslon')
                     ->visibility('public')
                     ->required(),
                 Forms\Components\TextInput::make('nm_wakil')
@@ -36,7 +36,7 @@ class PaslonResource extends Resource
                 Forms\Components\FileUpload::make('ft_wakil')
                     ->image()
                     ->disk('cloudinary')
-                    ->directory('pemira/paslon')
+                    ->directory('paslon')
                     ->visibility('public')
                     ->required(),
                 Forms\Components\TextInput::make('npm_ketua')

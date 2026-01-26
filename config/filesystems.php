@@ -59,6 +59,7 @@ return [
 
         'cloudinary' => [
             'driver' => 'cloudinary',
+            'folder' => 'pemira',
         ],
 
     ],
