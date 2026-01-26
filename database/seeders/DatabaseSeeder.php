@@ -23,5 +23,8 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt('pemira2026'),
             ]
         );
+
+        // Seed pemilih data
+        $this->call(PemilihSeeder::class);
     }
 }
