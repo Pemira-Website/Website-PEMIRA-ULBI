@@ -91,7 +91,8 @@ jobs:
             --set-env-vars "APP_ENV=production" \
             --set-env-vars "APP_DEBUG=false" \
             --set-env-vars "APP_KEY=${{ secrets.APP_KEY }}" \
-            --set-env-vars "FILESYSTEM_DISK=local" \
+            --set-env-vars "FILESYSTEM_DISK=cloudinary" \
+            --set-env-vars "CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}" \
             --set-env-vars "DB_CONNECTION=mysql" \
             --set-env-vars "DB_HOST=${{ secrets.DB_HOST }}" \
             --set-env-vars "DB_PORT=3306" \

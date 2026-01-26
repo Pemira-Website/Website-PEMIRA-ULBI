@@ -24,16 +24,20 @@ class PaslonResource extends Resource
                 Forms\Components\TextInput::make('nm_ketua')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\FileUpload::make('ft_ketua') // Kolom untuk upload foto ketua
+                Forms\Components\FileUpload::make('ft_ketua')
                     ->image()
-                    ->directory('fotoPaslon')
+                    ->disk('cloudinary')
+                    ->directory('pemira/paslon')
+                    ->visibility('public')
                     ->required(),
                 Forms\Components\TextInput::make('nm_wakil')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\FileUpload::make('ft_wakil') // Kolom untuk upload foto wakil
+                Forms\Components\FileUpload::make('ft_wakil')
                     ->image()
-                    ->directory('fotoPaslon')
+                    ->disk('cloudinary')
+                    ->directory('pemira/paslon')
+                    ->visibility('public')
                     ->required(),
                 Forms\Components\TextInput::make('npm_ketua')
                     ->required()
