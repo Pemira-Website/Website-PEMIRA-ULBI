@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="min-h-screen w-full flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8
             bg-gradient-to-br from-blue-900 via-blue-600 to-orange-500">
 
@@ -24,8 +22,8 @@
             </div>
 
             <!-- Form Login -->
-            <form class="space-y-6" method="POST" action="{{ route('login') }}">
-                @csrf
+            <form class="space-y-6" method="POST" action="<?php echo e(route('login')); ?>">
+                <?php echo csrf_field(); ?>
                 
                 <div class="space-y-4">
                     <!-- Input NPM -->
@@ -68,20 +66,20 @@
                 </div>
 
                 <!-- Error Messages -->
-                @if ($errors->any())
+                <?php if($errors->any()): ?>
                     <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-3">
                         <div class="flex items-center">
                             <svg class="w-5 h-5 text-red-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             <div class="text-red-700 text-sm">
-                                @foreach ($errors->all() as $error)
-                                    <p>{{ $error }}</p>
-                                @endforeach
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <p><?php echo e($error); ?></p>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                         </div>
                     </div>
-                @endif
+                <?php endif; ?>
 
                 <!-- Tombol Login -->
                 <button type="submit"
@@ -112,7 +110,7 @@
 </div>
 
 <!-- Modal Error -->
-@if (session('error'))
+<?php if(session('error')): ?>
 <div id="errorModal" class="fixed inset-0 bg-gray-900/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform animate-fadeIn">
         <div class="flex justify-between items-center p-5 border-b border-gray-100">
@@ -131,7 +129,7 @@
             </button>
         </div>
         <div class="p-5">
-            <p class="text-gray-700">{{ session('error') }}</p>
+            <p class="text-gray-700"><?php echo e(session('error')); ?></p>
         </div>
         <div class="p-5 pt-0 flex justify-end">
             <button onclick="closeModal()"
@@ -141,10 +139,10 @@
         </div>
     </div>
 </div>
-@endif
+<?php endif; ?>
 
 <!-- Modal Success -->
-@if (session('success'))
+<?php if(session('success')): ?>
 <div id="successModal" class="fixed inset-0 bg-gray-900/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform animate-fadeIn">
         <div class="flex justify-between items-center p-5 border-b border-gray-100">
@@ -163,7 +161,7 @@
             </button>
         </div>
         <div class="p-5">
-            <p class="text-gray-700">{{ session('success') }}</p>
+            <p class="text-gray-700"><?php echo e(session('success')); ?></p>
         </div>
         <div class="p-5 pt-0 flex justify-end">
             <button onclick="closeSuccessModal()"
@@ -173,7 +171,7 @@
         </div>
     </div>
 </div>
-@endif
+<?php endif; ?>
 
 <!-- Scripts -->
 <script>
@@ -214,4 +212,6 @@
         animation: fadeIn 0.3s ease-out;
     }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Website-PEMIRA-ULBI\resources\views/login.blade.php ENDPATH**/ ?>
