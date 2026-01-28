@@ -28,13 +28,17 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Orange,
+                'primary' => Color::Fuchsia,
+                'danger' => Color::Rose,
+                'info' => Color::Sky,
+                'success' => Color::Emerald,
+                'warning' => Color::Amber,
             ])
-            ->brandLogo('https://github.com/user-attachments/assets/6c156f10-b646-4a46-9157-a6829dd91d0c')
+            ->brandLogo('https://github.com/user-attachments/assets/c56a3643-4779-4fb7-95fd-b31f6b1b1db7')
             ->brandLogoHeight('70px')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            ->favicon('https://github.com/user-attachments/assets/6c156f10-b646-4a46-9157-a6829dd91d0c')
+            ->favicon('https://github.com/user-attachments/assets/c56a3643-4779-4fb7-95fd-b31f6b1b1db7')
             ->pages([
                 Pages\Dashboard::class,
             ])
