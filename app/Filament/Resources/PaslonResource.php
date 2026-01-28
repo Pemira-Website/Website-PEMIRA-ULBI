@@ -26,7 +26,7 @@ class PaslonResource extends Resource
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('ft_ketua')
                     ->image()
-                    ->disk('cloudinary')
+                    ->disk('gcs')
                     ->directory('paslon')
                     ->visibility('public')
                     ->required(),
@@ -35,7 +35,7 @@ class PaslonResource extends Resource
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('ft_wakil')
                     ->image()
-                    ->disk('cloudinary')
+                    ->disk('gcs')
                     ->directory('paslon')
                     ->visibility('public')
                     ->required(),
