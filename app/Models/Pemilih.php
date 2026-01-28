@@ -17,6 +17,7 @@ class Pemilih extends Model
         'nama', 
         'prodi', 
         'password', 
+        'otp_expires_at',
         'total_vote', 
         'pml_presma', 
         'pml_hima', 
@@ -28,6 +29,7 @@ class Pemilih extends Model
         'total_vote' => 'integer',
         'pml_presma' => 'integer',
         'pml_hima' => 'integer',
+        'otp_expires_at' => 'datetime',
     ];
 
     // Relasi ke model Paslon (opsional, tambahkan jika ada hubungan antar tabel)
