@@ -57,10 +57,6 @@ return [
             'throw' => false,
         ],
 
-        'cloudinary' => [
-            'driver' => 'cloudinary',
-            'folder' => 'pemira',
-        ],
 
         'gcs' => [
             'driver' => 'gcs',

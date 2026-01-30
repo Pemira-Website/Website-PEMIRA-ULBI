@@ -37,8 +37,9 @@
           <div class="relative">
             <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-400 rounded-full blur-3xl opacity-30 animate-pulse"></div>
             <img class="relative w-full max-w-md h-auto object-contain drop-shadow-2xl" 
-                 src="https://github.com/user-attachments/assets/6c156f10-b646-4a46-9157-a6829dd91d0c" 
-                 alt="Logo Pemira ULBI">
+                 src="<?php echo e(asset('images/pemira.png')); ?>" 
+                 alt="Logo Pemira ULBI"
+                 loading="eager">
           </div>
         </div>
       </div>
@@ -331,9 +332,10 @@
         <!-- Logo & Description -->
         <div class="md:col-span-2">
           <div class="flex items-center mb-6">
-            <img src="https://github.com/user-attachments/assets/6c156f10-b646-4a46-9157-a6829dd91d0c" 
+            <img src="<?php echo e(asset('images/pemira.png')); ?>" 
                  alt="Logo PEMIRA" 
-                 class="w-12 h-12 mr-3">
+                 class="w-12 h-12 mr-3"
+                 loading="lazy">
             <span class="text-2xl font-bold">PEMIRA <span class="text-orange-400">KEMA ULBI</span></span>
           </div>
           <p class="text-blue-200 leading-relaxed mb-6">
@@ -408,4 +410,4 @@
 </div>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app1', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Website-PEMIRA-ULBI\resources\views/welcome.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app1', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Kegabutan\menyusahkan\pemira_26\resources\views/welcome.blade.php ENDPATH**/ ?>

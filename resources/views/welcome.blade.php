@@ -39,8 +39,9 @@
           <div class="relative">
             <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-400 rounded-full blur-3xl opacity-30 animate-pulse"></div>
             <img class="relative w-full max-w-md h-auto object-contain drop-shadow-2xl" 
-                 src="https://github.com/user-attachments/assets/6c156f10-b646-4a46-9157-a6829dd91d0c" 
-                 alt="Logo Pemira ULBI">
+                 src="{{ asset('images/pemira.png') }}" 
+                 alt="Logo Pemira ULBI"
+                 loading="eager">
           </div>
         </div>
       </div>
@@ -333,9 +334,10 @@
         <!-- Logo & Description -->
         <div class="md:col-span-2">
           <div class="flex items-center mb-6">
-            <img src="https://github.com/user-attachments/assets/6c156f10-b646-4a46-9157-a6829dd91d0c" 
+            <img src="{{ asset('images/pemira.png') }}" 
                  alt="Logo PEMIRA" 
-                 class="w-12 h-12 mr-3">
+                 class="w-12 h-12 mr-3"
+                 loading="lazy">
             <span class="text-2xl font-bold">PEMIRA <span class="text-orange-400">KEMA ULBI</span></span>
           </div>
           <p class="text-blue-200 leading-relaxed mb-6">
