@@ -39,7 +39,7 @@
           <div class="relative">
             <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-400 rounded-full blur-3xl opacity-30 animate-pulse"></div>
             <img class="relative w-full max-w-md h-auto object-contain drop-shadow-2xl" 
-                 src="{{ asset('images/pemira.png') }}" 
+                 src="https://github.com/user-attachments/assets/c56a3643-4779-4fb7-95fd-b31f6b1b1db7" 
                  alt="Logo Pemira ULBI"
                  loading="eager">
           </div>
