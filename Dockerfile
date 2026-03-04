@@ -37,6 +37,10 @@ COPY . .
 # Copy built assets from node stage
 COPY --from=node-builder /app/public/build ./public/build
 
+# Create storage directories before composer install so package:discover doesn't fail
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+    && mkdir -p storage/logs
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
@@ -49,12 +53,8 @@ COPY docker/start.sh /start.sh
 RUN chmod +x /start.sh \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage \
+    && chown -R www-data:www-data storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
-
-# Create storage directories
-RUN mkdir -p storage/framework/{sessions,views,cache} \
-    && mkdir -p storage/logs \
-    && chown -R www-data:www-data storage
 
 # Expose port (Cloud Run uses PORT env var)
 EXPOSE 8080
