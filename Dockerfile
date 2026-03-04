@@ -38,7 +38,7 @@ COPY . .
 COPY --from=node-builder /app/public/build ./public/build
 
 # Create storage directories before composer install so package:discover doesn't fail
-RUN mkdir -p storage/framework/{sessions,views,cache} \
+RUN mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache \
     && mkdir -p storage/logs
 
 # Install PHP dependencies
