@@ -27,6 +27,9 @@ jobs:
           extensions: mbstring, pdo, pdo_mysql, gd, zip, bcmath
           coverage: none
 
+      - name: Create framework directories
+        run: mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache
+
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress
 
