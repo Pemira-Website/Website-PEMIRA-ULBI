@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\Paslon;
+use Illuminate\Support\Facades\Cache;
 
 class PresmaLiveChart extends Component
 {
@@ -31,11 +32,14 @@ class PresmaLiveChart extends Component
 
     private function loadData()
     {
-        $totalVote = Paslon::where('jenis_pemilihan', 'presma')->get();
-        $data = [
-            'data' => $totalVote->pluck('total_vote')->map(fn($vote) => (int) $vote)->toArray(),
-            'total' => $totalVote->sum('total_vote') // Menambahkan total suara
-        ];
+        $data = Cache::remember('presma_chart_data', 5, function () {
+            $totalVote = Paslon::where('jenis_pemilihan', 'presma')->get();
+            return [
+                'data' => $totalVote->pluck('total_vote')->map(fn($vote) => (int) $vote)->toArray(),
+                'total' => $totalVote->sum('total_vote')
+            ];
+        });
+
         $this->totalVote = json_encode($data);
     }
 }

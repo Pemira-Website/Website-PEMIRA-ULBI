@@ -47,54 +47,55 @@ class VoteController extends Controller
             }
         }
 
-        // Special handling for himabig, hicomlog, and himamera (only presma)
-        if (in_array($himaType, ['himabig', 'hicomlog', 'himamera'])) {
-            if ($jenisVote == 'presma') {
-                if ($pemilih->pml_presma == 0) {
-                    $pemilih->pml_presma = 1;
-                    $pemilih->total_vote = 1;
-                    $pemilih->save();
-                    
-                    $paslon->increment('total_vote');
-                    
-                    Session::flush();
-                    return redirect()->route('login')->with('success', 'Terima kasih, Anda telah memberikan vote.');
-                }
-                return redirect()->back()->with('error', 'Anda sudah memberikan vote untuk Presma.');
-            }
-            return redirect()->back()->with('error', 'Anda hanya dapat memilih Presma.');
-        }
+        // Calculate special states before returning immediately
+        $isPresmaVoted = $pemilih->pml_presma == 1;
+        $isHimaVoted = $pemilih->pml_hima == 1;
+        
+        $willBeFinished = false;
+        $errorMessage = null;
 
-        // Regular voting logic
-        if ($jenisVote == 'presma') {
-            if ($pemilih->pml_presma == 0) {
-                $pemilih->pml_presma = 1;
-                $pemilih->total_vote = $pemilih->pml_presma + $pemilih->pml_hima;
-                $pemilih->save();
-                $paslon->increment('total_vote');
+        if (in_array($himaType, ['himabig', 'hicomlog', 'himamera'])) {
+            if ($jenisVote != 'presma') {
+                $errorMessage = 'Anda hanya dapat memilih Presma.';
+            } else if ($isPresmaVoted) {
+                $errorMessage = 'Anda sudah memberikan vote untuk Presma.';
             } else {
-                return redirect()->back()->with('error', 'Anda sudah memberikan vote untuk Presma.');
-            }
-        } elseif ($jenisVote == $himaType) {
-            if ($pemilih->pml_hima == 0) {
-                $pemilih->pml_hima = 1;
-                $pemilih->total_vote = $pemilih->pml_presma + $pemilih->pml_hima;
-                $pemilih->save();
-                $paslon->increment('total_vote');
-            } else {
-                return redirect()->back()->with('error', 'Anda sudah memberikan vote untuk Himpunan.');
+                $willBeFinished = true;
             }
         } else {
-            return redirect()->back()->with('error', 'Jenis vote tidak valid.');
+            if ($jenisVote == 'presma' && $isPresmaVoted) {
+                $errorMessage = 'Anda sudah memberikan vote untuk Presma.';
+            } elseif ($jenisVote == $himaType && $isHimaVoted) {
+                $errorMessage = 'Anda sudah memberikan vote untuk Himpunan.';
+            } elseif (!in_array($jenisVote, ['presma', $himaType])) {
+                $errorMessage = 'Jenis vote tidak valid.';
+            } else {
+                $willBeFinished = ($pemilih->total_vote + 1) >= 2;
+            }
         }
 
-        // Logout jika total_vote >= 2
-        if ($pemilih->total_vote >= 2) {
+        if ($errorMessage) {
+            return redirect()->back()->with('error', $errorMessage);
+        }
+
+        // Dispatch background job to Redis Queue (Message Broker)
+        \App\Jobs\ProcessVote::dispatch($pemilih->id, $paslon->id, $jenisVote, $himaType);
+
+        // Immediate response for high throughput
+        if ($willBeFinished) {
             Session::flush();
-            return redirect()->route('login')->with('success', 'Terima kasih, Anda telah memberikan vote.');
+            return redirect()->route('login')->with('success', 'Vote Anda sedang diproses. Terima kasih! (Harap tunggu 1-2 menit hingga chart diperbarui)');
+        }
+
+        // Increment total vote locally for redirection purpose (frontend logic bypass)
+        $pemilih->total_vote += 1;
+
+        if ($pemilih->total_vote >= 2) {
+             Session::flush();
+             return redirect()->route('login')->with('success', 'Vote Anda sedang diproses. Terima kasih! (Harap tunggu 1-2 menit hingga chart diperbarui)');
         }
 
         return redirect()->route('menuvote', ['prodi' => $user])
-            ->with('success', 'Vote berhasil diproses.');
+            ->with('success', 'Berhasil! Vote diproses ke dalam antrean (Queue).');
     }
 }

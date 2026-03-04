@@ -101,9 +101,11 @@ jobs:
             --set-env-vars "DB_DATABASE=${{ secrets.DB_DATABASE }}" \
             --set-env-vars "DB_USERNAME=${{ secrets.DB_USERNAME }}" \
             --set-env-vars "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" \
-            --set-env-vars "SESSION_DRIVER=database" \
-            --set-env-vars "CACHE_STORE=database" \
-            --set-env-vars "QUEUE_CONNECTION=database"
+            --set-env-vars "SESSION_DRIVER=redis" \
+            --set-env-vars "CACHE_STORE=redis" \
+            --set-env-vars "QUEUE_CONNECTION=redis" \
+            --set-env-vars "REDIS_CLIENT=predis" \
+            --set-env-vars "REDIS_URL=${{ secrets.REDIS_URL }}"
 
       - name: Update APP_URL with deployed URL
         run: |
