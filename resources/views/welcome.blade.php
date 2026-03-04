@@ -158,151 +158,51 @@
     </div>
   </section>
 
-  <!-- Jadwal Pemilihan Section -->
-  <section id="jadwal" class="py-20 bg-gray-50">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <!-- FAQ Section -->
+  <section id="faq" class="py-20 bg-gray-50">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
         <span class="inline-block px-4 py-1 bg-orange-500 text-white rounded-full text-sm font-semibold mb-4">
-          TIMELINE
+          BANTUAN
         </span>
         <h2 class="text-3xl md:text-4xl font-bold text-blue-900">
-          Jadwal PEMIRA KEMA ULBI 2026
+          Pertanyaan Umum (FAQ)
         </h2>
-        <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-          Pastikan Anda tidak melewatkan momen penting dalam PEMIRA 2026
+        <p class="mt-4 text-lg text-gray-600">
+          Jawaban dari pertanyaan yang sering diajukan terkait PEMIRA 2026
         </p>
       </div>
       
-      <div class="max-w-4xl mx-auto">
-        <!-- Timeline Item 1 - Pendaftaran Paslon BEM -->
-        <div class="relative pl-8 pb-8 border-l-4 border-blue-900">
-          <div class="absolute -left-3 top-0 w-6 h-6 bg-blue-900 rounded-full border-4 border-white shadow"></div>
-          <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 ml-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <span class="inline-block px-3 py-1 bg-blue-900 text-white text-sm font-semibold rounded-full mb-2">
-              Kamis, 15 Januari – Rabu, 21 Januari 2026
-            </span>
-            <h3 class="text-xl font-bold text-blue-900">📝 Pendaftaran Paslon BEM</h3>
-            <p class="text-gray-600 mt-2">Periode pendaftaran calon ketua dan wakil ketua BEM KEMA ULBI.</p>
+      <div class="space-y-4">
+        <!-- FAQ Item 1 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+          <div class="p-6">
+            <h3 class="text-lg font-bold text-blue-900 mb-2">🤔 Siapa saja yang berhak memberikan suara?</h3>
+            <p class="text-gray-600">Seluruh mahasiswa aktif Universitas Logistik dan Bisnis Internasional (ULBI) berhak dan wajib memberikan hak suaranya pada PEMIRA 2026.</p>
           </div>
         </div>
 
-        <!-- Timeline Item 2 - Verifikasi Berkas -->
-        <div class="relative pl-8 pb-8 border-l-4 border-teal-500">
-          <div class="absolute -left-3 top-0 w-6 h-6 bg-teal-500 rounded-full border-4 border-white shadow"></div>
-          <div class="bg-gradient-to-r from-teal-50 to-cyan-50 rounded-xl p-6 ml-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <span class="inline-block px-3 py-1 bg-teal-500 text-white text-sm font-semibold rounded-full mb-2">
-              Kamis, 22 Januari – Sabtu, 24 Januari 2026
-            </span>
-            <h3 class="text-xl font-bold text-teal-700">📋 Verifikasi & Pengumpulan Berkas Paslon BEM</h3>
-            <p class="text-gray-600 mt-2">Proses verifikasi kelengkapan dan keabsahan berkas pendaftaran paslon.</p>
+        <!-- FAQ Item 2 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+          <div class="p-6">
+            <h3 class="text-lg font-bold text-blue-900 mb-2">🔐 Apakah kerahasiaan pilihan saya terjamin?</h3>
+            <p class="text-gray-600">Sangat terjamin. Sistem e-voting PEMIRA ULBI dirancang secara anonim. Identitas diri (NIM) Anda hanya digunakan untuk memverifikasi hak suara, dan tidak akan ditautkan dengan siapa kandidat yang Anda coblos di database.</p>
           </div>
         </div>
 
-        <!-- Timeline Item 3 - Fit & Proper Test -->
-        <div class="relative pl-8 pb-8 border-l-4 border-cyan-500">
-          <div class="absolute -left-3 top-0 w-6 h-6 bg-cyan-500 rounded-full border-4 border-white shadow"></div>
-          <div class="bg-gradient-to-r from-cyan-50 to-sky-50 rounded-xl p-6 ml-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <span class="inline-block px-3 py-1 bg-cyan-500 text-white text-sm font-semibold rounded-full mb-2">
-              Senin, 26 Januari 2026
-            </span>
-            <h3 class="text-xl font-bold text-cyan-700">🎤 Fit & Proper Test Paslon BEM</h3>
-            <p class="text-gray-600 mt-2">Uji kelayakan dan kepatutan calon ketua dan wakil ketua BEM.</p>
+        <!-- FAQ Item 3 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+          <div class="p-6">
+            <h3 class="text-lg font-bold text-blue-900 mb-2">� Bagaimana cara login ke dalam sistem?</h3>
+            <p class="text-gray-600">Anda dapat masuk menggunakan Nomor Induk Mahasiswa (NIM) dan Password yang digunakan untuk mengakses portal/SIAK mahasiswa. Jika terkendala, silakan hubungi panitia KPU.</p>
           </div>
         </div>
 
-        <!-- Timeline Item 4 - Penetapan Paslon -->
-        <div class="relative pl-8 pb-8 border-l-4 border-yellow-500">
-          <div class="absolute -left-3 top-0 w-6 h-6 bg-yellow-500 rounded-full border-4 border-white shadow"></div>
-          <div class="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl p-6 ml-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <span class="inline-block px-3 py-1 bg-yellow-500 text-white text-sm font-semibold rounded-full mb-2">
-              Selasa, 27 Januari 2026
-            </span>
-            <h3 class="text-xl font-bold text-yellow-600">🏷️ Penetapan Paslon BEM & Nomor Urut</h3>
-            <p class="text-gray-600 mt-2">Pengumuman resmi paslon yang lolos dan pemberian nomor urut.</p>
-          </div>
-        </div>
-
-        <!-- Timeline Item 5 - Masa Kampanye BEM -->
-        <div class="relative pl-8 pb-8 border-l-4 border-orange-500">
-          <div class="absolute -left-3 top-0 w-6 h-6 bg-orange-500 rounded-full border-4 border-white shadow"></div>
-          <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-6 ml-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <span class="inline-block px-3 py-1 bg-orange-500 text-white text-sm font-semibold rounded-full mb-2">
-              Rabu, 28 Januari – Selasa, 10 Februari 2026
-            </span>
-            <h3 class="text-xl font-bold text-orange-600">📢 Masa Kampanye Paslon BEM</h3>
-            <p class="text-gray-600 mt-2">Para kandidat mempresentasikan visi, misi, dan program kerja kepada seluruh mahasiswa.</p>
-          </div>
-        </div>
-
-        <!-- Timeline Item 6 - Debat Paslon BEM -->
-        <div class="relative pl-8 pb-8 border-l-4 border-pink-500">
-          <div class="absolute -left-3 top-0 w-6 h-6 bg-pink-500 rounded-full border-4 border-white shadow"></div>
-          <div class="bg-gradient-to-r from-pink-50 to-rose-50 rounded-xl p-6 ml-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <span class="inline-block px-3 py-1 bg-pink-500 text-white text-sm font-semibold rounded-full mb-2">
-              Minggu, 2 Februari 2026
-            </span>
-            <h3 class="text-xl font-bold text-pink-600">🎙️ Debat Paslon BEM</h3>
-            <p class="text-gray-600 mt-2">Debat terbuka antar kandidat untuk memaparkan solusi atas permasalahan kampus.</p>
-          </div>
-        </div>
-
-        <!-- Timeline Item 7 - Pendaftaran HMJ -->
-        <div class="relative pl-8 pb-8 border-l-4 border-blue-600">
-          <div class="absolute -left-3 top-0 w-6 h-6 bg-blue-600 rounded-full border-4 border-white shadow"></div>
-          <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 ml-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <span class="inline-block px-3 py-1 bg-blue-600 text-white text-sm font-semibold rounded-full mb-2">
-              Mulai Rabu, 4 Februari 2026
-            </span>
-            <h3 class="text-xl font-bold text-blue-700">📝 Pendaftaran Paslon HMJ</h3>
-            <p class="text-gray-600 mt-2">Periode pendaftaran calon ketua dan wakil ketua Himpunan Mahasiswa Jurusan.</p>
-          </div>
-        </div>
-
-        <!-- Timeline Item 8 - Kampanye HMJ -->
-        <div class="relative pl-8 pb-8 border-l-4 border-purple-500">
-          <div class="absolute -left-3 top-0 w-6 h-6 bg-purple-500 rounded-full border-4 border-white shadow"></div>
-          <div class="bg-gradient-to-r from-purple-50 to-fuchsia-50 rounded-xl p-6 ml-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <span class="inline-block px-3 py-1 bg-purple-500 text-white text-sm font-semibold rounded-full mb-2">
-              Rabu, 4 Februari – Selasa, 10 Februari 2026
-            </span>
-            <h3 class="text-xl font-bold text-purple-600">📢 Masa Kampanye Paslon HMJ</h3>
-            <p class="text-gray-600 mt-2">Para kandidat HMJ mempresentasikan visi, misi, dan program kerja.</p>
-          </div>
-        </div>
-
-        <!-- Timeline Item 9 - Hari Tenang -->
-        <div class="relative pl-8 pb-8 border-l-4 border-gray-400">
-          <div class="absolute -left-3 top-0 w-6 h-6 bg-gray-500 rounded-full border-4 border-white shadow"></div>
-          <div class="bg-gradient-to-r from-gray-50 to-slate-100 rounded-xl p-6 ml-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <span class="inline-block px-3 py-1 bg-gray-500 text-white text-sm font-semibold rounded-full mb-2">
-              Rabu, 11 Februari 2026
-            </span>
-            <h3 class="text-xl font-bold text-gray-700">🤫 Hari Tenang PEMIRA</h3>
-            <p class="text-gray-600 mt-2">Masa jeda tanpa kampanye untuk persiapan hari pemungutan suara.</p>
-          </div>
-        </div>
-
-        <!-- Timeline Item 10 - Hari Pemilihan -->
-        <div class="relative pl-8 pb-8 border-l-4 border-red-500">
-          <div class="absolute -left-3 top-0 w-6 h-6 bg-red-500 rounded-full border-4 border-white shadow animate-pulse"></div>
-          <div class="bg-gradient-to-r from-red-50 to-rose-100 rounded-xl p-6 ml-4 shadow-lg hover:shadow-xl transition-shadow duration-300 ring-2 ring-red-400">
-            <span class="inline-block px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full mb-2">
-              Kamis, 12 Februari 2026
-            </span>
-            <h3 class="text-xl font-bold text-red-600">🗳️ Pemungutan & Penghitungan Suara</h3>
-            <p class="text-gray-600 mt-2">HARI PEMILIHAN! Gunakan hak suara Anda untuk menentukan pemimpin terbaik!</p>
-          </div>
-        </div>
-
-        <!-- Timeline Item 11 - Pengumuman -->
-        <div class="relative pl-8 border-l-4 border-yellow-500">
-          <div class="absolute -left-3 top-0 w-6 h-6 bg-yellow-500 rounded-full border-4 border-white shadow"></div>
-          <div class="bg-gradient-to-r from-yellow-50 to-amber-100 rounded-xl p-6 ml-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <span class="inline-block px-3 py-1 bg-yellow-500 text-white text-sm font-semibold rounded-full mb-2">
-              Jumat, 13 Februari 2026
-            </span>
-            <h3 class="text-xl font-bold text-yellow-600">🏆 Pengaduan & Pengumuman Hasil Suara</h3>
-            <p class="text-gray-600 mt-2">Pengumuman resmi hasil pemilihan dan penetapan pemenang PEMIRA 2026.</p>
+        <!-- FAQ Item 4 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+          <div class="p-6">
+            <h3 class="text-lg font-bold text-blue-900 mb-2">📱 Apakah saya bisa memilih menggunakan HP?</h3>
+            <p class="text-gray-600">Tentu saja. Website pemungutan suara telah didesain responsif untuk bisa diakses dengan lancar kapanpun melalui perangkat Smartphone, Tablet, maupun Laptop/PC.</p>
           </div>
         </div>
       </div>
