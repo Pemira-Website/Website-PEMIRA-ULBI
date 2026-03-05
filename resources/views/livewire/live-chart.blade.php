@@ -115,56 +115,85 @@
                         const images = chartData_{{ $jenis_pemilihan }}.images;
                         const chartArea = chart.chartArea;
                         
+                        // Buat cache lokal agar gambar tidak diload ulang terus-menerus yang menyebabkan hilang timbul
+                        if (!chart.imageMapCache) {
+                            chart.imageMapCache = {};
+                        }
+
                         images.forEach((pair, index) => {
                             if (!pair || !pair.ketua || !pair.wakil) return;
                             
-                            // Ketua Image
-                            const imgKetua = new Image();
-                            imgKetua.src = pair.ketua;
-                            
-                            // Wakil Image
-                            const imgWakil = new Image();
-                            imgWakil.src = pair.wakil;
-                            
-                            const drawImages = () => {
+                            const drawPair = (img1, img2) => {
                                 try {
                                     const meta = chart.getDatasetMeta(0);
                                     if (!meta.data[index]) return;
                                     
                                     const bar = meta.data[index];
                                     const x = bar.x;
-                                    // Letakkan di bawah garis X-axis (tengah)
-                                    const y = chartArea.bottom + 10; 
                                     
-                                    const imgWidth = 40;
-                                    const imgHeight = 55;
-                                    const spacing = 5;
+                                    // Letakkan di bawah label X-axis (angka 01, 02)
+                                    const y = chartArea.bottom + 45; 
+                                    
+                                    const imgWidth = 50;  // Diperbesar sesuai desain
+                                    const imgHeight = 65;
+                                    const spacing = 0;    // Digabung rapat
                                     
                                     if (!isNaN(x) && !isNaN(y)) {
+                                        ctx.save();
+                                        
+                                        const boxWidth = (imgWidth * 2) + spacing;
+                                        const boxX = x - (boxWidth / 2);
+                                        const boxY = y;
+                                        
                                         // Draw Ketua (kiri)
-                                        ctx.drawImage(imgKetua, x - imgWidth - (spacing/2), y, imgWidth, imgHeight);
+                                        ctx.drawImage(img1, boxX, boxY, imgWidth, imgHeight);
                                         // Draw Wakil (kanan)
-                                        ctx.drawImage(imgWakil, x + (spacing/2), y, imgWidth, imgHeight);
+                                        ctx.drawImage(img2, boxX + imgWidth + spacing, boxY, imgWidth, imgHeight);
+                                        
+                                        // Berikan border kotak ala surat suara
+                                        ctx.strokeStyle = '#333';
+                                        ctx.lineWidth = 3;
+                                        ctx.strokeRect(boxX, boxY, boxWidth, imgHeight);
+                                        
+                                        ctx.restore();
                                     }
-                                } catch (e) {}
+                                } catch (e) {
+                                    console.error(e);
+                                }
                             };
 
-                            // Menunggu gambar terload untuk digambar.
-                            // Catatan: Jika gambar sudah ada di cache browser, onload mungkin tertunda/terlewat.
-                            if (imgKetua.complete && imgWakil.complete) {
-                                drawImages();
-                            } else {
-                                let loaded = 0;
-                                const checkBothLoaded = () => {
-                                    loaded++;
-                                    if (loaded === 2) {
-                                        drawImages();
-                                        // Trigger update halus agar sinkron (satu kali)
-                                        // chart.update('none'); 
+                            let key = index;
+                            
+                            // Jika gambar sudah ter-cache dan ter-load, langsung gambar
+                            if (chart.imageMapCache[key] && chart.imageMapCache[key].isLoaded) {
+                                drawPair(chart.imageMapCache[key].imgK, chart.imageMapCache[key].imgW);
+                            } 
+                            // Jika belum di-inisasi proses download gambarnya
+                            else if (!chart.imageMapCache[key]) {
+                                chart.imageMapCache[key] = { 
+                                    isLoaded: false, 
+                                    loadedCount: 0,
+                                    imgK: new Image(), 
+                                    imgW: new Image() 
+                                };
+                                
+                                // Setup CORS agar gambar GCS bisa digambar di atas Canvas
+                                chart.imageMapCache[key].imgK.crossOrigin = "anonymous";
+                                chart.imageMapCache[key].imgW.crossOrigin = "anonymous";
+                                
+                                const checkLoaded = () => {
+                                    chart.imageMapCache[key].loadedCount++;
+                                    if (chart.imageMapCache[key].loadedCount === 2) {
+                                        chart.imageMapCache[key].isLoaded = true;
+                                        chart.update('none'); // Panggil gambar ulang halus pada frame berikutnya
                                     }
                                 };
-                                imgKetua.onload = checkBothLoaded;
-                                imgWakil.onload = checkBothLoaded;
+                                
+                                chart.imageMapCache[key].imgK.onload = checkLoaded;
+                                chart.imageMapCache[key].imgW.onload = checkLoaded;
+                                
+                                chart.imageMapCache[key].imgK.src = pair.ketua;
+                                chart.imageMapCache[key].imgW.src = pair.wakil;
                             }
                         });
                     }
