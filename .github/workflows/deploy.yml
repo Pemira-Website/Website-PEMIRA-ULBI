@@ -84,32 +84,48 @@ jobs:
           docker push "$IMAGE"
 
       - name: Deploy to Cloud Run
+        env:
+          APP_KEY: ${{ secrets.APP_KEY }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GCS_BUCKET: ${{ secrets.GCS_BUCKET }}
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
         run: |
           IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/pemira-26/$SERVICE_NAME:${{ github.sha }}"
+
+          # Mencegah error parsing 'Bad syntax for dict arg' akibat JSON Kredensial GCS
+          jq -n '{
+            "APP_ENV": "production",
+            "APP_DEBUG": "false",
+            "APP_KEY": env.APP_KEY,
+            "FILESYSTEM_DISK": "gcs",
+            "GOOGLE_CLOUD_PROJECT_ID": env.GCP_PROJECT_ID,
+            "GOOGLE_CLOUD_CREDENTIALS": env.GCP_SA_KEY,
+            "GOOGLE_CLOUD_STORAGE_BUCKET": env.GCS_BUCKET,
+            "GOOGLE_CLOUD_STORAGE_PATH_PREFIX": "pemira",
+            "DB_CONNECTION": "mysql",
+            "DB_HOST": env.DB_HOST,
+            "DB_PORT": "3306",
+            "DB_DATABASE": env.DB_DATABASE,
+            "DB_USERNAME": env.DB_USERNAME,
+            "DB_PASSWORD": env.DB_PASSWORD,
+            "SESSION_DRIVER": "redis",
+            "CACHE_STORE": "redis",
+            "QUEUE_CONNECTION": "redis",
+            "REDIS_CLIENT": "predis",
+            "REDIS_URL": env.REDIS_URL
+          }' > env_vars.yaml
+
           gcloud run deploy $SERVICE_NAME \
             --image $IMAGE \
             --platform managed \
             --region $REGION \
             --allow-unauthenticated \
-            --set-env-vars "APP_ENV=production" \
-            --set-env-vars "APP_DEBUG=false" \
-            --set-env-vars "APP_KEY=${{ secrets.APP_KEY }}" \
-            --set-env-vars "FILESYSTEM_DISK=gcs" \
-            --set-env-vars "GOOGLE_CLOUD_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" \
-            --set-env-vars "GOOGLE_CLOUD_CREDENTIALS=${{ secrets.GCP_SA_KEY }}" \
-            --set-env-vars "GOOGLE_CLOUD_STORAGE_BUCKET=${{ secrets.GCS_BUCKET }}" \
-            --set-env-vars "GOOGLE_CLOUD_STORAGE_PATH_PREFIX=pemira" \
-            --set-env-vars "DB_CONNECTION=mysql" \
-            --set-env-vars "DB_HOST=${{ secrets.DB_HOST }}" \
-            --set-env-vars "DB_PORT=3306" \
-            --set-env-vars "DB_DATABASE=${{ secrets.DB_DATABASE }}" \
-            --set-env-vars "DB_USERNAME=${{ secrets.DB_USERNAME }}" \
-            --set-env-vars "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" \
-            --set-env-vars "SESSION_DRIVER=redis" \
-            --set-env-vars "CACHE_STORE=redis" \
-            --set-env-vars "QUEUE_CONNECTION=redis" \
-            --set-env-vars "REDIS_CLIENT=predis" \
-            --set-env-vars "REDIS_URL=${{ secrets.REDIS_URL }}"
+            --env-vars-file env_vars.yaml
 
       - name: Update APP_URL with deployed URL
         run: |
