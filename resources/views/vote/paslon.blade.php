@@ -19,7 +19,7 @@
             <div class="flex justify-center items-start gap-16">
                 <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                     <div class="relative w-72 h-64 overflow-hidden">
-                        <img src="{{ Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : asset('storage/' . $paslon->ft_ketua) }}" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        <img src="{{ Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::url($paslon->ft_ketua) }}" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     </div>
                     <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
                         <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_ketua }}</span>
@@ -29,7 +29,7 @@
         
                 <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                     <div class="relative w-72 h-64 overflow-hidden">
-                        <img src="{{ Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : asset('storage/' . $paslon->ft_wakil) }}" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        <img src="{{ Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::url($paslon->ft_wakil) }}" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     </div>
                     <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
                         <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_wakil }}</span>

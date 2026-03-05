@@ -43,7 +43,19 @@ class AppServiceProvider extends ServiceProvider
             $adapter = new GoogleCloudStorageAdapter($bucket, $pathPrefix);
             $filesystem = new Filesystem($adapter);
 
-            return new FilesystemAdapter($filesystem, $adapter, $config);
+            return new class($filesystem, $adapter, $config) extends FilesystemAdapter {
+                public function url($path)
+                {
+                    $url = $this->config['url'] ?? ('https://storage.googleapis.com/' . $this->config['bucket'] . '/' . ($this->config['path_prefix'] ?? ''));
+                    return rtrim($url, '/') . '/' . ltrim($path, '/');
+                }
+
+                public function temporaryUrl($path, $expiration, array $options = [])
+                {
+                    // Because bucket is public, we can just return the actual URL
+                    return $this->url($path); 
+                }
+            };
         });
     }
 }
