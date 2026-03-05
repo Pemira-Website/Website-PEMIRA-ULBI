@@ -68,6 +68,7 @@ return [
             'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', 'pemira'),
             'url' => env('GOOGLE_CLOUD_STORAGE_URL', 'https://storage.googleapis.com/' . env('GOOGLE_CLOUD_STORAGE_BUCKET') . '/' . env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', 'pemira')),
             'visibility' => 'public',
+            'throw' => true,
         ],
 
     ],
