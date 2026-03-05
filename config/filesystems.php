@@ -67,7 +67,6 @@ return [
             'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET'),
             'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', 'pemira'),
             'url' => env('GOOGLE_CLOUD_STORAGE_URL'),
-            'visibility' => 'public',
             'throw' => true,
         ],
 

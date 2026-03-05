@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Google\Cloud\Storage\StorageClient;
 use League\Flysystem\Filesystem;
 use League\Flysystem\GoogleCloudStorage\GoogleCloudStorageAdapter;
+use League\Flysystem\GoogleCloudStorage\UniformBucketLevelAccessVisibility;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -50,7 +51,11 @@ class AppServiceProvider extends ServiceProvider
             $bucket = $storageClient->bucket($config['bucket']);
             $pathPrefix = $config['path_prefix'] ?? '';
 
-            $adapter = new GoogleCloudStorageAdapter($bucket, $pathPrefix);
+            $adapter = new GoogleCloudStorageAdapter(
+                bucket: $bucket,
+                prefix: $pathPrefix,
+                visibilityHandler: new UniformBucketLevelAccessVisibility(),
+            );
             $filesystem = new Filesystem($adapter);
 
             return new class($filesystem, $adapter, $config) extends FilesystemAdapter {
