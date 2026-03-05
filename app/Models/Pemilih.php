@@ -32,10 +32,41 @@ class Pemilih extends Model
         'otp_expires_at' => 'datetime',
     ];
 
-    // Relasi ke model Paslon (opsional, tambahkan jika ada hubungan antar tabel)
-    public function paslon()
+    /**
+     * Ambil daftar jenis pemilihan yang diizinkan (dari comma-separated string).
+     */
+    public function getAllowedVoteTypes(): array
     {
-        return $this->belongsTo(Paslon::class, 'jenis_pemilihan', 'jenis_pemilihan');
+        return array_map('trim', explode(',', $this->jenis_pemilihan));
+    }
+
+    /**
+     * Cek apakah pemilih bisa vote untuk jenis pemilihan tertentu.
+     */
+    public function canVoteFor(string $jenisPemilihan): bool
+    {
+        return in_array($jenisPemilihan, $this->getAllowedVoteTypes());
+    }
+
+    /**
+     * Ambil paslon berdasarkan salah satu jenis pemilihan yang diizinkan.
+     * Karena jenis_pemilihan comma-separated, relasi belongsTo tidak cocok.
+     */
+    public function paslonByJenis(string $jenisPemilihan)
+    {
+        return Paslon::where('jenis_pemilihan', $jenisPemilihan)->get();
+    }
+
+    /**
+     * Cek apakah OTP masih valid (belum expired).
+     */
+    public function isOtpValid(): bool
+    {
+        if (!$this->otp_expires_at) {
+            return true; // Jika tidak ada expiry, anggap valid (legacy data)
+        }
+
+        return $this->otp_expires_at->isFuture();
     }
 
     /**

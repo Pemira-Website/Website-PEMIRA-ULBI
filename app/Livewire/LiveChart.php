@@ -58,9 +58,9 @@ class LiveChart extends Component
                 $labels[] = str_pad($paslon->paslon_ke, 2, '0', STR_PAD_LEFT);
                 $votes[] = (int) $paslon->total_vote;
                 
-                // Get the image paths properly via Storage Facade
-                $ketuaUrl = Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : \Illuminate\Support\Facades\Storage::url($paslon->ft_ketua);
-                $wakilUrl = Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : \Illuminate\Support\Facades\Storage::url($paslon->ft_wakil);
+                // Get the image paths properly via GCS Storage disk
+                $ketuaUrl = Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : \Illuminate\Support\Facades\Storage::disk('gcs')->url($paslon->ft_ketua);
+                $wakilUrl = Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : \Illuminate\Support\Facades\Storage::disk('gcs')->url($paslon->ft_wakil);
                 
                 $images[] = [
                     'ketua' => $ketuaUrl,

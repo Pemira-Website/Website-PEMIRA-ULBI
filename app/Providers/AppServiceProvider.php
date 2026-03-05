@@ -32,11 +32,21 @@ class AppServiceProvider extends ServiceProvider
 
         // Register GCS filesystem driver
         Storage::extend('gcs', function ($app, $config) {
-            $storageClient = new StorageClient([
-                'projectId' => $config['project_id'],
-                'keyFile' => $config['key_file'] ?? null,
-            ]);
+            // Validasi config yang diperlukan
+            if (empty($config['project_id']) || empty($config['bucket'])) {
+                throw new \RuntimeException('GCS storage requires project_id and bucket configuration.');
+            }
 
+            $clientConfig = [
+                'projectId' => $config['project_id'],
+            ];
+
+            // Hanya set keyFile jika benar-benar ada (bukan null/empty string)
+            if (!empty($config['key_file']) && is_array($config['key_file'])) {
+                $clientConfig['keyFile'] = $config['key_file'];
+            }
+
+            $storageClient = new StorageClient($clientConfig);
             $bucket = $storageClient->bucket($config['bucket']);
             $pathPrefix = $config['path_prefix'] ?? '';
 
@@ -44,16 +54,35 @@ class AppServiceProvider extends ServiceProvider
             $filesystem = new Filesystem($adapter);
 
             return new class($filesystem, $adapter, $config) extends FilesystemAdapter {
-                public function url($path)
+                /**
+                 * Generate public URL untuk file di GCS.
+                 * Path yang diberikan sudah relatif terhadap path_prefix,
+                 * jadi kita hanya perlu menambahkan ke base URL.
+                 */
+                public function url($path): string
                 {
-                    $url = $this->config['url'] ?? ('https://storage.googleapis.com/' . $this->config['bucket'] . '/' . ($this->config['path_prefix'] ?? ''));
-                    return rtrim($url, '/') . '/' . ltrim($path, '/');
+                    // Jika path sudah berupa full URL, kembalikan langsung
+                    if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+                        return $path;
+                    }
+
+                    $bucket = $this->config['bucket'] ?? '';
+                    $prefix = $this->config['path_prefix'] ?? '';
+
+                    // Build base URL: https://storage.googleapis.com/{bucket}/{prefix}
+                    $baseUrl = $this->config['url']
+                        ?? ('https://storage.googleapis.com/' . $bucket . ($prefix ? '/' . trim($prefix, '/') : ''));
+
+                    return rtrim($baseUrl, '/') . '/' . ltrim($path, '/');
                 }
 
-                public function temporaryUrl($path, $expiration, array $options = [])
+                /**
+                 * GCS public bucket tidak perlu signed URL,
+                 * kembalikan public URL langsung.
+                 */
+                public function temporaryUrl($path, $expiration, array $options = []): string
                 {
-                    // Because bucket is public, we can just return the actual URL
-                    return $this->url($path); 
+                    return $this->url($path);
                 }
             };
         });

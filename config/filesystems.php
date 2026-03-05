@@ -61,12 +61,12 @@ return [
         'gcs' => [
             'driver' => 'gcs',
             'project_id' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'key_file' => env('GOOGLE_CLOUD_CREDENTIALS') 
-                ? json_decode(env('GOOGLE_CLOUD_CREDENTIALS'), true) 
-                : env('GOOGLE_CLOUD_KEY_FILE'),
+            'key_file' => env('GOOGLE_CLOUD_CREDENTIALS')
+                ? json_decode(env('GOOGLE_CLOUD_CREDENTIALS'), true)
+                : null,
             'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET'),
             'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', 'pemira'),
-            'url' => env('GOOGLE_CLOUD_STORAGE_URL', 'https://storage.googleapis.com/' . env('GOOGLE_CLOUD_STORAGE_BUCKET') . '/' . env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', 'pemira')),
+            'url' => env('GOOGLE_CLOUD_STORAGE_URL'),
             'visibility' => 'public',
             'throw' => true,
         ],

@@ -19,7 +19,7 @@
             <div class="flex justify-center items-start gap-16">
                 <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                     <div class="relative w-72 h-64 overflow-hidden">
-                        <img src="{{ Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::url($paslon->ft_ketua) }}" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        <img src="{{ Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::disk('gcs')->url($paslon->ft_ketua) }}" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     </div>
                     <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
                         <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_ketua }}</span>
@@ -29,7 +29,7 @@
         
                 <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                     <div class="relative w-72 h-64 overflow-hidden">
-                        <img src="{{ Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::url($paslon->ft_wakil) }}" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        <img src="{{ Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::disk('gcs')->url($paslon->ft_wakil) }}" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     </div>
                     <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
                         <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_wakil }}</span>
@@ -52,20 +52,20 @@
                 <button
                     class="text-white font-extrabold py-3 px-10 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 shadow-lg hover:shadow-xl hover:scale-105 hover:bg-gradient-to-r hover:from-orange-400 hover:to-yellow-400 transition-all duration-300"
                     onclick="showDetailModal(
-                        '{{ Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : asset('storage/' . $paslon->ft_ketua) }}',
-                        '{{ $paslon->nm_ketua }}',
-                        '{{ $paslon->npm_ketua }}',
-                        '{{ $paslon->pd_ketua }}',
-                        '{{ $paslon->ang_ketua }}',
-                        '{{ $paslon->jbt_ketua }}',
-                        '{{ Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : asset('storage/' . $paslon->ft_wakil) }}',
-                        '{{ $paslon->nm_wakil }}',
-                        '{{ $paslon->npm_wakil }}',
-                        '{{ $paslon->pd_wakil }}',
-                        '{{ $paslon->ang_wakil }}',
-                        '{{ $paslon->jbt_wakil }}',
-                        `{!! addslashes($paslon->visi) !!}`,
-                        `{!! addslashes($paslon->misi) !!}`
+                        @json(Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::disk('gcs')->url($paslon->ft_ketua)),
+                        @json($paslon->nm_ketua),
+                        @json((string)$paslon->npm_ketua),
+                        @json($paslon->pd_ketua),
+                        @json($paslon->ang_ketua),
+                        @json($paslon->jbt_ketua),
+                        @json(Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::disk('gcs')->url($paslon->ft_wakil)),
+                        @json($paslon->nm_wakil),
+                        @json((string)$paslon->npm_wakil),
+                        @json($paslon->pd_wakil),
+                        @json($paslon->ang_wakil),
+                        @json($paslon->jbt_wakil),
+                        @json($paslon->visi),
+                        @json($paslon->misi)
                     )">
                     Detail Profil
                 </button>

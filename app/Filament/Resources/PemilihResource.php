@@ -155,10 +155,13 @@ class PemilihResource extends Resource
                         ->modalDescription(fn ($record) => "Password akan di-generate dari 4 digit terakhir NPM ({$record->npm}): " . substr($record->npm, -4))
                         ->action(function ($record) {
                             $password = substr($record->npm, -4);
-                            $record->update(['password' => $password]);
+                            $record->update([
+                                'password' => \Illuminate\Support\Facades\Hash::make($password),
+                                'otp_expires_at' => \Carbon\Carbon::now('Asia/Jakarta')->addMinutes(30),
+                            ]);
                             Notification::make()
                                 ->title('Kode berhasil di-generate!')
-                                ->body("Password: {$password}")
+                                ->body("Password: {$password} (berlaku 30 menit)")
                                 ->success()
                                 ->send();
                         }),

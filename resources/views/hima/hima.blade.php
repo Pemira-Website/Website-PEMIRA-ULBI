@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pemira 2024</title>
+    <title>Pemira 2026</title>
     @vite('resources/css/app.css')
 </head>
 
@@ -29,6 +29,12 @@
             @include('hima.himasta')
         @elseif ($prodi == 'D3 Manajemen Informatika')
             @include('hima.hmmi')
+        @elseif ($prodi == 'S1 Bisnis Digital')
+            @include('hima.himabig')
+        @elseif ($prodi == 'D4 Logistik Niaga-EL')
+            @include('hima.hicomlog')
+        @elseif ($prodi == 'S1 Manajemen Rekayasa')
+            @include('hima.himamera')
         @endif
 
     </div>

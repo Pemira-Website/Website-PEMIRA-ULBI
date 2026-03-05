@@ -37,10 +37,25 @@ class Paslon extends Model
         'total_vote' => 'integer',
     ];
 
-    // Relasi ke model Pemilih (opsional, tambahkan jika ada hubungan antar tabel)
+    /**
+     * Scope: Ambil semua pemilih yang bisa vote untuk jenis pemilihan ini.
+     * Karena field jenis_pemilihan di pemilih berformat comma-separated ("presma,himatif"),
+     * kita gunakan FIND_IN_SET alih-alih relasi Eloquent biasa.
+     */
     public function pemilih()
     {
-        return $this->hasMany(Pemilih::class, 'jenis_pemilihan', 'jenis_pemilihan');
+        return Pemilih::whereRaw('FIND_IN_SET(?, jenis_pemilihan)', [$this->jenis_pemilihan])->get();
+    }
+
+    /**
+     * Scope: Count pemilih yang sudah vote untuk jenis pemilihan ini.
+     */
+    public function countVoters(): int
+    {
+        $column = $this->jenis_pemilihan === 'presma' ? 'pml_presma' : 'pml_hima';
+        return Pemilih::whereRaw('FIND_IN_SET(?, jenis_pemilihan)', [$this->jenis_pemilihan])
+            ->where($column, 1)
+            ->count();
     }
 
     /**

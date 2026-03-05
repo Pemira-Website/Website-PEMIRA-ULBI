@@ -37,6 +37,11 @@ class AuthController extends Controller
         $user = Pemilih::where('npm', $npm)->first();
 
         if ($user && Hash::check($password, $user->password)) {
+            // Cek apakah OTP sudah expired
+            if ($user->otp_expires_at && $user->otp_expires_at->isPast()) {
+                return redirect()->back()->withErrors(['error' => 'Kode OTP sudah expired. Silakan minta kode baru ke panitia.']);
+            }
+
             // Parse jenis_pemilihan (format: "presma,himatif")
             $allowedVotes = array_map('trim', explode(',', $user->jenis_pemilihan));
             
