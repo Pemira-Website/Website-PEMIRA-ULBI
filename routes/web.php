@@ -15,5 +15,8 @@
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/menuvote/{prodi}', [MenuVoteController::class, 'show'])->name('menuvote');
     Route::get('/vote/{jenis_pemilihan}', [PaslonController::class, 'index'])->name('vote.show');
-    Route::get('/hasilvote', PresmaLiveChart::class);
+    Route::get('/hasilvote', function () {
+        $jenis_pemilihans = \App\Models\Paslon::select('jenis_pemilihan')->distinct()->pluck('jenis_pemilihan');
+        return view('hasilvote', compact('jenis_pemilihans'));
+    });
     Route::post('/vote/{npm}', [VoteController::class, 'addVote'])->name('vote.add');
