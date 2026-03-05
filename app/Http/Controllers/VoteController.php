@@ -78,8 +78,21 @@ class VoteController extends Controller
             return redirect()->back()->with('error', $errorMessage);
         }
 
+        // --- Custom Request Rate Limiting (Throttle) ---
+        // Batasi klik tombol vote max 1 kali per 3 detik untuk NPM ini agar tidak men-spam queue/server
+        $throttleKey = 'vote_throttle_'.$pemilih->npm;
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, 1)) {
+            return redirect()->back()->with('error', 'Terlalu banyak permintaan! Harap tunggu beberapa detik.');
+        }
+        \Illuminate\Support\Facades\RateLimiter::hit($throttleKey, 3);
+        // -----------------------------------------------
+
+        // Extract security context
+        $ip_address = $request->ip();
+        $user_agent = $request->userAgent();
+
         // Dispatch background job to Redis Queue (Message Broker)
-        \App\Jobs\ProcessVote::dispatch($pemilih->id, $paslon->id, $jenisVote, $himaType);
+        \App\Jobs\ProcessVote::dispatch($pemilih->id, $paslon->id, $jenisVote, $himaType, $ip_address, $user_agent);
 
         // Immediate response for high throughput
         if ($willBeFinished) {

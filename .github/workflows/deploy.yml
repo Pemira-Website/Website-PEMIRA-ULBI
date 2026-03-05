@@ -96,6 +96,7 @@ jobs:
             --set-env-vars "APP_KEY=${{ secrets.APP_KEY }}" \
             --set-env-vars "FILESYSTEM_DISK=gcs" \
             --set-env-vars "GOOGLE_CLOUD_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" \
+            --set-env-vars "GOOGLE_CLOUD_CREDENTIALS=${{ secrets.GCP_SA_KEY }}" \
             --set-env-vars "GOOGLE_CLOUD_STORAGE_BUCKET=${{ secrets.GCS_BUCKET }}" \
             --set-env-vars "GOOGLE_CLOUD_STORAGE_PATH_PREFIX=pemira" \
             --set-env-vars "DB_CONNECTION=mysql" \

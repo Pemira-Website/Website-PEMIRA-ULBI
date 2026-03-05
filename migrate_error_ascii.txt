@@ -1,0 +1,26 @@
+
+   INFO  Running migrations.  
+
+  2026_01_28_140000_add_otp_expires_at_to_pemilih  44.80ms FAIL
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'otp_expires_at' (Connection: mysql, SQL: alter table `pemilih` add `otp_expires_at` timestamp null after `password`)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:825
+    821?                     $this->getName(), $query, $this->prepareBindings($bindings), $e
+    822?                 );
+    823?             }
+    824? 
+  ? 825?             throw new QueryException(
+    826?                 $this->getName(), $query, $this->prepareBindings($bindings), $e
+    827?             );
+    828?         }
+    829?     }
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:571
+      PDOException::("SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'otp_expires_at'")
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:571
+      PDOStatement::execute()
+
