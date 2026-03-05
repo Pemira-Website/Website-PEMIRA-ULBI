@@ -54,13 +54,18 @@ class LiveChart extends Component
             ];
 
             foreach ($paslons as $index => $paslon) {
-                // Ensure labels and votes are captured
-                $labels[] = "Paslon " . $paslon->paslon_ke;
+                // Formatting numbers to 01, 02 etc.
+                $labels[] = str_pad($paslon->paslon_ke, 2, '0', STR_PAD_LEFT);
                 $votes[] = (int) $paslon->total_vote;
                 
-                // Get the image path properly
-                $imgUrl = Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : asset('storage/' . $paslon->ft_ketua);
-                $images[] = $imgUrl;
+                // Get the image paths properly
+                $ketuaUrl = Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : asset('storage/' . $paslon->ft_ketua);
+                $wakilUrl = Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : asset('storage/' . $paslon->ft_wakil);
+                
+                $images[] = [
+                    'ketua' => $ketuaUrl,
+                    'wakil' => $wakilUrl
+                ];
                 
                 $colorIndex = $index % count($colorPalette);
                 $colors[] = $colorPalette[$colorIndex][0];
