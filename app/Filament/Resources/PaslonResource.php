@@ -29,7 +29,11 @@ class PaslonResource extends Resource
                     ->disk('gcs')
                     ->directory('paslon')
                     ->visibility('public')
-                    ->required(),
+                    ->required(fn (string $operation): bool => $operation === 'create')
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->maxSize(5120)
+                    ->openable()
+                    ->downloadable(),
                 Forms\Components\TextInput::make('nm_wakil')
                     ->required()
                     ->maxLength(255),
@@ -38,7 +42,11 @@ class PaslonResource extends Resource
                     ->disk('gcs')
                     ->directory('paslon')
                     ->visibility('public')
-                    ->required(),
+                    ->required(fn (string $operation): bool => $operation === 'create')
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->maxSize(5120)
+                    ->openable()
+                    ->downloadable(),
                 Forms\Components\TextInput::make('npm_ketua')
                     ->required()
                     ->numeric(),
@@ -138,12 +146,18 @@ class PaslonResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('nm_ketua')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('ft_ketua') // Kolom gambar ketua
-                    ->label('Foto Ketua'),
+                Tables\Columns\ImageColumn::make('ft_ketua')
+                    ->label('Foto Ketua')
+                    ->disk('gcs')
+                    ->square()
+                    ->size(60),
                 Tables\Columns\TextColumn::make('nm_wakil')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('ft_wakil') // Kolom gambar wakil
-                    ->label('Foto Wakil'),
+                Tables\Columns\ImageColumn::make('ft_wakil')
+                    ->label('Foto Wakil')
+                    ->disk('gcs')
+                    ->square()
+                    ->size(60),
                 Tables\Columns\TextColumn::make('npm_ketua')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('npm_wakil')

@@ -56,12 +56,9 @@ class AppServiceProvider extends ServiceProvider
             return new class($filesystem, $adapter, $config) extends FilesystemAdapter {
                 /**
                  * Generate public URL untuk file di GCS.
-                 * Path yang diberikan sudah relatif terhadap path_prefix,
-                 * jadi kita hanya perlu menambahkan ke base URL.
                  */
                 public function url($path): string
                 {
-                    // Jika path sudah berupa full URL, kembalikan langsung
                     if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
                         return $path;
                     }
@@ -69,7 +66,6 @@ class AppServiceProvider extends ServiceProvider
                     $bucket = $this->config['bucket'] ?? '';
                     $prefix = $this->config['path_prefix'] ?? '';
 
-                    // Build base URL: https://storage.googleapis.com/{bucket}/{prefix}
                     $baseUrl = $this->config['url']
                         ?? ('https://storage.googleapis.com/' . $bucket . ($prefix ? '/' . trim($prefix, '/') : ''));
 
@@ -83,6 +79,34 @@ class AppServiceProvider extends ServiceProvider
                 public function temporaryUrl($path, $expiration, array $options = []): string
                 {
                     return $this->url($path);
+                }
+
+                /**
+                 * Indicate that temporary URLs can be generated.
+                 * Required by Filament FileUpload to generate preview URLs.
+                 */
+                public function providesTemporaryUrls(): bool
+                {
+                    return true;
+                }
+
+                /**
+                 * GCS uniform bucket-level access: visibility is managed at bucket level,
+                 * not per-object. Override to prevent exceptions from Filament FileUpload.
+                 */
+                public function getVisibility($path): string
+                {
+                    return 'public';
+                }
+
+                /**
+                 * No-op: GCS public bucket manages visibility at bucket level.
+                 * Mencegah error saat Filament FileUpload set visibility.
+                 */
+                public function setVisibility($path, $visibility): bool
+                {
+                    // No-op for uniform bucket-level access
+                    return true;
                 }
             };
         });
