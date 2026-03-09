@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasColumn('pemilih', 'otp_expires_at')) {
-            Schema::table('pemilih', function (Blueprint $table) {
-                $table->timestamp('otp_expires_at')->nullable()->after('password');
-            });
-        }
+        Schema::table('pemilih', function (Blueprint $table) {
+            $table->string('password')->nullable()->change();
+        });
     }
 
     /**
@@ -24,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('pemilih', function (Blueprint $table) {
-            $table->dropColumn('otp_expires_at');
+            $table->string('password')->nullable(false)->change();
         });
     }
 };

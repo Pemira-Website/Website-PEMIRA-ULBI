@@ -40,12 +40,56 @@ class PemilihResource extends Resource
                                     $set('password', substr($state, -4));
                                 }
                             }),
-                        Forms\Components\TextInput::make('prodi')
+                        Forms\Components\Select::make('prodi')
                             ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('jenis_pemilihan')
+                            ->searchable()
+                            ->options([
+                                'D3 Akuntansi'           => 'D3 Akuntansi',
+                                'D3 Manajemen Logistik'  => 'D3 Manajemen Logistik',
+                                'D3 Manajemen Bisnis'    => 'D3 Manajemen Bisnis',
+                                'D3 Manajemen Informatika' => 'D3 Manajemen Informatika',
+                                'D3 Teknik Informatika'  => 'D3 Teknik Informatika',
+                                'D4 Logistik Bisnis'     => 'D4 Logistik Bisnis',
+                                'D4 Akuntansi Keuangan'  => 'D4 Akuntansi Keuangan',
+                                'D4 Manajemen Bisnis'    => 'D4 Manajemen Bisnis',
+                                'D4 Teknik Informatika'  => 'D4 Teknik Informatika',
+                                'D4 E-Commerce Logistics' => 'D4 E-Commerce Logistics',
+                                'S1 Manajemen Logistik'  => 'S1 Manajemen Logistik',
+                                'S1 Manajemen Transportasi' => 'S1 Manajemen Transportasi',
+                                'S1 Sains Data'          => 'S1 Sains Data',
+                                'S1 Bisnis Digital'      => 'S1 Bisnis Digital',
+                                'S1 Manajemen Rekayasa'  => 'S1 Manajemen Rekayasa',
+                            ]),
+                        Forms\Components\Select::make('jenis_pemilihan')
                             ->required()
-                            ->maxLength(255),
+                            ->multiple()
+                            ->afterStateHydrated(function ($state, callable $set) {
+                                // Konversi comma-separated string ke array untuk form
+                                if (is_string($state) && !empty($state)) {
+                                    $set('jenis_pemilihan', array_map('trim', explode(',', $state)));
+                                }
+                            })
+                            ->dehydrateStateUsing(function ($state) {
+                                // Konversi array kembali ke comma-separated string untuk database
+                                if (is_array($state)) {
+                                    return implode(',', $state);
+                                }
+                                return $state;
+                            })
+                            ->options([
+                                'presma'   => 'Presiden Mahasiswa (Presma)',
+                                'himatif'  => 'Himpunan - HIMATIF',
+                                'himagis'  => 'Himpunan - HIMAGIS',
+                                'himalogbis' => 'Himpunan - HIMALOGBIS',
+                                'himaporta' => 'Himpunan - HIMAPORTA',
+                                'himanbis' => 'Himpunan - HIMANBIS',
+                                'hma'      => 'Himpunan - HMA',
+                                'himabig'  => 'Himpunan - HIMABIG',
+                                'hicomlog' => 'Himpunan - HICOMLOG',
+                                'himasta'  => 'Himpunan - HIMASTA',
+                                'himamera' => 'Himpunan - HIMAMERA',
+                                'hmmi'     => 'Himpunan - HMMI',
+                            ]),
                     ])
                     ->columns(2),
                 
