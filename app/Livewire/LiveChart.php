@@ -77,12 +77,17 @@ class LiveChart extends Component
                 $votes[] = (int) $paslon->total_vote;
                 
                 // Get the image paths properly via GCS Storage disk
-                $ketuaUrl = Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : \Illuminate\Support\Facades\Storage::disk('gcs')->url($paslon->ft_ketua);
-                $wakilUrl = Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : \Illuminate\Support\Facades\Storage::disk('gcs')->url($paslon->ft_wakil);
+                $ketuaUrl = filled($paslon->ft_ketua)
+                    ? (Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : \Illuminate\Support\Facades\Storage::disk('gcs')->url($paslon->ft_ketua))
+                    : null;
+                $wakilUrl = filled($paslon->ft_wakil)
+                    ? (Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : \Illuminate\Support\Facades\Storage::disk('gcs')->url($paslon->ft_wakil))
+                    : null;
                 
                 $images[] = [
                     'ketua' => $ketuaUrl,
-                    'wakil' => $wakilUrl
+                    'wakil' => $wakilUrl,
+                    'has_wakil' => filled($paslon->nm_wakil),
                 ];
                 
                 $colorIndex = $index % count($colorPalette);

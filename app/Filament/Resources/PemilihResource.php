@@ -199,7 +199,7 @@ class PemilihResource extends Resource
                             $otp = PemiraConfig::generateOtpCode();
                             $record->update([
                                 'password' => Hash::make($otp),
-                                'otp_expires_at' => Carbon::now('Asia/Jakarta')->addMinutes(30),
+                                'otp_expires_at' => now()->addMinutes(30),
                             ]);
                             Notification::make()
                                 ->title('Kode berhasil di-generate!')

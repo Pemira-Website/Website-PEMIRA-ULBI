@@ -101,8 +101,8 @@ class GenerateKodePage extends Page implements HasForms
         // Generate random alphanumeric OTP (6 chars)
         $kode = PemiraConfig::generateOtpCode();
         
-        // Set expiration time (30 minutes from now) in WIB timezone
-        $expiresAt = Carbon::now('Asia/Jakarta')->addMinutes(30);
+        // Ikuti timezone aplikasi agar display dan validasi login konsisten.
+        $expiresAt = now()->addMinutes(30);
 
         // Update password (hashed) dan expiration di database
         $pemilih->update([

@@ -17,59 +17,81 @@
         <div class="space-y-10">
         @forelse ($dataPaslon as $key => $paslon)
         <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-black shadow-2xl rounded-3xl w-[800px] p-8 relative overflow-hidden">
-            <div class="absolute -top-10 -left-10 w-64 h-64 bg-gradient-to-tr from-blue-700 to-blue-500 opacity-20 blur-3xl"></div>
-            <div class="absolute -bottom-10 -right-10 w-72 h-72 bg-gradient-to-tr from-orange-600 to-orange-400 opacity-20 blur-3xl"></div>
+            <div class="pointer-events-none absolute -top-10 -left-10 w-64 h-64 bg-gradient-to-tr from-blue-700 to-blue-500 opacity-20 blur-3xl"></div>
+            <div class="pointer-events-none absolute -bottom-10 -right-10 w-72 h-72 bg-gradient-to-tr from-orange-600 to-orange-400 opacity-20 blur-3xl"></div>
         
-            <div class="text-center mb-8">
+            <div class="relative z-10 text-center mb-8">
                 <h2 class="text-4xl font-bold text-white tracking-wide uppercase drop-shadow-md">
                     Paslon {{ $key + 1 }}
                 </h2>
                 <p class="text-sm text-gray-400 italic mt-2">"Pilih pemimpin terbaik untuk masa depan"</p>
             </div>
         
-            <div class="flex justify-center items-start gap-16">
+            @php
+                $ketuaFoto = filled($paslon->ft_ketua)
+                    ? (Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::disk('gcs')->url($paslon->ft_ketua))
+                    : null;
+                $wakilFoto = filled($paslon->ft_wakil)
+                    ? (Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::disk('gcs')->url($paslon->ft_wakil))
+                    : null;
+                $hasWakil = filled($paslon->nm_wakil);
+            @endphp
+
+            <div class="relative z-10 flex justify-center items-start gap-16">
                 <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                     <div class="relative w-72 h-64 overflow-hidden">
-                        <img src="{{ Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::disk('gcs')->url($paslon->ft_ketua) }}" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        @if($ketuaFoto)
+                            <img src="{{ $ketuaFoto }}" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center bg-slate-700 text-slate-200 font-semibold">Foto belum tersedia</div>
+                        @endif
                     </div>
                     <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
                         <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_ketua }}</span>
                         <span class="block text-white font-extrabold text-xl mt-1">{{ $paslon->nm_ketua }}</span>
                     </div>
                 </div>
-        
-                <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
-                    <div class="relative w-72 h-64 overflow-hidden">
-                        <img src="{{ Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::disk('gcs')->url($paslon->ft_wakil) }}" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+
+                @if($hasWakil)
+                    <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
+                        <div class="relative w-72 h-64 overflow-hidden">
+                            @if($wakilFoto)
+                                <img src="{{ $wakilFoto }}" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center bg-slate-700 text-slate-200 font-semibold">Foto belum tersedia</div>
+                            @endif
+                        </div>
+                        <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
+                            <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_wakil }}</span>
+                            <span class="block text-white font-extrabold text-xl mt-1">{{ $paslon->nm_wakil }}</span>
+                        </div>
                     </div>
-                    <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
-                        <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_wakil }}</span>
-                        <span class="block text-white font-extrabold text-xl mt-1">{{ $paslon->nm_wakil }}</span>
-                    </div>
-                </div>
+                @endif
             </div>
             <br>
-            <div class="py-4 flex justify-center gap-6">
+            <div class="relative z-10 py-4 flex justify-center gap-6">
                 <form method="POST" action="{{ route('vote.add') }}" id="voteForm-{{ $paslon->id }}" class="hidden">
                     @csrf
                     <input type="hidden" name="paslon_id" value="{{ $paslon->id }}">
                     <input type="hidden" name="jenis_vote" value="{{ $paslon->jenis_pemilihan }}">
                 </form>
                 <button 
+                    type="button"
                     class="text-white font-extrabold py-3 px-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 shadow-lg hover:shadow-xl hover:scale-105 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 transition-all duration-300"
                     onclick="confirmVote({{ $paslon->id }})">
                     Vote Paslon
                 </button>
                 <button
+                    type="button"
                     class="text-white font-extrabold py-3 px-10 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 shadow-lg hover:shadow-xl hover:scale-105 hover:bg-gradient-to-r hover:from-orange-400 hover:to-yellow-400 transition-all duration-300"
                     onclick="showDetailModal(
-                        @json(Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::disk('gcs')->url($paslon->ft_ketua)),
+                        @json($ketuaFoto),
                         @json($paslon->nm_ketua),
                         @json((string)$paslon->npm_ketua),
                         @json($paslon->pd_ketua),
                         @json($paslon->ang_ketua),
                         @json($paslon->jbt_ketua),
-                        @json(Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::disk('gcs')->url($paslon->ft_wakil)),
+                        @json($wakilFoto),
                         @json($paslon->nm_wakil),
                         @json((string)$paslon->npm_wakil),
                         @json($paslon->pd_wakil),
@@ -172,9 +194,9 @@
                         </div>
                     </div>
                 </div>
-                <div>
+                <div id="wakilWrapper">
                     <h4 id="wakilJbt" class="text-lg font-bold text-orange-700 mb-2"></h4>
-                    <div class="flex items-center p-4 border border-gray-200 rounded-lg shadow-sm">
+                    <div id="wakilSection" class="flex items-center p-4 border border-gray-200 rounded-lg shadow-sm">
                         <div class="flex-shrink-0 w-16 h-16 rounded-full overflow-hidden bg-gray-100 shadow-md">
                             <img src="" id="wakilFoto" alt="Foto Wakil" class="w-full h-full object-cover">
                         </div>
@@ -266,18 +288,28 @@
 
         function showDetailModal(ketuaFoto, ketuaNama, ketuaNPM, ketuaProdi, ketuaAngkatan, ketuaJbt, wakilFoto, wakilNama, wakilNPM, wakilProdi, wakilAngkatan, wakilJbt, visi, misi) {
             document.getElementById('ketuaNama').innerText = ketuaNama;
-            document.getElementById('ketuaFoto').src = ketuaFoto; 
+            document.getElementById('ketuaFoto').src = ketuaFoto || '';
             document.getElementById('ketuaNPM').innerText = ketuaNPM;
             document.getElementById('ketuaProdi').innerText = ketuaProdi;
             document.getElementById('ketuaAngkatan').innerText = ketuaAngkatan;
             document.getElementById('ketuaJbt').innerText = ketuaJbt;
 
-            document.getElementById('wakilNama').innerText = wakilNama;
-            document.getElementById('wakilFoto').src = wakilFoto;
-            document.getElementById('wakilNPM').innerText = wakilNPM;
-            document.getElementById('wakilProdi').innerText = wakilProdi;
-            document.getElementById('wakilAngkatan').innerText = wakilAngkatan;
-            document.getElementById('wakilJbt').innerText = wakilJbt;
+            const hasWakil = Boolean(wakilNama);
+            const wakilSection = document.getElementById('wakilSection');
+            const wakilWrapper = document.getElementById('wakilWrapper');
+            if (hasWakil) {
+                wakilWrapper.classList.remove('hidden');
+                wakilSection.classList.remove('hidden');
+                document.getElementById('wakilNama').innerText = wakilNama;
+                document.getElementById('wakilFoto').src = wakilFoto || '';
+                document.getElementById('wakilNPM').innerText = wakilNPM || '-';
+                document.getElementById('wakilProdi').innerText = wakilProdi || '-';
+                document.getElementById('wakilAngkatan').innerText = wakilAngkatan || '-';
+                document.getElementById('wakilJbt').innerText = wakilJbt || 'Wakil';
+            } else {
+                wakilWrapper.classList.add('hidden');
+                wakilSection.classList.add('hidden');
+            }
 
             document.getElementById('visi').innerText = visi;
             document.getElementById('misi').innerText = misi;

@@ -35,13 +35,14 @@ class PaslonResource extends Resource
                     ->openable()
                     ->downloadable(),
                 Forms\Components\TextInput::make('nm_wakil')
-                    ->required()
-                    ->maxLength(255),
+                    ->label('Nama Wakil (Opsional)')
+                    ->maxLength(255)
+                    ->helperText('Kosongkan jika pasangan calon tidak memiliki wakil.'),
                 Forms\Components\FileUpload::make('ft_wakil')
+                    ->label('Foto Wakil (Opsional)')
                     ->image()
                     ->disk('gcs')
                     ->directory('paslon')
-                    ->required(fn (string $operation): bool => $operation === 'create')
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                     ->maxSize(5120)
                     ->openable()
@@ -50,7 +51,7 @@ class PaslonResource extends Resource
                     ->required()
                     ->numeric(),
                 Forms\Components\TextInput::make('npm_wakil')
-                    ->required()
+                    ->label('NPM Wakil (Opsional)')
                     ->numeric(),
                 Forms\Components\Select::make('pd_ketua') // Menjadikan pd_ketua enum
                     ->options(function (): array {
@@ -61,13 +62,13 @@ class PaslonResource extends Resource
                     })
                     ->required(),
                 Forms\Components\Select::make('pd_wakil') // Menjadikan pd_wakil enum
+                    ->label('Prodi Wakil (Opsional)')
                     ->options(function (): array {
                         $prodis = array_keys(PemiraConfig::prodiToHimaMap());
                         sort($prodis);
 
                         return array_combine($prodis, $prodis);
-                    })
-                    ->required(),
+                    }),
                 Forms\Components\TextInput::make('ang_ketua')
                     ->required()
                     ->maxLength(255),
@@ -78,14 +79,15 @@ class PaslonResource extends Resource
                     ])
                     ->required(),
                 Forms\Components\TextInput::make('ang_wakil')
-                    ->required()
+                    ->label('Angkatan Wakil (Opsional)')
                     ->maxLength(255),
                 Forms\Components\Select::make('jbt_wakil') // Menjadikan jbt_wakil enum
+                    ->label('Jabatan Wakil (Otomatis / Opsional)')
                     ->options([
                         'Wakil Presiden Mahasiswa' => 'Wakil Presiden Mahasiswa',
                         'Wakil Ketua Himpunan' => 'Wakil Ketua Himpunan',
                     ])
-                    ->required(),
+                    ->helperText('Akan diisi otomatis jika data wakil tersedia.'),
                 Forms\Components\Textarea::make('visi')
                     ->required()
                     ->columnSpanFull(),
@@ -120,7 +122,8 @@ class PaslonResource extends Resource
                     ->square()
                     ->size(60),
                 Tables\Columns\TextColumn::make('nm_wakil')
-                    ->searchable(),
+                    ->searchable()
+                    ->placeholder('-'),
                 Tables\Columns\ImageColumn::make('ft_wakil')
                     ->label('Foto Wakil')
                     ->disk('gcs')
@@ -129,19 +132,23 @@ class PaslonResource extends Resource
                 Tables\Columns\TextColumn::make('npm_ketua')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('npm_wakil')
-                    ->sortable(),
+                    ->sortable()
+                    ->placeholder('-'),
                 Tables\Columns\TextColumn::make('pd_ketua')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('pd_wakil')
-                    ->searchable(),
+                    ->searchable()
+                    ->placeholder('-'),
                 Tables\Columns\TextColumn::make('ang_ketua')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('jbt_ketua')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('ang_wakil')
-                    ->searchable(),
+                    ->searchable()
+                    ->placeholder('-'),
                 Tables\Columns\TextColumn::make('jbt_wakil')
-                    ->searchable(),
+                    ->searchable()
+                    ->placeholder('-'),
                 Tables\Columns\TextColumn::make('jenis_pemilihan')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('total_vote')
