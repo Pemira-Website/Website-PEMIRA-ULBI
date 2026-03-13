@@ -5,14 +5,17 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\Paslon;
+use App\Support\PemiraConfig;
 use Illuminate\Support\Facades\Cache;
 
 class PresmaLiveChart extends Component
 {
     public $totalVote;
+    public int $pollingSeconds = 10;
 
     public function mount()
     {
+        $this->pollingSeconds = PemiraConfig::resultPollingSeconds();
         $this->loadData();
     }
 
@@ -32,7 +35,9 @@ class PresmaLiveChart extends Component
 
     private function loadData()
     {
-        $data = Cache::remember('presma_chart_data', 5, function () {
+        $cacheTtlSeconds = PemiraConfig::resultCacheTtlSeconds();
+
+        $data = Cache::remember('presma_chart_data', $cacheTtlSeconds, function () {
             $totalVote = Paslon::where('jenis_pemilihan', 'presma')->get();
             return [
                 'data' => $totalVote->pluck('total_vote')->map(fn($vote) => (int) $vote)->toArray(),

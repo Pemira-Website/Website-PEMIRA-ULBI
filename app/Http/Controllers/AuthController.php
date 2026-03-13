@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pemilih;
+use App\Support\PemiraConfig;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 
@@ -42,6 +43,8 @@ class AuthController extends Controller
                 return redirect()->back()->withErrors(['error' => 'Kode OTP sudah expired. Silakan minta kode baru ke panitia.']);
             }
 
+            $normalizedProdi = PemiraConfig::normalizeProdi($user->prodi);
+
             // Parse jenis_pemilihan (format: "presma,himatif")
             $allowedVotes = array_map('trim', explode(',', $user->jenis_pemilihan));
             
@@ -55,23 +58,26 @@ class AuthController extends Controller
             }
 
             // Check special programs (only 1 vote allowed)
-            if (in_array($himaType, ['hicomlog', 'himabig', 'himamera']) && $user->total_vote >= 1) {
+            if (PemiraConfig::isSpecialHima($himaType) && Pemilih::isLockedVoteStatus($user->presma_status)) {
                 return redirect()->back()->withErrors(['error' => 'Anda sudah menggunakan hak suara Anda.']);
             }
 
             // Check if total_vote sudah mencapai 2
-            if ($user->total_vote >= 2) {
+            if (
+                Pemilih::isLockedVoteStatus($user->presma_status)
+                && Pemilih::isLockedVoteStatus($user->hima_status)
+            ) {
                 return redirect()->back()->withErrors(['error' => 'Anda sudah menggunakan hak suara Anda.']);
             }
 
             // Simpan informasi user ke dalam session
             Session::put('npm', $user->npm);
             Session::put('nama', $user->nama);
-            Session::put('prodi', $user->prodi);
+            Session::put('prodi', $normalizedProdi);
             Session::put('jenis_pemilihan', $user->jenis_pemilihan);
 
             // Redirect ke halaman menuvote sesuai prodi
-            return redirect()->route('menuvote', ['prodi' => $user->prodi]);
+            return redirect()->route('menuvote', ['prodi' => $normalizedProdi]);
         } else {
             return redirect()->back()->withErrors(['error' => 'NPM atau password tidak sesuai!']);
         }

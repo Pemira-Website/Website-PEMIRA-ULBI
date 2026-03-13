@@ -7,8 +7,14 @@
     @push('js')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-            // Interval untuk mengirim event ke server
-            setInterval(() => Livewire.dispatch('ubahData'), 3000);
+            const presmaChartPollingMs = {{ $pollingSeconds * 1000 }};
+            window.presmaChartInterval = window.presmaChartInterval || setInterval(() => {
+                if (document.hidden) {
+                    return;
+                }
+
+                Livewire.dispatch('ubahData');
+            }, presmaChartPollingMs);
 
             // Inisialisasi chart
             let chartData = JSON.parse(@json($totalVote));

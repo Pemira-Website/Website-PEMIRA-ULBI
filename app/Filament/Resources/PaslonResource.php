@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaslonResource\Pages;
 use App\Models\Paslon;
+use App\Support\PemiraConfig;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -52,42 +53,20 @@ class PaslonResource extends Resource
                     ->required()
                     ->numeric(),
                 Forms\Components\Select::make('pd_ketua') // Menjadikan pd_ketua enum
-                    ->options([
-                        'D3 Teknik Informatika' => 'D3 Teknik Informatika',
-                        'D4 Teknik Informatika' => 'D4 Teknik Informatika',
-                        'D3 Administrasi Logistik' => 'D3 Administrasi Logistik',
-                        'D4 Logistik Bisnis' => 'D4 Logistik Bisnis',
-                        'S1 Manajemen Logistik' => 'S1 Manajemen Logistik',
-                        'S1 Bisnis Digital' => 'S1 Bisnis Digital',
-                        'S1 Sains Data' => 'S1 Sains Data',
-                        'S1 Manajemen Rekayasa' => 'S1 Manajemen Rekayasa',
-                        'D4 Logistik Niaga-EL' => 'D4 Logistik Niaga-EL',
-                        'S1 Manajemen Transportasi' => 'S1 Manajemen Transportasi',
-                        'D4 Manajemen Perusahaan' => 'D4 Manajemen Perusahaan',
-                        'D3 Manajemen Pemasaran' => 'D3 Manajemen Pemasaran',
-                        'D3 Akuntansi' => 'D3 Akuntansi',
-                        'D4 Akuntansi Keuangan' => 'D4 Akuntansi Keuangan',
-                        'D3 Manajemen informatika' => 'D3 Manajemen informatika'
-                    ])
+                    ->options(function (): array {
+                        $prodis = array_keys(PemiraConfig::prodiToHimaMap());
+                        sort($prodis);
+
+                        return array_combine($prodis, $prodis);
+                    })
                     ->required(),
                 Forms\Components\Select::make('pd_wakil') // Menjadikan pd_wakil enum
-                    ->options([
-                        'D3 Teknik Informatika' => 'D3 Teknik Informatika',
-                        'D4 Teknik Informatika' => 'D4 Teknik Informatika',
-                        'D3 Administrasi Logistik' => 'D3 Administrasi Logistik',
-                        'D4 Logistik Bisnis' => 'D4 Logistik Bisnis',
-                        'S1 Manajemen Logistik' => 'S1 Manajemen Logistik',
-                        'S1 Bisnis Digital' => 'S1 Bisnis Digital',
-                        'S1 Sains Data' => 'S1 Sains Data',
-                        'S1 Manajemen Rekayasa' => 'S1 Manajemen Rekayasa',
-                        'D4 Logistik Niaga-EL' => 'D4 Logistik Niaga-EL',
-                        'S1 Manajemen Transportasi' => 'S1 Manajemen Transportasi',
-                        'D4 Manajemen Perusahaan' => 'D4 Manajemen Perusahaan',
-                        'D3 Manajemen Pemasaran' => 'D3 Manajemen Pemasaran',
-                        'D3 Akuntansi' => 'D3 Akuntansi',
-                        'D4 Akuntansi Keuangan' => 'D4 Akuntansi Keuangan',
-                        'D3 Manajemen informatika' => 'D3 Manajemen informatika'
-                    ])
+                    ->options(function (): array {
+                        $prodis = array_keys(PemiraConfig::prodiToHimaMap());
+                        sort($prodis);
+
+                        return array_combine($prodis, $prodis);
+                    })
                     ->required(),
                 Forms\Components\TextInput::make('ang_ketua')
                     ->required()
@@ -114,24 +93,15 @@ class PaslonResource extends Resource
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\Select::make('jenis_pemilihan') // Menjadikan jenis_pemilihan enum
-                    ->options([
-                        'himatif' => 'Himatif',
-                        'himagis' => 'Himagis',
-                        'himalogbis' => 'Himalogbis',
-                        'himaporta' => 'Himaporta',
-                        'himanbis' => 'Himanbis',
-                        'hma' => 'HMA',
-                        'himabig' => 'Himabig',
-                        'hicomlog' => 'Hicomlog',
-                        'himasta' => 'Himasta',
-                        'himamera' => 'Himamera',
-                        'hmmi' => 'Hmmi',
-                        'presma' => 'Presma',
-                    ])
+                    ->options(PemiraConfig::voteTypes())
                     ->required(),
-                    Forms\Components\TextInput::make('total_vote')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\TextInput::make('total_vote')
+                    ->label('Total Vote (Sistem)')
+                    ->numeric()
+                    ->default(0)
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->helperText('Dihitung otomatis oleh sistem voting, tidak bisa diedit manual.'),
             ]);
     }
 

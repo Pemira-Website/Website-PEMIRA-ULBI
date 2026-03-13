@@ -57,7 +57,15 @@ class ProcessVote implements ShouldQueue
 
         if ($lock->get()) {
             try {
-                \Illuminate\Support\Facades\DB::transaction(function () use ($pemilih, $paslon, $auditLog) {
+                \Illuminate\Support\Facades\DB::transaction(function () use ($auditLog) {
+                    $pemilih = \App\Models\Pemilih::where('id', $this->pemilih_id)->lockForUpdate()->first();
+                    $paslon = \App\Models\Paslon::find($this->paslon_id);
+
+                    if (!$pemilih || !$paslon) {
+                        $auditLog->update(['status' => 'failed_missing_data']);
+                        return;
+                    }
+
                     $success = false;
 
                     // Special handling for himabig, hicomlog, and himamera (only presma)
@@ -65,6 +73,7 @@ class ProcessVote implements ShouldQueue
                         if ($this->jenisVote == 'presma' && $pemilih->pml_presma == 0) {
                             $pemilih->pml_presma = 1;
                             $pemilih->total_vote = 1;
+                            $pemilih->presma_status = \App\Models\Pemilih::STATUS_COMPLETED;
                             $pemilih->save();
                             $paslon->increment('total_vote');
                             $success = true;
@@ -74,12 +83,14 @@ class ProcessVote implements ShouldQueue
                         if ($this->jenisVote == 'presma' && $pemilih->pml_presma == 0) {
                             $pemilih->pml_presma = 1;
                             $pemilih->total_vote = $pemilih->pml_presma + $pemilih->pml_hima;
+                            $pemilih->presma_status = \App\Models\Pemilih::STATUS_COMPLETED;
                             $pemilih->save();
                             $paslon->increment('total_vote');
                             $success = true;
                         } elseif ($this->jenisVote == $this->himaType && $pemilih->pml_hima == 0) {
                             $pemilih->pml_hima = 1;
                             $pemilih->total_vote = $pemilih->pml_presma + $pemilih->pml_hima;
+                            $pemilih->hima_status = \App\Models\Pemilih::STATUS_COMPLETED;
                             $pemilih->save();
                             $paslon->increment('total_vote');
                             $success = true;
@@ -89,17 +100,47 @@ class ProcessVote implements ShouldQueue
                     if ($success) {
                         $auditLog->update(['status' => 'success']);
                     } else {
+                        if ($this->jenisVote === 'presma') {
+                            $pemilih->presma_status = $pemilih->pml_presma == 1
+                                ? \App\Models\Pemilih::STATUS_COMPLETED
+                                : \App\Models\Pemilih::STATUS_FAILED;
+                        } else {
+                            $pemilih->hima_status = $pemilih->pml_hima == 1
+                                ? \App\Models\Pemilih::STATUS_COMPLETED
+                                : \App\Models\Pemilih::STATUS_FAILED;
+                        }
+                        $pemilih->save();
                         $auditLog->update(['status' => 'failed_already_voted']);
                     }
                 });
             } catch (\Exception $e) {
+                $this->markPendingAsFailed();
                 $auditLog->update(['status' => 'failed_exception']);
                 throw $e;
             } finally {
                 $lock->release();
             }
         } else {
+            $this->markPendingAsFailed();
             $auditLog->update(['status' => 'failed_race_condition']);
         }
+    }
+
+    private function markPendingAsFailed(): void
+    {
+        $pemilih = \App\Models\Pemilih::find($this->pemilih_id);
+        if (!$pemilih) {
+            return;
+        }
+
+        if ($this->jenisVote === 'presma' && $pemilih->presma_status === \App\Models\Pemilih::STATUS_PENDING) {
+            $pemilih->presma_status = \App\Models\Pemilih::STATUS_FAILED;
+        }
+
+        if ($this->jenisVote !== 'presma' && $pemilih->hima_status === \App\Models\Pemilih::STATUS_PENDING) {
+            $pemilih->hima_status = \App\Models\Pemilih::STATUS_FAILED;
+        }
+
+        $pemilih->save();
     }
 }

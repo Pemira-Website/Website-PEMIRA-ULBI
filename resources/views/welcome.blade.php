@@ -75,15 +75,15 @@
           <p class="text-gray-600">Setiap mahasiswa memiliki hak suara yang sama untuk menentukan pemimpin organisasi kemahasiswaan.</p>
         </div>
 
-        <!-- Card 2 - Aman & Rahasia -->
+        <!-- Card 2 - Privasi & Audit -->
         <div class="group bg-gradient-to-br from-teal-50 to-cyan-100 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-t-4 border-teal-500">
           <div class="w-16 h-16 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
             </svg>
           </div>
-          <h3 class="text-xl font-bold text-teal-700 mb-3">Aman & Rahasia</h3>
-          <p class="text-gray-600">Sistem voting online kami menjamin keamanan dan kerahasiaan pilihan setiap pemilih.</p>
+          <h3 class="text-xl font-bold text-teal-700 mb-3">{{ \App\Support\PemiraConfig::publicPrivacyHeadline() }}</h3>
+          <p class="text-gray-600">{{ \App\Support\PemiraConfig::publicPrivacyDescription() }}</p>
         </div>
 
         <!-- Card 3 - Transparan -->
@@ -185,8 +185,8 @@
         <!-- FAQ Item 2 -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
           <div class="p-6">
-            <h3 class="text-lg font-bold text-blue-900 mb-2">🔐 Apakah kerahasiaan pilihan saya terjamin?</h3>
-            <p class="text-gray-600">Sangat terjamin. Sistem e-voting PEMIRA ULBI dirancang secara anonim. Identitas diri (NIM) Anda hanya digunakan untuk memverifikasi hak suara, dan tidak akan ditautkan dengan siapa kandidat yang Anda coblos di database.</p>
+            <h3 class="text-lg font-bold text-blue-900 mb-2">🔐 Bagaimana kebijakan privasi suara saya?</h3>
+            <p class="text-gray-600">{{ \App\Support\PemiraConfig::publicPrivacyFaqAnswer() }}</p>
           </div>
         </div>
 

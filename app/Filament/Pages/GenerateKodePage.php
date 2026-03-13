@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Pemilih;
+use App\Support\PemiraConfig;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -64,24 +65,6 @@ class GenerateKodePage extends Page implements HasForms
 
     public ?array $data = [];
 
-    /**
-     * Generate random alphanumeric OTP code (6 digits)
-     */
-    protected function generateOTP(): string
-    {
-        // Alphanumeric: Letters + Numbers (exclude confusing chars like 0, O, I, 1, L)
-        $characters = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-        
-        $code = '';
-        $max = strlen($characters) - 1;
-        
-        for ($i = 0; $i < 6; $i++) {
-            $code .= $characters[random_int(0, $max)];
-        }
-
-        return $code;
-    }
-
     public function generateKode(): void
     {
         $data = $this->form->getState();
@@ -115,8 +98,8 @@ class GenerateKodePage extends Page implements HasForms
             return;
         }
 
-        // Generate random alphanumeric OTP (6 digits)
-        $kode = $this->generateOTP();
+        // Generate random alphanumeric OTP (6 chars)
+        $kode = PemiraConfig::generateOtpCode();
         
         // Set expiration time (30 minutes from now) in WIB timezone
         $expiresAt = Carbon::now('Asia/Jakarta')->addMinutes(30);

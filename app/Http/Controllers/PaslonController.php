@@ -4,48 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Models\Paslon;
 use App\Models\Pemilih;
+use App\Support\PemiraConfig;
 use Illuminate\Support\Facades\Session;
 
 class PaslonController extends Controller
 {
     public function index($jenis_pemilihan)
     {
-        if (!Session::has('prodi')) {
+        if (!Session::has('prodi') || !Session::has('npm')) {
             return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        // Ambil prodi user dari sesi
-        $userProdi = Session::get('prodi');
+        $userProdi = PemiraConfig::normalizeProdi(Session::get('prodi'));
+        if (!$userProdi) {
+            Session::flush();
+            return redirect()->route('login')->with('error', 'Sesi tidak valid. Silakan login ulang.');
+        }
 
-        // Aturan akses berdasarkan jenis pemilihan dan prodi user
-        $prodiValidasi = [
-            'himatif'      => ['D3 Teknik Informatika', 'D4 Teknik Informatika'],
-            'himagis'      => ['S1 Manajemen Logistik'],
-            'himalogbis'   => ['D3 Administrasi Logistik', 'D4 Logistik Bisnis'],
-            'himaporta'    => ['S1 Manajemen Transportasi'],
-            'himanbis'     => ['D3 Manajemen Pemasaran' , 'D4 Manajemen Perusahaan'],
-            'hma'          => ['D3 Akuntansi', 'D4 Akuntansi Keuangan'],
-            'himabig'      => ['S1 Bisnis Digital'],
-            'hicomlog'     => ['D4 Logistik Niaga-EL'],
-            'himasta'      => ['S1 Sains Data'],
-            'himamera'     => ['S1 Manajemen Rekayasa'],
-            'hmmi'         => ['D3 Manajemen Informatika'],
-            'presma'       => ['Semua Prodi'], // Presma bisa diakses oleh semua prodi
-        ];
+        $pemilih = Pemilih::where('npm', Session::get('npm'))->first();
+        if (!$pemilih) {
+            Session::flush();
+            return redirect()->route('login')->with('error', 'Data pemilih tidak ditemukan. Silakan login ulang.');
+        }
 
-        // Validasi akses halaman
-        if (isset($prodiValidasi[$jenis_pemilihan])) {
-            if ($prodiValidasi[$jenis_pemilihan] !== ['Semua Prodi'] && !in_array($userProdi, $prodiValidasi[$jenis_pemilihan])) {
-                // Redirect dengan pesan error untuk modal
-                return redirect()->back()->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+        $voteTypes = array_keys(PemiraConfig::voteTypes());
+        if (!in_array($jenis_pemilihan, $voteTypes, true)) {
+            return redirect()->route('menuvote', ['prodi' => $userProdi])
+                ->with('error', 'Jenis pemilihan tidak tersedia.');
+        }
+
+        // Presma bisa diakses semua prodi
+        if ($jenis_pemilihan !== 'presma') {
+            $allowedProdi = PemiraConfig::prodisForHima($jenis_pemilihan);
+            if (!in_array($userProdi, $allowedProdi, true)) {
+                return redirect()->route('menuvote', ['prodi' => $userProdi])
+                    ->with('error', 'Anda tidak memiliki akses ke jenis pemilihan ini.');
             }
-        } else {
-            return redirect()->back()->with('error', 'Halaman tidak valid.');
+        }
+
+        $presmaStatus = $pemilih->presma_status ?: ($pemilih->pml_presma ? Pemilih::STATUS_COMPLETED : Pemilih::STATUS_NOT_VOTED);
+        $himaStatus = $pemilih->hima_status ?: ($pemilih->pml_hima ? Pemilih::STATUS_COMPLETED : Pemilih::STATUS_NOT_VOTED);
+
+        if ($jenis_pemilihan === 'presma' && Pemilih::isLockedVoteStatus($presmaStatus)) {
+            $message = $presmaStatus === Pemilih::STATUS_PENDING
+                ? 'Vote Presma Anda sedang diproses. Tunggu beberapa saat lalu cek status di menu utama.'
+                : 'Anda sudah menggunakan hak suara Presma.';
+
+            return redirect()->route('menuvote', ['prodi' => $userProdi])->with('error', $message);
+        }
+
+        if ($jenis_pemilihan !== 'presma' && Pemilih::isLockedVoteStatus($himaStatus)) {
+            $message = $himaStatus === Pemilih::STATUS_PENDING
+                ? 'Vote HIMA Anda sedang diproses. Tunggu beberapa saat lalu cek status di menu utama.'
+                : 'Anda sudah menggunakan hak suara HIMA.';
+
+            return redirect()->route('menuvote', ['prodi' => $userProdi])->with('error', $message);
         }
 
         // Ambil data paslon berdasarkan jenis pemilihan
         $dataPaslon = Paslon::where('jenis_pemilihan', $jenis_pemilihan)->get();
 
-        return view('vote.paslon', compact('dataPaslon', 'jenis_pemilihan'))->with('title', 'Pemilihan ' . ucwords($jenis_pemilihan));
+        return view('vote.paslon', compact('dataPaslon', 'jenis_pemilihan', 'userProdi'))
+            ->with('title', 'Pemilihan ' . ucwords($jenis_pemilihan));
     }
 }

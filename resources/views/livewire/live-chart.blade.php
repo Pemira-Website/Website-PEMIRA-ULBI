@@ -1,5 +1,8 @@
 <div wire:ignore class="bg-white p-10 rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] w-full mb-8">
     <div class="text-2xl font-bold mb-2 capitalize">Pemilihan {{ $jenis_pemilihan }}</div>
+    <div class="text-sm text-gray-500 mb-2">
+        Refresh otomatis setiap {{ $pollingSeconds }} detik.
+    </div>
     <div>
         <canvas id="myChart_{{ $jenis_pemilihan }}" class="w-full h-96"></canvas>
     </div>
@@ -8,8 +11,20 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             document.addEventListener('livewire:initialized', () => {
-                // Interval untuk polling event ke server, 3 detik.
-                setInterval(() => @this.dispatch('ubahData'), 3000);
+                const chartKey = 'chart_{{ $jenis_pemilihan }}';
+                const pollingMs = {{ $pollingSeconds * 1000 }};
+
+                window.pemiraChartIntervals = window.pemiraChartIntervals || {};
+                if (!window.pemiraChartIntervals[chartKey]) {
+                    window.pemiraChartIntervals[chartKey] = setInterval(() => {
+                        // Hindari request polling saat tab tidak aktif untuk menurunkan beban.
+                        if (document.hidden) {
+                            return;
+                        }
+
+                        @this.dispatch('ubahData');
+                    }, pollingMs);
+                }
             });
 
             // Inisialisasi chart awal
@@ -203,16 +218,25 @@
             const myChartIns_{{ $jenis_pemilihan }} = new Chart(ctx_{{ $jenis_pemilihan }}, config_{{ $jenis_pemilihan }});
 
             document.addEventListener('livewire:initialized', () => {
+                const chartKey = 'chart_{{ $jenis_pemilihan }}';
+                window.pemiraChartListeners = window.pemiraChartListeners || {};
+
+                if (window.pemiraChartListeners[chartKey]) {
+                    return;
+                }
+
+                window.pemiraChartListeners[chartKey] = true;
+
                 Livewire.on('berhasilUpdate-{{ $jenis_pemilihan }}', (event) => {
                     // Extract payload efficiently for Livewire v3 variants
                     let payload = Array.isArray(event) ? event[0] : event;
                     let targetData = payload.data ? payload.data : payload;
-                    
+
                     let updatedData = typeof targetData === 'string' ? JSON.parse(targetData) : targetData;
-                    
+
                     // Update variables local
                     chartData_{{ $jenis_pemilihan }} = updatedData;
-                    
+
                     // Force update labels and logic manually to ensure integrity
                     myChartIns_{{ $jenis_pemilihan }}.data.labels = updatedData.labels;
                     myChartIns_{{ $jenis_pemilihan }}.data.datasets[0].data = updatedData.data;

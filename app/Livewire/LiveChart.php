@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\Paslon;
+use App\Support\PemiraConfig;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
@@ -12,10 +13,12 @@ class LiveChart extends Component
 {
     public $jenis_pemilihan;
     public $chartDataJson;
+    public int $pollingSeconds = 10;
 
     public function mount($jenis_pemilihan = 'presma')
     {
         $this->jenis_pemilihan = $jenis_pemilihan;
+        $this->pollingSeconds = PemiraConfig::resultPollingSeconds();
         $this->loadData();
     }
 
@@ -34,7 +37,22 @@ class LiveChart extends Component
 
     private function loadData()
     {
-        $data = Cache::remember("chart_data_{$this->jenis_pemilihan}", 5, function () {
+        if (!PemiraConfig::canShowPublicResults()) {
+            $this->chartDataJson = json_encode([
+                'labels' => [],
+                'data' => [],
+                'images' => [],
+                'colors' => [],
+                'borderColors' => [],
+                'total' => 0,
+            ]);
+
+            return;
+        }
+
+        $cacheTtlSeconds = PemiraConfig::resultCacheTtlSeconds();
+
+        $data = Cache::remember("chart_data_{$this->jenis_pemilihan}", $cacheTtlSeconds, function () {
             $paslons = Paslon::where('jenis_pemilihan', $this->jenis_pemilihan)->orderBy('paslon_ke', 'asc')->get();
             
             $labels = [];
@@ -85,4 +103,3 @@ class LiveChart extends Component
         $this->chartDataJson = json_encode($data);
     }
 }
-

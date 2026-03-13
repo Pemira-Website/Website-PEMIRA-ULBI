@@ -2,9 +2,20 @@
 
 {{-- <body class="bg-gradient-to-r from-orange-200 to-blue-200 flex items-center justify-center"> --}}
     @section('content')
-    <div class="space-y-10">
-        <br>
-        @foreach ($dataPaslon as $key => $paslon)
+    <div class="w-full max-w-5xl space-y-8">
+        <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+            <a href="{{ route('menuvote', ['prodi' => $userProdi]) }}"
+                class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-white border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 transition">
+                Kembali ke Menu Vote
+            </a>
+            <a href="{{ route('hasilvote') }}"
+                class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
+                Lihat Hasil Sementara
+            </a>
+        </div>
+
+        <div class="space-y-10">
+        @forelse ($dataPaslon as $key => $paslon)
         <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-black shadow-2xl rounded-3xl w-[800px] p-8 relative overflow-hidden">
             <div class="absolute -top-10 -left-10 w-64 h-64 bg-gradient-to-tr from-blue-700 to-blue-500 opacity-20 blur-3xl"></div>
             <div class="absolute -bottom-10 -right-10 w-72 h-72 bg-gradient-to-tr from-orange-600 to-orange-400 opacity-20 blur-3xl"></div>
@@ -39,7 +50,7 @@
             </div>
             <br>
             <div class="py-4 flex justify-center gap-6">
-                <form method="POST" action="{{ route('vote.add', ['npm' => Session::get('npm')]) }}" id="voteForm-{{ $paslon->id }}" class="hidden">
+                <form method="POST" action="{{ route('vote.add') }}" id="voteForm-{{ $paslon->id }}" class="hidden">
                     @csrf
                     <input type="hidden" name="paslon_id" value="{{ $paslon->id }}">
                     <input type="hidden" name="jenis_vote" value="{{ $paslon->jenis_pemilihan }}">
@@ -72,7 +83,25 @@
             </div>            
         </div>
         <br>
-        @endforeach
+        @empty
+            <div class="bg-white shadow-lg rounded-2xl border border-slate-200 p-8 text-center space-y-4">
+                <h2 class="text-xl font-bold text-slate-800">Belum Ada Kandidat</h2>
+                <p class="text-slate-600">
+                    Data pasangan calon untuk pemilihan ini belum tersedia. Silakan kembali ke menu utama atau cek hasil sementara.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <a href="{{ route('menuvote', ['prodi' => $userProdi]) }}"
+                        class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-slate-700 text-white font-semibold hover:bg-slate-800 transition">
+                        Kembali ke Menu Vote
+                    </a>
+                    <a href="{{ route('hasilvote') }}"
+                        class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
+                        Lihat Hasil Sementara
+                    </a>
+                </div>
+            </div>
+        @endforelse
+        </div>
     </div>
 
     <!-- Modal Konfirmasi -->
@@ -224,9 +253,12 @@
             document.getElementById('confirmModal').classList.remove('hidden');
         }
 
-        document.getElementById('confirmYes').onclick = function() {
-            document.getElementById('voteForm-' + currentPaslonId).submit(); // Kirim formulir
-        };
+        const confirmYesButton = document.getElementById('confirmYes');
+        if (confirmYesButton) {
+            confirmYesButton.onclick = function() {
+                document.getElementById('voteForm-' + currentPaslonId).submit(); // Kirim formulir
+            };
+        }
 
         function closeConfirmModal() {
             document.getElementById('confirmModal').classList.add('hidden');

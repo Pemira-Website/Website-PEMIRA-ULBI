@@ -1,43 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+<div class="space-y-8 w-full max-w-2xl">
+    @include('presma.presma')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pemira 2026</title>
-    @vite('resources/css/app.css')
-</head>
-
-<body class="bg-gradient-to-r from-orange-100 to-indigo-300 flex items-center justify-center min-h-screen">
-
-    <div class="space-y-8 w-full max-w-2xl">
-        @include('presma.presma')
-
-        @if ($prodi == 'D3 Teknik Informatika' || $prodi == 'D4 Teknik Informatika')
-            @include('hima.himatif')
-        @elseif ($prodi == 'S1 Manajemen Logistik')
-            @include('hima.himagis')
-        @elseif ($prodi == 'D3 Administrasi Logistik' || $prodi == 'D4 Logistik Bisnis')
-            @include('hima.himalogbis')
-        @elseif ($prodi == 'S1 Manajemen Transportasi')
-            @include('hima.himaporta')
-        @elseif ($prodi == 'D3 Manajemen Pemasaran' || $prodi == 'D4 Manajemen Perusahaan' )
-            @include('hima.himanbis')
-        @elseif ($prodi == 'D3 Akuntansi' || $prodi == 'D4 Akuntansi Keuangan')
-            @include('hima.hma')
-        @elseif ($prodi == 'S1 Sains Data')
-            @include('hima.himasta')
-        @elseif ($prodi == 'D3 Manajemen Informatika')
-            @include('hima.hmmi')
-        @elseif ($prodi == 'S1 Bisnis Digital')
-            @include('hima.himabig')
-        @elseif ($prodi == 'D4 Logistik Niaga-EL')
-            @include('hima.hicomlog')
-        @elseif ($prodi == 'S1 Manajemen Rekayasa')
-            @include('hima.himamera')
-        @endif
-
-    </div>
-</body>
-
-</html>
+    @if ($hima_type && \Illuminate\Support\Facades\View::exists('hima.' . $hima_type))
+        @include('hima.' . $hima_type)
+    @elseif ($hima_type)
+        <div class="bg-white border border-red-200 text-red-700 rounded-xl p-4 text-center space-y-3">
+            <p>Mapping HIMA tidak ditemukan untuk prodi ini.</p>
+            <a href="{{ route('hasilvote') }}" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition">
+                Lihat Hasil Sementara
+            </a>
+        </div>
+    @endif
+</div>

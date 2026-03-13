@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pemilih;
+use App\Support\PemiraConfig;
 use Illuminate\Support\Facades\Session;
 
 class MenuVoteController extends Controller
 {
     public function show($prodi)
     {
-        // Ambil prodi dari session
-        $userProdi = Session::get('prodi');
+        // Ambil prodi dari session dan normalisasi agar konsisten
+        $userProdi = PemiraConfig::normalizeProdi(Session::get('prodi'));
+        $routeProdi = PemiraConfig::normalizeProdi($prodi);
 
         // Validasi: Pastikan user sudah login dan memiliki prodi
         if (!$userProdi) {
@@ -18,7 +20,7 @@ class MenuVoteController extends Controller
         }
 
         // Validasi: Pastikan user hanya bisa mengakses halaman sesuai prodi mereka
-        if ($userProdi !== $prodi) {
+        if ($userProdi !== $routeProdi) {
             return redirect()->route('menuvote', ['prodi' => $userProdi])
                 ->with('error', 'Anda tidak memiliki akses ke halaman ini.');
         }
@@ -26,11 +28,22 @@ class MenuVoteController extends Controller
         $npmPemilih = Session::get('npm');
         $pemilih = Pemilih::where('npm', $npmPemilih)->first();
 
+        if (!$pemilih) {
+            Session::flush();
+            return redirect()->route('login')->with('error', 'Data pemilih tidak ditemukan. Silakan login ulang.');
+        }
+
+        $presmaStatus = $pemilih->presma_status ?: ($pemilih->pml_presma ? Pemilih::STATUS_COMPLETED : Pemilih::STATUS_NOT_VOTED);
+        $himaStatus = $pemilih->hima_status ?: ($pemilih->pml_hima ? Pemilih::STATUS_COMPLETED : Pemilih::STATUS_NOT_VOTED);
+
         // Kirim prodi ke view
         return view('menu_vote', [
-            'prodi' => $prodi,
-            'pml_presma' => $pemilih->pml_presma ?? 0,
-            'pml_hima' => $pemilih->pml_hima ?? 0,
-        ])->with('title', 'Prodi ' . $prodi);
+            'prodi' => $userProdi,
+            'hima_type' => PemiraConfig::himaForProdi($userProdi),
+            'presma_status' => $presmaStatus,
+            'hima_status' => $himaStatus,
+            'pml_presma' => Pemilih::isLockedVoteStatus($presmaStatus) ? 1 : 0,
+            'pml_hima' => Pemilih::isLockedVoteStatus($himaStatus) ? 1 : 0,
+        ])->with('title', 'Prodi ' . $userProdi);
     }
 }

@@ -2,38 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreVoteRequest;
 use App\Models\Pemilih;
-use App\Models\Paslon;
-use Illuminate\Http\Request;
+use App\Support\PemiraConfig;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
 
 class VoteController extends Controller
 {
     /**
      * Tambahkan vote pada akun tertentu.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $npm
+     * @param  \App\Http\Requests\StoreVoteRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function addVote(Request $request, $npm)
+    public function addVote(StoreVoteRequest $request)
     {
-        $pemilih = Pemilih::where('npm', $npm)->first();
+        $pemilih = $request->pemilih();
         
         if (!$pemilih) {
-            return redirect()->back()->with('error', 'Pemilih tidak ditemukan.');
+            Session::flush();
+            return redirect()->route('login')->with('error', 'Akun pemilih tidak ditemukan. Silakan login ulang.');
         }
 
-        $paslon = Paslon::find($request->input('paslon_id'));
+        $paslon = $request->paslon();
         
         if (!$paslon) {
             return redirect()->back()->with('error', 'Paslon tidak ditemukan.');
         }
 
-        $jenisPemilihanRaw = Session::get('jenis_pemilihan');
+        $jenisPemilihanRaw = $pemilih->jenis_pemilihan;
         $user = Session::get('prodi');
-        $jenisVote = $request->input('jenis_vote');
+        $jenisVote = (string) $request->validated('jenis_vote');
 
         // Parse jenis_pemilihan (format: "presma,himatif" atau single value)
         $allowedVotes = array_map('trim', explode(',', $jenisPemilihanRaw));
@@ -47,37 +47,6 @@ class VoteController extends Controller
             }
         }
 
-        // Calculate special states before returning immediately
-        $isPresmaVoted = $pemilih->pml_presma == 1;
-        $isHimaVoted = $pemilih->pml_hima == 1;
-        
-        $willBeFinished = false;
-        $errorMessage = null;
-
-        if (in_array($himaType, ['himabig', 'hicomlog', 'himamera'])) {
-            if ($jenisVote != 'presma') {
-                $errorMessage = 'Anda hanya dapat memilih Presma.';
-            } else if ($isPresmaVoted) {
-                $errorMessage = 'Anda sudah memberikan vote untuk Presma.';
-            } else {
-                $willBeFinished = true;
-            }
-        } else {
-            if ($jenisVote == 'presma' && $isPresmaVoted) {
-                $errorMessage = 'Anda sudah memberikan vote untuk Presma.';
-            } elseif ($jenisVote == $himaType && $isHimaVoted) {
-                $errorMessage = 'Anda sudah memberikan vote untuk Himpunan.';
-            } elseif (!in_array($jenisVote, ['presma', $himaType])) {
-                $errorMessage = 'Jenis vote tidak valid.';
-            } else {
-                $willBeFinished = ($pemilih->total_vote + 1) >= 2;
-            }
-        }
-
-        if ($errorMessage) {
-            return redirect()->back()->with('error', $errorMessage);
-        }
-
         // --- Custom Request Rate Limiting (Throttle) ---
         // Batasi klik tombol vote max 1 kali per 3 detik untuk NPM ini agar tidak men-spam queue/server
         $throttleKey = 'vote_throttle_'.$pemilih->npm;
@@ -87,28 +56,112 @@ class VoteController extends Controller
         \Illuminate\Support\Facades\RateLimiter::hit($throttleKey, 3);
         // -----------------------------------------------
 
+        $willBeFinished = false;
+        $errorMessage = null;
+
+        DB::transaction(function () use ($pemilih, $jenisVote, $himaType, &$willBeFinished, &$errorMessage): void {
+            $lockedPemilih = Pemilih::where('id', $pemilih->id)->lockForUpdate()->first();
+
+            if (!$lockedPemilih) {
+                $errorMessage = 'Akun pemilih tidak ditemukan.';
+                return;
+            }
+
+            $presmaStatus = $lockedPemilih->presma_status ?: Pemilih::defaultVoteStatus();
+            $himaStatus = $lockedPemilih->hima_status ?: Pemilih::defaultVoteStatus();
+            $isSpecial = PemiraConfig::isSpecialHima($himaType);
+
+            if ($isSpecial) {
+                if ($jenisVote !== 'presma') {
+                    $errorMessage = 'Anda hanya dapat memilih Presma.';
+                    return;
+                }
+
+                if (Pemilih::isLockedVoteStatus($presmaStatus)) {
+                    $errorMessage = $presmaStatus === Pemilih::STATUS_PENDING
+                        ? 'Vote Presma Anda sedang diproses.'
+                        : 'Anda sudah memberikan vote untuk Presma.';
+                    return;
+                }
+
+                $lockedPemilih->presma_status = Pemilih::STATUS_PENDING;
+                $lockedPemilih->save();
+                $willBeFinished = true;
+                return;
+            }
+
+            if ($jenisVote === 'presma') {
+                if (Pemilih::isLockedVoteStatus($presmaStatus)) {
+                    $errorMessage = $presmaStatus === Pemilih::STATUS_PENDING
+                        ? 'Vote Presma Anda sedang diproses.'
+                        : 'Anda sudah memberikan vote untuk Presma.';
+                    return;
+                }
+
+                $lockedPemilih->presma_status = Pemilih::STATUS_PENDING;
+                $lockedPemilih->save();
+                $willBeFinished = Pemilih::isLockedVoteStatus($himaStatus);
+                return;
+            }
+
+            if ($jenisVote === $himaType) {
+                if (Pemilih::isLockedVoteStatus($himaStatus)) {
+                    $errorMessage = $himaStatus === Pemilih::STATUS_PENDING
+                        ? 'Vote Himpunan Anda sedang diproses.'
+                        : 'Anda sudah memberikan vote untuk Himpunan.';
+                    return;
+                }
+
+                $lockedPemilih->hima_status = Pemilih::STATUS_PENDING;
+                $lockedPemilih->save();
+                $willBeFinished = Pemilih::isLockedVoteStatus($presmaStatus);
+                return;
+            }
+
+            $errorMessage = 'Jenis vote tidak valid.';
+        });
+
+        if ($errorMessage) {
+            return redirect()->back()->with('error', $errorMessage);
+        }
+
         // Extract security context
         $ip_address = $request->ip();
         $user_agent = $request->userAgent();
 
         // Dispatch background job to Redis Queue (Message Broker)
-        \App\Jobs\ProcessVote::dispatch($pemilih->id, $paslon->id, $jenisVote, $himaType, $ip_address, $user_agent);
+        try {
+            \App\Jobs\ProcessVote::dispatch($pemilih->id, $paslon->id, $jenisVote, $himaType, $ip_address, $user_agent);
+        } catch (\Throwable $e) {
+            $this->markVoteStatusAsFailed($pemilih->id, $jenisVote);
+            return redirect()->back()->with('error', 'Gagal memproses antrean vote. Silakan coba lagi.');
+        }
 
         // Immediate response for high throughput
         if ($willBeFinished) {
             Session::flush();
-            return redirect()->route('login')->with('success', 'Vote Anda sedang diproses. Terima kasih! (Harap tunggu 1-2 menit hingga chart diperbarui)');
-        }
-
-        // Increment total vote locally for redirection purpose (frontend logic bypass)
-        $pemilih->total_vote += 1;
-
-        if ($pemilih->total_vote >= 2) {
-             Session::flush();
-             return redirect()->route('login')->with('success', 'Vote Anda sedang diproses. Terima kasih! (Harap tunggu 1-2 menit hingga chart diperbarui)');
+            return redirect()->route('login')->with('success', 'Vote berhasil dikirim dan sedang diproses. Terima kasih. Tunggu 1-2 menit untuk pembaruan hasil.');
         }
 
         return redirect()->route('menuvote', ['prodi' => $user])
-            ->with('success', 'Berhasil! Vote diproses ke dalam antrean (Queue).');
+            ->with('success', 'Vote berhasil dikirim ke antrean. Silakan lanjutkan hak suara lainnya atau tunggu status berubah menjadi selesai.');
+    }
+
+    private function markVoteStatusAsFailed(int $pemilihId, string $jenisVote): void
+    {
+        $pemilih = Pemilih::find($pemilihId);
+        if (!$pemilih) {
+            return;
+        }
+
+        if ($jenisVote === 'presma' && $pemilih->presma_status === Pemilih::STATUS_PENDING) {
+            $pemilih->presma_status = Pemilih::STATUS_FAILED;
+        }
+
+        if ($jenisVote !== 'presma' && $pemilih->hima_status === Pemilih::STATUS_PENDING) {
+            $pemilih->hima_status = Pemilih::STATUS_FAILED;
+        }
+
+        $pemilih->save();
     }
 }

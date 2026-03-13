@@ -9,6 +9,11 @@ class Pemilih extends Model
 {
     use HasFactory;
 
+    public const STATUS_NOT_VOTED = 'not_voted';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_FAILED = 'failed';
+
     protected $table = 'pemilih';
 
     // Kolom yang dapat diisi (mass assignment)
@@ -20,7 +25,9 @@ class Pemilih extends Model
         'otp_expires_at',
         'total_vote', 
         'pml_presma', 
+        'presma_status',
         'pml_hima', 
+        'hima_status',
         'jenis_pemilihan',
     ];
 
@@ -31,6 +38,16 @@ class Pemilih extends Model
         'pml_hima' => 'integer',
         'otp_expires_at' => 'datetime',
     ];
+
+    public static function isLockedVoteStatus(?string $status): bool
+    {
+        return in_array($status, [self::STATUS_PENDING, self::STATUS_COMPLETED], true);
+    }
+
+    public static function defaultVoteStatus(): string
+    {
+        return self::STATUS_NOT_VOTED;
+    }
 
     /**
      * Ambil daftar jenis pemilihan yang diizinkan (dari comma-separated string).
