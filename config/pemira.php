@@ -126,4 +126,16 @@ return [
     |
     */
     'privacy_mode' => env('PEMIRA_PRIVACY_MODE', 'auditable'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dummy Seed Control
+    |--------------------------------------------------------------------------
+    |
+    | Nonaktif secara default agar startup aplikasi tidak mengisi ulang data
+    | pemilih dummy ke database shared. Aktifkan manual saat butuh data contoh
+    | untuk development atau demo.
+    |
+    */
+    'seed_dummy_pemilih' => env('PEMIRA_SEED_DUMMY_PEMILIH', false),
 ];
