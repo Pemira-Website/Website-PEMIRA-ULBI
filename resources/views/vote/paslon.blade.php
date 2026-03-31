@@ -2,62 +2,128 @@
 
 {{-- <body class="bg-gradient-to-r from-orange-200 to-blue-200 flex items-center justify-center"> --}}
     @section('content')
-    <div class="space-y-10">
-        <br>
-        @foreach ($dataPaslon as $key => $paslon)
+    <div class="w-full max-w-5xl space-y-8">
+        <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+            <a href="{{ route('menuvote', ['prodi' => $userProdi]) }}"
+                class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-white border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 transition">
+                Kembali ke Menu Vote
+            </a>
+            <a href="{{ route('hasilvote') }}"
+                class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
+                Lihat Hasil Sementara
+            </a>
+        </div>
+
+        <div class="space-y-10">
+        @forelse ($dataPaslon as $key => $paslon)
         <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-black shadow-2xl rounded-3xl w-[800px] p-8 relative overflow-hidden">
-            <div class="absolute -top-10 -left-10 w-64 h-64 bg-gradient-to-tr from-blue-700 to-blue-500 opacity-20 blur-3xl"></div>
-            <div class="absolute -bottom-10 -right-10 w-72 h-72 bg-gradient-to-tr from-orange-600 to-orange-400 opacity-20 blur-3xl"></div>
+            <div class="pointer-events-none absolute -top-10 -left-10 w-64 h-64 bg-gradient-to-tr from-blue-700 to-blue-500 opacity-20 blur-3xl"></div>
+            <div class="pointer-events-none absolute -bottom-10 -right-10 w-72 h-72 bg-gradient-to-tr from-orange-600 to-orange-400 opacity-20 blur-3xl"></div>
         
-            <div class="text-center mb-8">
+            <div class="relative z-10 text-center mb-8">
                 <h2 class="text-4xl font-bold text-white tracking-wide uppercase drop-shadow-md">
                     Paslon {{ $key + 1 }}
                 </h2>
                 <p class="text-sm text-gray-400 italic mt-2">"Pilih pemimpin terbaik untuk masa depan"</p>
             </div>
         
-            <div class="flex justify-center items-start gap-16">
+            @php
+                $ketuaFoto = filled($paslon->ft_ketua)
+                    ? (Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::disk('gcs')->url($paslon->ft_ketua))
+                    : null;
+                $wakilFoto = filled($paslon->ft_wakil)
+                    ? (Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::disk('gcs')->url($paslon->ft_wakil))
+                    : null;
+                $hasWakil = filled($paslon->nm_wakil);
+            @endphp
+
+            <div class="relative z-10 flex justify-center items-start gap-16">
                 <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                     <div class="relative w-72 h-64 overflow-hidden">
-                        <img src="{{ Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::disk('gcs')->url($paslon->ft_ketua) }}" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        @if($ketuaFoto)
+                            <img src="{{ $ketuaFoto }}" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center bg-slate-700 text-slate-200 font-semibold">Foto belum tersedia</div>
+                        @endif
                     </div>
                     <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
                         <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_ketua }}</span>
                         <span class="block text-white font-extrabold text-xl mt-1">{{ $paslon->nm_ketua }}</span>
                     </div>
                 </div>
-        
-                <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
-                    <div class="relative w-72 h-64 overflow-hidden">
-                        <img src="{{ Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::disk('gcs')->url($paslon->ft_wakil) }}" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+
+                @if($hasWakil)
+                    <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
+                        <div class="relative w-72 h-64 overflow-hidden">
+                            @if($wakilFoto)
+                                <img src="{{ $wakilFoto }}" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center bg-slate-700 text-slate-200 font-semibold">Foto belum tersedia</div>
+                            @endif
+                        </div>
+                        <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
+                            <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_wakil }}</span>
+                            <span class="block text-white font-extrabold text-xl mt-1">{{ $paslon->nm_wakil }}</span>
+                        </div>
                     </div>
-                    <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
-                        <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_wakil }}</span>
-                        <span class="block text-white font-extrabold text-xl mt-1">{{ $paslon->nm_wakil }}</span>
-                    </div>
-                </div>
+                @endif
             </div>
             <br>
-            <div class="py-4 flex justify-center gap-6">
-                <form method="POST" action="{{ route('vote.add', ['npm' => Session::get('npm')]) }}" id="voteForm-{{ $paslon->id }}" class="hidden">
+            <div class="relative z-10 py-4 flex justify-center gap-6">
+                <form method="POST" action="{{ route('vote.add') }}" id="voteForm-{{ $paslon->id }}" class="hidden">
                     @csrf
                     <input type="hidden" name="paslon_id" value="{{ $paslon->id }}">
                     <input type="hidden" name="jenis_vote" value="{{ $paslon->jenis_pemilihan }}">
                 </form>
                 <button 
+                    type="button"
                     class="text-white font-extrabold py-3 px-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 shadow-lg hover:shadow-xl hover:scale-105 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 transition-all duration-300"
                     onclick="confirmVote({{ $paslon->id }})">
                     Vote Paslon
                 </button>
                 <button
+                    type="button"
                     class="text-white font-extrabold py-3 px-10 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 shadow-lg hover:shadow-xl hover:scale-105 hover:bg-gradient-to-r hover:from-orange-400 hover:to-yellow-400 transition-all duration-300"
-                    onclick="showDetailModal({{ $key }})">
+                    onclick="showDetailModal(
+                        @json($ketuaFoto),
+                        @json($paslon->nm_ketua),
+                        @json((string)$paslon->npm_ketua),
+                        @json($paslon->pd_ketua),
+                        @json($paslon->ang_ketua),
+                        @json($paslon->jbt_ketua),
+                        @json($wakilFoto),
+                        @json($paslon->nm_wakil),
+                        @json((string)$paslon->npm_wakil),
+                        @json($paslon->pd_wakil),
+                        @json($paslon->ang_wakil),
+                        @json($paslon->jbt_wakil),
+                        @json($paslon->visi),
+                        @json($paslon->misi)
+                    )">
                     Detail Profil
                 </button>
             </div>            
         </div>
         <br>
-        @endforeach
+        @empty
+            <div class="bg-white shadow-lg rounded-2xl border border-slate-200 p-8 text-center space-y-4">
+                <h2 class="text-xl font-bold text-slate-800">Belum Ada Kandidat</h2>
+                <p class="text-slate-600">
+                    Data pasangan calon untuk pemilihan ini belum tersedia. Silakan kembali ke menu utama atau cek hasil sementara.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <a href="{{ route('menuvote', ['prodi' => $userProdi]) }}"
+                        class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-slate-700 text-white font-semibold hover:bg-slate-800 transition">
+                        Kembali ke Menu Vote
+                    </a>
+                    <a href="{{ route('hasilvote') }}"
+                        class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
+                        Lihat Hasil Sementara
+                    </a>
+                </div>
+            </div>
+        @endforelse
+        </div>
     </div>
 
     <!-- Modal Konfirmasi -->
@@ -128,9 +194,9 @@
                         </div>
                     </div>
                 </div>
-                <div>
+                <div id="wakilWrapper">
                     <h4 id="wakilJbt" class="text-lg font-bold text-orange-700 mb-2"></h4>
-                    <div class="flex items-center p-4 border border-gray-200 rounded-lg shadow-sm">
+                    <div id="wakilSection" class="flex items-center p-4 border border-gray-200 rounded-lg shadow-sm">
                         <div class="flex-shrink-0 w-16 h-16 rounded-full overflow-hidden bg-gray-100 shadow-md">
                             <img src="" id="wakilFoto" alt="Foto Wakil" class="w-full h-full object-cover">
                         </div>
@@ -202,59 +268,51 @@
 
     @push('js')
     <script>
-        // Data paslon disimpan di variabel JS agar aman dari masalah karakter khusus di atribut HTML
-        var paslonData = @json($dataPaslon->map(function($paslon) {
-            return [
-                'ft_ketua' => Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::disk('gcs')->url($paslon->ft_ketua),
-                'nm_ketua' => $paslon->nm_ketua,
-                'npm_ketua' => (string)$paslon->npm_ketua,
-                'pd_ketua' => $paslon->pd_ketua,
-                'ang_ketua' => $paslon->ang_ketua,
-                'jbt_ketua' => $paslon->jbt_ketua,
-                'ft_wakil' => Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::disk('gcs')->url($paslon->ft_wakil),
-                'nm_wakil' => $paslon->nm_wakil,
-                'npm_wakil' => (string)$paslon->npm_wakil,
-                'pd_wakil' => $paslon->pd_wakil,
-                'ang_wakil' => $paslon->ang_wakil,
-                'jbt_wakil' => $paslon->jbt_wakil,
-                'visi' => $paslon->visi,
-                'misi' => $paslon->misi,
-            ];
-        })->values());
-
         let currentPaslonId = null;
 
         function confirmVote(paslonId) {
-            currentPaslonId = paslonId;
+            currentPaslonId = paslonId; // Simpan ID paslon yang dipilih
             document.getElementById('confirmModal').classList.remove('hidden');
         }
 
-        document.getElementById('confirmYes').onclick = function() {
-            document.getElementById('voteForm-' + currentPaslonId).submit();
-        };
+        const confirmYesButton = document.getElementById('confirmYes');
+        if (confirmYesButton) {
+            confirmYesButton.onclick = function() {
+                document.getElementById('voteForm-' + currentPaslonId).submit(); // Kirim formulir
+            };
+        }
 
         function closeConfirmModal() {
             document.getElementById('confirmModal').classList.add('hidden');
         }
 
-        function showDetailModal(index) {
-            var p = paslonData[index];
-            document.getElementById('ketuaFoto').src = p.ft_ketua;
-            document.getElementById('ketuaNama').innerText = p.nm_ketua;
-            document.getElementById('ketuaNPM').innerText = p.npm_ketua;
-            document.getElementById('ketuaProdi').innerText = p.pd_ketua;
-            document.getElementById('ketuaAngkatan').innerText = p.ang_ketua;
-            document.getElementById('ketuaJbt').innerText = p.jbt_ketua;
+        function showDetailModal(ketuaFoto, ketuaNama, ketuaNPM, ketuaProdi, ketuaAngkatan, ketuaJbt, wakilFoto, wakilNama, wakilNPM, wakilProdi, wakilAngkatan, wakilJbt, visi, misi) {
+            document.getElementById('ketuaNama').innerText = ketuaNama;
+            document.getElementById('ketuaFoto').src = ketuaFoto || '';
+            document.getElementById('ketuaNPM').innerText = ketuaNPM;
+            document.getElementById('ketuaProdi').innerText = ketuaProdi;
+            document.getElementById('ketuaAngkatan').innerText = ketuaAngkatan;
+            document.getElementById('ketuaJbt').innerText = ketuaJbt;
 
-            document.getElementById('wakilFoto').src = p.ft_wakil;
-            document.getElementById('wakilNama').innerText = p.nm_wakil;
-            document.getElementById('wakilNPM').innerText = p.npm_wakil;
-            document.getElementById('wakilProdi').innerText = p.pd_wakil;
-            document.getElementById('wakilAngkatan').innerText = p.ang_wakil;
-            document.getElementById('wakilJbt').innerText = p.jbt_wakil;
+            const hasWakil = Boolean(wakilNama);
+            const wakilSection = document.getElementById('wakilSection');
+            const wakilWrapper = document.getElementById('wakilWrapper');
+            if (hasWakil) {
+                wakilWrapper.classList.remove('hidden');
+                wakilSection.classList.remove('hidden');
+                document.getElementById('wakilNama').innerText = wakilNama;
+                document.getElementById('wakilFoto').src = wakilFoto || '';
+                document.getElementById('wakilNPM').innerText = wakilNPM || '-';
+                document.getElementById('wakilProdi').innerText = wakilProdi || '-';
+                document.getElementById('wakilAngkatan').innerText = wakilAngkatan || '-';
+                document.getElementById('wakilJbt').innerText = wakilJbt || 'Wakil';
+            } else {
+                wakilWrapper.classList.add('hidden');
+                wakilSection.classList.add('hidden');
+            }
 
-            document.getElementById('visi').innerText = p.visi;
-            document.getElementById('misi').innerText = p.misi;
+            document.getElementById('visi').innerText = visi;
+            document.getElementById('misi').innerText = misi;
 
             document.getElementById('modalDetail').classList.remove('hidden');
         }

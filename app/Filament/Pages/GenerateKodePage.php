@@ -11,7 +11,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\Hash;
 
 class GenerateKodePage extends Page implements HasForms
@@ -65,6 +65,19 @@ class GenerateKodePage extends Page implements HasForms
 
     public ?array $data = [];
 
+    public static function otpTimezone(): string
+    {
+        return (string) config('app.timezone', 'Asia/Jakarta');
+    }
+
+    public static function formatExpiryForDisplay(CarbonInterface $expiresAt): string
+    {
+        $localized = $expiresAt->copy()->setTimezone(self::otpTimezone());
+        $label = self::otpTimezone() === 'Asia/Jakarta' ? 'WIB' : $localized->format('T');
+
+        return trim($localized->format('H:i:s') . ' ' . $label);
+    }
+
     public function generateKode(): void
     {
         $data = $this->form->getState();
@@ -102,7 +115,7 @@ class GenerateKodePage extends Page implements HasForms
         $kode = PemiraConfig::generateOtpCode();
         
         // Ikuti timezone aplikasi agar display dan validasi login konsisten.
-        $expiresAt = now()->addMinutes(30);
+        $expiresAt = now(self::otpTimezone())->addMinutes(30);
 
         // Update password (hashed) dan expiration di database
         $pemilih->update([
@@ -116,12 +129,12 @@ class GenerateKodePage extends Page implements HasForms
         $this->result_nama = $pemilih->nama;
         $this->result_prodi = $pemilih->prodi;
         $this->result_kode = $kode;
-        $this->result_expires_at = $expiresAt->format('H:i:s') . ' WIB';
+        $this->result_expires_at = self::formatExpiryForDisplay($expiresAt);
         $this->result_minutes_left = 30;
 
         Notification::make()
             ->title('Kode OTP berhasil di-generate!')
-            ->body("Kode untuk {$pemilih->nama}: {$kode}\nBerlaku hingga: {$expiresAt->format('H:i:s')}")
+            ->body("Kode untuk {$pemilih->nama}: {$kode}\nBerlaku hingga: " . self::formatExpiryForDisplay($expiresAt))
             ->success()
             ->send();
     }
