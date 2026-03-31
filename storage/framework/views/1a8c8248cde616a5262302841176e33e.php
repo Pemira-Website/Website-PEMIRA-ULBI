@@ -1,33 +1,31 @@
-@extends('layouts.app')
-
-{{-- <body class="bg-gradient-to-r from-orange-200 to-blue-200 flex items-center justify-center"> --}}
-    @section('content')
+    <?php $__env->startSection('content'); ?>
     <div class="w-full max-w-5xl space-y-8">
         <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-            <a href="{{ route('menuvote', ['prodi' => $userProdi]) }}"
+            <a href="<?php echo e(route('menuvote', ['prodi' => $userProdi])); ?>"
                 class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-white border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 transition">
                 Kembali ke Menu Vote
             </a>
-            <a href="{{ route('hasilvote') }}"
+            <a href="<?php echo e(route('hasilvote')); ?>"
                 class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
                 Lihat Hasil Sementara
             </a>
         </div>
 
         <div class="space-y-10">
-        @forelse ($dataPaslon as $key => $paslon)
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $dataPaslon; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $paslon): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
         <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-black shadow-2xl rounded-3xl w-[800px] p-8 relative overflow-hidden">
             <div class="pointer-events-none absolute -top-10 -left-10 w-64 h-64 bg-gradient-to-tr from-blue-700 to-blue-500 opacity-20 blur-3xl"></div>
             <div class="pointer-events-none absolute -bottom-10 -right-10 w-72 h-72 bg-gradient-to-tr from-orange-600 to-orange-400 opacity-20 blur-3xl"></div>
         
             <div class="relative z-10 text-center mb-8">
                 <h2 class="text-4xl font-bold text-white tracking-wide uppercase drop-shadow-md">
-                    Paslon {{ $key + 1 }}
+                    Paslon <?php echo e($key + 1); ?>
+
                 </h2>
                 <p class="text-sm text-gray-400 italic mt-2">"Pilih pemimpin terbaik untuk masa depan"</p>
             </div>
         
-            @php
+            <?php
                 $ketuaFoto = filled($paslon->ft_ketua)
                     ? (Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::disk('gcs')->url($paslon->ft_ketua))
                     : null;
@@ -51,50 +49,50 @@
                     'visi' => $paslon->visi,
                     'misi' => $paslon->misi,
                 ];
-            @endphp
+            ?>
 
             <div
                 class="relative z-10 space-y-4"
                 data-detail-trigger="paslon-card"
-                data-detail='@json($detailPayload)'
+                data-detail='<?php echo json_encode($detailPayload, 15, 512) ?>'
             >
                 <div
                     class="flex justify-center items-start gap-16 cursor-pointer rounded-3xl focus:outline-none focus:ring-4 focus:ring-orange-400/60"
                     role="button"
                     tabindex="0"
-                    aria-label="Lihat detail profil paslon {{ $key + 1 }}"
+                    aria-label="Lihat detail profil paslon <?php echo e($key + 1); ?>"
                     onclick="showDetailModalFromTrigger(this.parentElement)"
                     onkeydown="handleDetailTriggerKeydown(event, this.parentElement)"
                 >
                 <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                     <div class="relative w-72 h-64 overflow-hidden">
-                        @if($ketuaFoto)
-                            <img src="{{ $ketuaFoto }}" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-                        @else
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($ketuaFoto): ?>
+                            <img src="<?php echo e($ketuaFoto); ?>" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        <?php else: ?>
                             <div class="w-full h-full flex items-center justify-center bg-slate-700 text-slate-200 font-semibold">Foto belum tersedia</div>
-                        @endif
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                     </div>
                     <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
-                        <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_ketua }}</span>
-                        <span class="block text-white font-extrabold text-xl mt-1">{{ $paslon->nm_ketua }}</span>
+                        <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest"><?php echo e($paslon->jbt_ketua); ?></span>
+                        <span class="block text-white font-extrabold text-xl mt-1"><?php echo e($paslon->nm_ketua); ?></span>
                     </div>
                 </div>
 
-                @if($hasWakil)
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($hasWakil): ?>
                     <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                         <div class="relative w-72 h-64 overflow-hidden">
-                            @if($wakilFoto)
-                                <img src="{{ $wakilFoto }}" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-                            @else
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($wakilFoto): ?>
+                                <img src="<?php echo e($wakilFoto); ?>" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                            <?php else: ?>
                                 <div class="w-full h-full flex items-center justify-center bg-slate-700 text-slate-200 font-semibold">Foto belum tersedia</div>
-                            @endif
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>
                         <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
-                            <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest">{{ $paslon->jbt_wakil }}</span>
-                            <span class="block text-white font-extrabold text-xl mt-1">{{ $paslon->nm_wakil }}</span>
+                            <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest"><?php echo e($paslon->jbt_wakil); ?></span>
+                            <span class="block text-white font-extrabold text-xl mt-1"><?php echo e($paslon->nm_wakil); ?></span>
                         </div>
                     </div>
-                @endif
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </div>
                 <p class="text-center text-sm font-medium text-orange-300">
                     Klik kartu paslon untuk lihat detail lengkap
@@ -102,46 +100,46 @@
             </div>
             <br>
             <div class="relative z-10 py-4 flex justify-center gap-6">
-                <form method="POST" action="{{ route('vote.add') }}" id="voteForm-{{ $paslon->id }}" class="hidden">
-                    @csrf
-                    <input type="hidden" name="paslon_id" value="{{ $paslon->id }}">
-                    <input type="hidden" name="jenis_vote" value="{{ $paslon->jenis_pemilihan }}">
+                <form method="POST" action="<?php echo e(route('vote.add')); ?>" id="voteForm-<?php echo e($paslon->id); ?>" class="hidden">
+                    <?php echo csrf_field(); ?>
+                    <input type="hidden" name="paslon_id" value="<?php echo e($paslon->id); ?>">
+                    <input type="hidden" name="jenis_vote" value="<?php echo e($paslon->jenis_pemilihan); ?>">
                 </form>
                 <button 
                     type="button"
                     class="text-white font-extrabold py-3 px-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 shadow-lg hover:shadow-xl hover:scale-105 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 transition-all duration-300"
-                    onclick="confirmVote({{ $paslon->id }})">
+                    onclick="confirmVote(<?php echo e($paslon->id); ?>)">
                     Vote Paslon
                 </button>
                 <button
                     type="button"
                     class="text-white font-extrabold py-3 px-10 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 shadow-lg hover:shadow-xl hover:scale-105 hover:bg-gradient-to-r hover:from-orange-400 hover:to-yellow-400 transition-all duration-300"
                     data-detail-trigger="paslon-button"
-                    data-detail='@json($detailPayload)'
+                    data-detail='<?php echo json_encode($detailPayload, 15, 512) ?>'
                     onclick="showDetailModalFromTrigger(this)">
                     Detail Profil
                 </button>
             </div>            
         </div>
         <br>
-        @empty
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <div class="bg-white shadow-lg rounded-2xl border border-slate-200 p-8 text-center space-y-4">
                 <h2 class="text-xl font-bold text-slate-800">Belum Ada Kandidat</h2>
                 <p class="text-slate-600">
                     Data pasangan calon untuk pemilihan ini belum tersedia. Silakan kembali ke menu utama atau cek hasil sementara.
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-3">
-                    <a href="{{ route('menuvote', ['prodi' => $userProdi]) }}"
+                    <a href="<?php echo e(route('menuvote', ['prodi' => $userProdi])); ?>"
                         class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-slate-700 text-white font-semibold hover:bg-slate-800 transition">
                         Kembali ke Menu Vote
                     </a>
-                    <a href="{{ route('hasilvote') }}"
+                    <a href="<?php echo e(route('hasilvote')); ?>"
                         class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
                         Lihat Hasil Sementara
                     </a>
                 </div>
             </div>
-        @endforelse
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
         </div>
     </div>
 
@@ -260,7 +258,7 @@
         </div>
     </div>
 
-    @if (session('error'))
+    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(session('error')): ?>
     <div id="errorModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
             <!-- Header -->
@@ -273,7 +271,7 @@
                 </button>
             </div>
             <div class="mt-4 text-gray-700">
-                <p>{{ session('error') }}</p>
+                <p><?php echo e(session('error')); ?></p>
             </div>
             <div class="mt-6 flex justify-end">
                 <button onclick="closeModalError()" class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition">
@@ -282,10 +280,10 @@
             </div>
         </div>
     </div>
-    @endif
-    @endsection
+    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+    <?php $__env->stopSection(); ?>
 
-    @push('js')
+    <?php $__env->startPush('js'); ?>
     <script>
         let currentPaslonId = null;
 
@@ -372,4 +370,6 @@
             document.getElementById('errorModal').classList.add('hidden');
         }
     </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Kegabutan\menyusahkan\pemira_26\resources\views/vote/paslon.blade.php ENDPATH**/ ?>

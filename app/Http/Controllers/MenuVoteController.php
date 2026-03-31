@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Paslon;
 use App\Models\Pemilih;
 use App\Support\PemiraConfig;
 use Illuminate\Support\Facades\Session;
@@ -36,10 +37,14 @@ class MenuVoteController extends Controller
         $presmaStatus = $pemilih->presma_status ?: ($pemilih->pml_presma ? Pemilih::STATUS_COMPLETED : Pemilih::STATUS_NOT_VOTED);
         $himaStatus = $pemilih->hima_status ?: ($pemilih->pml_hima ? Pemilih::STATUS_COMPLETED : Pemilih::STATUS_NOT_VOTED);
 
+        $himaType = PemiraConfig::himaForProdi($userProdi);
+        $showHima = filled($himaType) && Paslon::where('jenis_pemilihan', $himaType)->exists();
+
         // Kirim prodi ke view
         return view('menu_vote', [
             'prodi' => $userProdi,
-            'hima_type' => PemiraConfig::himaForProdi($userProdi),
+            'hima_type' => $himaType,
+            'show_hima' => $showHima,
             'presma_status' => $presmaStatus,
             'hima_status' => $himaStatus,
             'pml_presma' => Pemilih::isLockedVoteStatus($presmaStatus) ? 1 : 0,

@@ -1,7 +1,5 @@
-@extends('layouts.app')
-
-@section('content')
-    @php
+<?php $__env->startSection('content'); ?>
+    <?php
         $statusMap = [
             'not_voted' => [
                 'label' => 'Belum Memilih',
@@ -34,7 +32,7 @@
         $presmaLocked = \App\Models\Pemilih::isLockedVoteStatus($presma_status);
         $himaLocked = \App\Models\Pemilih::isLockedVoteStatus($hima_status);
         $allVotesLocked = $hasVisibleHimaVote ? ($presmaLocked && $himaLocked) : $presmaLocked;
-    @endphp
+    ?>
 
     <div class="w-full max-w-4xl space-y-6">
         <div class="bg-white/95 shadow-lg rounded-2xl p-6 border border-slate-200">
@@ -43,56 +41,58 @@
                 Pastikan status sudah sesuai sebelum meninggalkan halaman.
             </p>
 
-            <div class="grid gap-4 mt-4 {{ $hasVisibleHimaVote ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1' }}">
+            <div class="grid gap-4 mt-4 <?php echo e($hasVisibleHimaVote ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'); ?>">
                 <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">
                     <div class="flex items-center justify-between gap-3">
                         <p class="font-semibold text-slate-800">Presma</p>
-                        <span class="text-xs font-semibold px-3 py-1 rounded-full {{ $presmaMeta['badge'] }}">
-                            {{ $presmaMeta['label'] }}
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full <?php echo e($presmaMeta['badge']); ?>">
+                            <?php echo e($presmaMeta['label']); ?>
+
                         </span>
                     </div>
-                    <p class="text-sm text-slate-600 mt-2">{{ $presmaMeta['next'] }}</p>
+                    <p class="text-sm text-slate-600 mt-2"><?php echo e($presmaMeta['next']); ?></p>
                 </div>
 
-                @if ($hasVisibleHimaVote)
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($hasVisibleHimaVote): ?>
                     <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">
                         <div class="flex items-center justify-between gap-3">
                             <p class="font-semibold text-slate-800">HIMA</p>
-                            <span class="text-xs font-semibold px-3 py-1 rounded-full {{ $himaMeta['badge'] }}">
-                                {{ $himaMeta['label'] }}
+                            <span class="text-xs font-semibold px-3 py-1 rounded-full <?php echo e($himaMeta['badge']); ?>">
+                                <?php echo e($himaMeta['label']); ?>
+
                             </span>
                         </div>
-                        <p class="text-sm text-slate-600 mt-2">{{ $himaMeta['next'] }}</p>
+                        <p class="text-sm text-slate-600 mt-2"><?php echo e($himaMeta['next']); ?></p>
                     </div>
-                @endif
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </div>
         </div>
 
-        @if ($allVotesLocked)
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($allVotesLocked): ?>
             <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <p class="font-semibold text-blue-900">Seluruh hak suara Anda sudah terkunci.</p>
                     <p class="text-sm text-blue-700 mt-1">Anda bisa melihat hasil sementara atau logout dari sesi pemilih.</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('hasilvote') }}" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
+                    <a href="<?php echo e(route('hasilvote')); ?>" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
                         Lihat Hasil
                     </a>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
+                    <form method="POST" action="<?php echo e(route('logout')); ?>">
+                        <?php echo csrf_field(); ?>
                         <button type="submit" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-white border border-blue-300 text-blue-700 font-semibold hover:bg-blue-100 transition">
                             Logout
                         </button>
                     </form>
                 </div>
             </div>
-        @endif
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
         <div>
-            @include('hima.hima')
+            <?php echo $__env->make('hima.hima', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
         </div>
     </div>
-    @if (session('success'))
+    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(session('success')): ?>
         <div id="successModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
                 <div class="flex justify-between items-center border-b pb-3">
@@ -104,7 +104,7 @@
                     </button>
                 </div>
                 <div class="mt-4 text-gray-700">
-                    <p>{{ session('success') }}</p>
+                    <p><?php echo e(session('success')); ?></p>
                 </div>
                 <div class="mt-6 flex justify-end">
                     <button onclick="closeModal('successModal')" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition">
@@ -113,9 +113,9 @@
                 </div>
             </div>
         </div>
-    @endif
+    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-    @if (session('error'))
+    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(session('error')): ?>
         <div id="errorModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
                 <div class="flex justify-between items-center border-b pb-3">
@@ -127,7 +127,7 @@
                     </button>
                 </div>
                 <div class="mt-4 text-gray-700">
-                    <p>{{ session('error') }}</p>
+                    <p><?php echo e(session('error')); ?></p>
                 </div>
                 <div class="mt-6 flex justify-end">
                     <button onclick="closeModal('errorModal')" class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition">
@@ -136,10 +136,10 @@
                 </div>
             </div>
         </div>
-    @endif
-@endsection
+    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
     <script>
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
@@ -148,4 +148,6 @@
             }
         }
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Kegabutan\menyusahkan\pemira_26\resources\views/menu_vote.blade.php ENDPATH**/ ?>
