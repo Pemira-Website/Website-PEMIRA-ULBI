@@ -75,21 +75,29 @@ class LiveChart extends Component
                 // Formatting numbers to 01, 02 etc.
                 $labels[] = str_pad($paslon->paslon_ke, 2, '0', STR_PAD_LEFT);
                 $votes[] = (int) $paslon->total_vote;
-                
-                // Get the image paths properly via GCS Storage disk
-                $ketuaUrl = filled($paslon->ft_ketua)
+
+                $isWithdrawn = (bool) $paslon->is_withdrawn;
+
+                // Slot yang mundur tetap muncul di hasil, tapi tanpa identitas kandidat.
+                $ketuaUrl = !$isWithdrawn && filled($paslon->ft_ketua)
                     ? (Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : \Illuminate\Support\Facades\Storage::disk('gcs')->url($paslon->ft_ketua))
                     : null;
-                $wakilUrl = filled($paslon->ft_wakil)
+                $wakilUrl = !$isWithdrawn && filled($paslon->ft_wakil)
                     ? (Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : \Illuminate\Support\Facades\Storage::disk('gcs')->url($paslon->ft_wakil))
                     : null;
-                
+
                 $images[] = [
                     'ketua' => $ketuaUrl,
                     'wakil' => $wakilUrl,
-                    'has_wakil' => filled($paslon->nm_wakil),
+                    'has_wakil' => !$isWithdrawn && filled($paslon->nm_wakil),
                 ];
-                
+
+                if ($isWithdrawn) {
+                    $colors[] = 'rgba(148, 163, 184, 0.85)';
+                    $borderColors[] = 'rgb(100, 116, 139)';
+                    continue;
+                }
+
                 $colorIndex = $index % count($colorPalette);
                 $colors[] = $colorPalette[$colorIndex][0];
                 $borderColors[] = $colorPalette[$colorIndex][1];

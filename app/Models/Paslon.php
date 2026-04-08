@@ -29,12 +29,14 @@ class Paslon extends Model
         'visi',
         'misi',
         'jenis_pemilihan',
+        'is_withdrawn',
         'total_vote',
     ];
 
     // Tipe data bawaan untuk casting atribut tertentu
     protected $casts = [
         'total_vote' => 'integer',
+        'is_withdrawn' => 'boolean',
     ];
 
     /**

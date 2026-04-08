@@ -25,6 +25,26 @@ class PaslonDetailViewTest extends TestCase
         $response->assertSee('data-detail-trigger="paslon-card"', false);
     }
 
+    public function test_withdrawn_paslon_is_rendered_as_empty_slot(): void
+    {
+        $pemilih = $this->createPemilih([
+            'npm' => '440001',
+        ]);
+        $this->createPaslon('presma', [
+            'is_withdrawn' => true,
+        ]);
+
+        $response = $this->withSession([
+            'npm' => $pemilih->npm,
+            'prodi' => $pemilih->prodi,
+        ])->get(route('vote.show', ['jenis_pemilihan' => 'presma']));
+
+        $response->assertOk();
+        $response->assertSee('Kotak Kosong');
+        $response->assertSee('Tidak Bisa Dipilih');
+        $response->assertDontSee('data-detail-trigger="paslon-card"', false);
+    }
+
     private function createPemilih(array $overrides = []): Pemilih
     {
         return Pemilih::create(array_merge([

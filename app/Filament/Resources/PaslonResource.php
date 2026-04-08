@@ -97,6 +97,10 @@ class PaslonResource extends Resource
                 Forms\Components\Select::make('jenis_pemilihan') // Menjadikan jenis_pemilihan enum
                     ->options(PemiraConfig::voteTypes())
                     ->required(),
+                Forms\Components\Toggle::make('is_withdrawn')
+                    ->label('Paslon Mengundurkan Diri')
+                    ->helperText('Jika diaktifkan, slot nomor urut tetap tampil sebagai kotak kosong dan tidak bisa dipilih.')
+                    ->default(false),
                 Forms\Components\TextInput::make('total_vote')
                     ->label('Total Vote (Sistem)')
                     ->numeric()
@@ -151,6 +155,9 @@ class PaslonResource extends Resource
                     ->placeholder('-'),
                 Tables\Columns\TextColumn::make('jenis_pemilihan')
                     ->searchable(),
+                Tables\Columns\IconColumn::make('is_withdrawn')
+                    ->label('Mundur')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('total_vote')
                     ->numeric()
                     ->sortable(),

@@ -135,6 +135,34 @@ class VoteFlowTest extends TestCase
         $this->assertSame(Pemilih::STATUS_PENDING, $pemilih->presma_status);
     }
 
+    public function test_rejects_vote_for_withdrawn_paslon(): void
+    {
+        $pemilih = $this->createPemilih([
+            'npm' => '220005',
+            'jenis_pemilihan' => 'presma,himatif',
+        ]);
+        $withdrawnPaslon = $this->createPaslon('presma', [
+            'is_withdrawn' => true,
+        ]);
+
+        Queue::fake();
+        $this->clearVoteThrottle($pemilih->npm);
+
+        $response = $this->from('/vote/presma')
+            ->withSession([
+                'npm' => $pemilih->npm,
+                'prodi' => $pemilih->prodi,
+            ])
+            ->post(route('vote.add'), [
+                'paslon_id' => $withdrawnPaslon->id,
+                'jenis_vote' => 'presma',
+            ]);
+
+        $response->assertRedirect('/vote/presma');
+        $response->assertSessionHasErrors(['paslon_id']);
+        Queue::assertNothingPushed();
+    }
+
     public static function lockedPresmaStatusesProvider(): array
     {
         return [

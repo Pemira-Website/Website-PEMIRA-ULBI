@@ -61,6 +61,10 @@ class StoreVoteRequest extends FormRequest
                     $validator->errors()->add('paslon_id', 'Paslon tidak sesuai dengan jenis vote.');
                 }
 
+                if ($paslon && $paslon->is_withdrawn) {
+                    $validator->errors()->add('paslon_id', 'Paslon ini sudah mengundurkan diri dan slotnya dikosongkan.');
+                }
+
                 $allowedVotes = array_filter(
                     array_map('trim', explode(',', (string) $pemilih->jenis_pemilihan))
                 );
