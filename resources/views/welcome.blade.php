@@ -234,7 +234,7 @@
         <!-- Logo & Description -->
         <div class="md:col-span-2">
           <div class="flex items-center mb-6">
-            <img src="{{ asset('images/pemira.png') }}" 
+            <img src="https://github.com/user-attachments/assets/c56a3643-4779-4fb7-95fd-b31f6b1b1db7" 
                  alt="Logo PEMIRA" 
                  class="w-12 h-12 mr-3"
                  loading="lazy">
