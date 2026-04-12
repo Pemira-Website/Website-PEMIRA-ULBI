@@ -135,7 +135,7 @@ class VoteFlowTest extends TestCase
         $this->assertSame(Pemilih::STATUS_PENDING, $pemilih->presma_status);
     }
 
-    public function test_rejects_vote_for_withdrawn_paslon(): void
+    public function test_allows_vote_for_withdrawn_paslon_slot(): void
     {
         $pemilih = $this->createPemilih([
             'npm' => '220005',
@@ -158,9 +158,15 @@ class VoteFlowTest extends TestCase
                 'jenis_vote' => 'presma',
             ]);
 
-        $response->assertRedirect('/vote/presma');
-        $response->assertSessionHasErrors(['paslon_id']);
-        Queue::assertNothingPushed();
+        $response->assertRedirect(route('menuvote', ['prodi' => $pemilih->prodi]));
+        $response->assertSessionHas('success');
+
+        Queue::assertPushed(ProcessVote::class, function (ProcessVote $job) use ($pemilih, $withdrawnPaslon) {
+            return $job->pemilih_id === $pemilih->id
+                && $job->paslon_id === $withdrawnPaslon->id
+                && $job->jenisVote === 'presma'
+                && $job->himaType === 'himatif';
+        });
     }
 
     public static function lockedPresmaStatusesProvider(): array

@@ -12,114 +12,151 @@
         </div>
 
         <div class="space-y-10">
-        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $dataPaslon; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $paslon): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $dataPaslon; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $paslon): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+        <?php
+            $isWithdrawn = (bool) $paslon->is_withdrawn;
+            $paslonNumber = str_pad((string) $paslon->paslon_ke, 2, '0', STR_PAD_LEFT);
+        ?>
         <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-black shadow-2xl rounded-3xl w-[800px] p-8 relative overflow-hidden">
             <div class="pointer-events-none absolute -top-10 -left-10 w-64 h-64 bg-gradient-to-tr from-blue-700 to-blue-500 opacity-20 blur-3xl"></div>
             <div class="pointer-events-none absolute -bottom-10 -right-10 w-72 h-72 bg-gradient-to-tr from-orange-600 to-orange-400 opacity-20 blur-3xl"></div>
         
             <div class="relative z-10 text-center mb-8">
                 <h2 class="text-4xl font-bold text-white tracking-wide uppercase drop-shadow-md">
-                    Paslon <?php echo e($key + 1); ?>
+                    Paslon <?php echo e($paslonNumber); ?>
 
                 </h2>
-                <p class="text-sm text-gray-400 italic mt-2">"Pilih pemimpin terbaik untuk masa depan"</p>
+                <p class="text-sm text-gray-400 italic mt-2">
+                    <?php echo e($isWithdrawn ? 'Slot nomor urut ini dikosongkan.' : '"Pilih pemimpin terbaik untuk masa depan"'); ?>
+
+                </p>
             </div>
         
-            <?php
-                $ketuaFoto = filled($paslon->ft_ketua)
-                    ? (Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::disk('gcs')->url($paslon->ft_ketua))
-                    : null;
-                $wakilFoto = filled($paslon->ft_wakil)
-                    ? (Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::disk('gcs')->url($paslon->ft_wakil))
-                    : null;
-                $hasWakil = filled($paslon->nm_wakil);
-                $detailPayload = [
-                    'ketuaFoto' => $ketuaFoto,
-                    'ketuaNama' => $paslon->nm_ketua,
-                    'ketuaNPM' => (string) $paslon->npm_ketua,
-                    'ketuaProdi' => $paslon->pd_ketua,
-                    'ketuaAngkatan' => $paslon->ang_ketua,
-                    'ketuaJbt' => $paslon->jbt_ketua,
-                    'wakilFoto' => $wakilFoto,
-                    'wakilNama' => $paslon->nm_wakil,
-                    'wakilNPM' => (string) $paslon->npm_wakil,
-                    'wakilProdi' => $paslon->pd_wakil,
-                    'wakilAngkatan' => $paslon->ang_wakil,
-                    'wakilJbt' => $paslon->jbt_wakil,
-                    'visi' => $paslon->visi,
-                    'misi' => $paslon->misi,
-                ];
-            ?>
-
-            <div
-                class="relative z-10 space-y-4"
-                data-detail-trigger="paslon-card"
-                data-detail='<?php echo json_encode($detailPayload, 15, 512) ?>'
-            >
-                <div
-                    class="flex justify-center items-start gap-16 cursor-pointer rounded-3xl focus:outline-none focus:ring-4 focus:ring-orange-400/60"
-                    role="button"
-                    tabindex="0"
-                    aria-label="Lihat detail profil paslon <?php echo e($key + 1); ?>"
-                    onclick="showDetailModalFromTrigger(this.parentElement)"
-                    onkeydown="handleDetailTriggerKeydown(event, this.parentElement)"
-                >
-                <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
-                    <div class="relative w-72 h-64 overflow-hidden">
-                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($ketuaFoto): ?>
-                            <img src="<?php echo e($ketuaFoto); ?>" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-                        <?php else: ?>
-                            <div class="w-full h-full flex items-center justify-center bg-slate-700 text-slate-200 font-semibold">Foto belum tersedia</div>
-                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($isWithdrawn): ?>
+                <div class="relative z-10 space-y-6">
+                    <div class="rounded-[2rem] border-2 border-dashed border-slate-500/70 bg-slate-900/60 px-8 py-12 text-center">
+                        <div class="mx-auto flex h-32 w-32 items-center justify-center rounded-full border border-dashed border-slate-400 text-slate-300">
+                            <span class="text-5xl font-black">?</span>
+                        </div>
+                        <h3 class="mt-6 text-3xl font-extrabold uppercase tracking-[0.35em] text-slate-200">Kotak Kosong</h3>
+                        <p class="mt-4 text-base text-slate-300">
+                            Pasangan calon untuk nomor urut <?php echo e($paslonNumber); ?> mengundurkan diri.
+                        </p>
+                        <p class="mt-2 text-sm text-slate-400">
+                            Slot ini sengaja dibiarkan kosong agar nomor urut paslon lain tidak berubah.
+                        </p>
                     </div>
-                    <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
-                        <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest"><?php echo e($paslon->jbt_ketua); ?></span>
-                        <span class="block text-white font-extrabold text-xl mt-1"><?php echo e($paslon->nm_ketua); ?></span>
+                    <div class="flex justify-center">
+                        <form method="POST" action="<?php echo e(route('vote.add')); ?>" id="voteForm-<?php echo e($paslon->id); ?>" class="hidden">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="paslon_id" value="<?php echo e($paslon->id); ?>">
+                            <input type="hidden" name="jenis_vote" value="<?php echo e($paslon->jenis_pemilihan); ?>">
+                        </form>
+                        <button
+                            type="button"
+                            class="rounded-full bg-gradient-to-r from-blue-600 to-blue-500 px-10 py-3 font-extrabold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-blue-500 hover:to-blue-400 hover:shadow-xl"
+                            onclick="confirmVote(<?php echo e($paslon->id); ?>)">
+                            Vote Kotak Kosong
+                        </button>
                     </div>
                 </div>
+            <?php else: ?>
+                <?php
+                    $ketuaFoto = filled($paslon->ft_ketua)
+                        ? (Str::startsWith($paslon->ft_ketua, 'http') ? $paslon->ft_ketua : Storage::disk('gcs')->url($paslon->ft_ketua))
+                        : null;
+                    $wakilFoto = filled($paslon->ft_wakil)
+                        ? (Str::startsWith($paslon->ft_wakil, 'http') ? $paslon->ft_wakil : Storage::disk('gcs')->url($paslon->ft_wakil))
+                        : null;
+                    $hasWakil = filled($paslon->nm_wakil);
+                    $detailPayload = [
+                        'ketuaFoto' => $ketuaFoto,
+                        'ketuaNama' => $paslon->nm_ketua,
+                        'ketuaNPM' => (string) $paslon->npm_ketua,
+                        'ketuaProdi' => $paslon->pd_ketua,
+                        'ketuaAngkatan' => $paslon->ang_ketua,
+                        'ketuaJbt' => $paslon->jbt_ketua,
+                        'wakilFoto' => $wakilFoto,
+                        'wakilNama' => $paslon->nm_wakil,
+                        'wakilNPM' => (string) $paslon->npm_wakil,
+                        'wakilProdi' => $paslon->pd_wakil,
+                        'wakilAngkatan' => $paslon->ang_wakil,
+                        'wakilJbt' => $paslon->jbt_wakil,
+                        'visi' => $paslon->visi,
+                        'misi' => $paslon->misi,
+                    ];
+                ?>
 
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($hasWakil): ?>
+                <div
+                    class="relative z-10 space-y-4"
+                    data-detail-trigger="paslon-card"
+                    data-detail='<?php echo json_encode($detailPayload, 15, 512) ?>'
+                >
+                    <div
+                        class="flex justify-center items-start gap-16 cursor-pointer rounded-3xl focus:outline-none focus:ring-4 focus:ring-orange-400/60"
+                        role="button"
+                        tabindex="0"
+                        aria-label="Lihat detail profil paslon <?php echo e($paslonNumber); ?>"
+                        onclick="showDetailModalFromTrigger(this.parentElement)"
+                        onkeydown="handleDetailTriggerKeydown(event, this.parentElement)"
+                    >
                     <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                         <div class="relative w-72 h-64 overflow-hidden">
-                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($wakilFoto): ?>
-                                <img src="<?php echo e($wakilFoto); ?>" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($ketuaFoto): ?>
+                                <img src="<?php echo e($ketuaFoto); ?>" alt="Foto ketua" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                             <?php else: ?>
                                 <div class="w-full h-full flex items-center justify-center bg-slate-700 text-slate-200 font-semibold">Foto belum tersedia</div>
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>
                         <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
-                            <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest"><?php echo e($paslon->jbt_wakil); ?></span>
-                            <span class="block text-white font-extrabold text-xl mt-1"><?php echo e($paslon->nm_wakil); ?></span>
+                            <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest"><?php echo e($paslon->jbt_ketua); ?></span>
+                            <span class="block text-white font-extrabold text-xl mt-1"><?php echo e($paslon->nm_ketua); ?></span>
                         </div>
                     </div>
-                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($hasWakil): ?>
+                        <div class="group relative bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
+                            <div class="relative w-72 h-64 overflow-hidden">
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($wakilFoto): ?>
+                                    <img src="<?php echo e($wakilFoto); ?>" alt="Foto Wakil" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                <?php else: ?>
+                                    <div class="w-full h-full flex items-center justify-center bg-slate-700 text-slate-200 font-semibold">Foto belum tersedia</div>
+                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                            </div>
+                            <div class="text-center py-4 bg-gradient-to-b from-orange-800 to-orange-700">
+                                <span class="block text-orange-400 font-bold text-sm uppercase tracking-widest"><?php echo e($paslon->jbt_wakil); ?></span>
+                                <span class="block text-white font-extrabold text-xl mt-1"><?php echo e($paslon->nm_wakil); ?></span>
+                            </div>
+                        </div>
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                    </div>
+                    <p class="text-center text-sm font-medium text-orange-300">
+                        Klik kartu paslon untuk lihat detail lengkap
+                    </p>
                 </div>
-                <p class="text-center text-sm font-medium text-orange-300">
-                    Klik kartu paslon untuk lihat detail lengkap
-                </p>
-            </div>
-            <br>
-            <div class="relative z-10 py-4 flex justify-center gap-6">
-                <form method="POST" action="<?php echo e(route('vote.add')); ?>" id="voteForm-<?php echo e($paslon->id); ?>" class="hidden">
-                    <?php echo csrf_field(); ?>
-                    <input type="hidden" name="paslon_id" value="<?php echo e($paslon->id); ?>">
-                    <input type="hidden" name="jenis_vote" value="<?php echo e($paslon->jenis_pemilihan); ?>">
-                </form>
-                <button 
-                    type="button"
-                    class="text-white font-extrabold py-3 px-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 shadow-lg hover:shadow-xl hover:scale-105 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 transition-all duration-300"
-                    onclick="confirmVote(<?php echo e($paslon->id); ?>)">
-                    Vote Paslon
-                </button>
-                <button
-                    type="button"
-                    class="text-white font-extrabold py-3 px-10 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 shadow-lg hover:shadow-xl hover:scale-105 hover:bg-gradient-to-r hover:from-orange-400 hover:to-yellow-400 transition-all duration-300"
-                    data-detail-trigger="paslon-button"
-                    data-detail='<?php echo json_encode($detailPayload, 15, 512) ?>'
-                    onclick="showDetailModalFromTrigger(this)">
-                    Detail Profil
-                </button>
-            </div>            
+                <br>
+                <div class="relative z-10 py-4 flex justify-center gap-6">
+                    <form method="POST" action="<?php echo e(route('vote.add')); ?>" id="voteForm-<?php echo e($paslon->id); ?>" class="hidden">
+                        <?php echo csrf_field(); ?>
+                        <input type="hidden" name="paslon_id" value="<?php echo e($paslon->id); ?>">
+                        <input type="hidden" name="jenis_vote" value="<?php echo e($paslon->jenis_pemilihan); ?>">
+                    </form>
+                    <button 
+                        type="button"
+                        class="text-white font-extrabold py-3 px-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 shadow-lg hover:shadow-xl hover:scale-105 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 transition-all duration-300"
+                        onclick="confirmVote(<?php echo e($paslon->id); ?>)">
+                        Vote Paslon
+                    </button>
+                    <button
+                        type="button"
+                        class="text-white font-extrabold py-3 px-10 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 shadow-lg hover:shadow-xl hover:scale-105 hover:bg-gradient-to-r hover:from-orange-400 hover:to-yellow-400 transition-all duration-300"
+                        data-detail-trigger="paslon-button"
+                        data-detail='<?php echo json_encode($detailPayload, 15, 512) ?>'
+                        onclick="showDetailModalFromTrigger(this)">
+                        Detail Profil
+                    </button>
+                </div>
+            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
         </div>
         <br>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

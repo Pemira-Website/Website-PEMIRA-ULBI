@@ -41,7 +41,7 @@ class PaslonDetailViewTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Kotak Kosong');
-        $response->assertSee('Tidak Bisa Dipilih');
+        $response->assertSee('Vote Kotak Kosong');
         $response->assertDontSee('data-detail-trigger="paslon-card"', false);
     }
 

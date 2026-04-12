@@ -48,11 +48,16 @@
                         </p>
                     </div>
                     <div class="flex justify-center">
+                        <form method="POST" action="{{ route('vote.add') }}" id="voteForm-{{ $paslon->id }}" class="hidden">
+                            @csrf
+                            <input type="hidden" name="paslon_id" value="{{ $paslon->id }}">
+                            <input type="hidden" name="jenis_vote" value="{{ $paslon->jenis_pemilihan }}">
+                        </form>
                         <button
                             type="button"
-                            disabled
-                            class="cursor-not-allowed rounded-full bg-slate-600/70 px-10 py-3 font-extrabold text-slate-200 opacity-80">
-                            Tidak Bisa Dipilih
+                            class="rounded-full bg-gradient-to-r from-blue-600 to-blue-500 px-10 py-3 font-extrabold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-blue-500 hover:to-blue-400 hover:shadow-xl"
+                            onclick="confirmVote({{ $paslon->id }})">
+                            Vote Kotak Kosong
                         </button>
                     </div>
                 </div>
