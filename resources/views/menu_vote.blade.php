@@ -29,11 +29,14 @@
         $presmaMeta = $statusMap[$presma_status] ?? $defaultStatus;
         $himaMeta = $statusMap[$hima_status] ?? $defaultStatus;
         $isSpecialHima = \App\Support\PemiraConfig::isSpecialHima($hima_type);
+        $showPresma = $show_presma ?? true;
         $showHima = $show_hima ?? false;
         $hasVisibleHimaVote = $showHima && ! $isSpecialHima;
         $presmaLocked = \App\Models\Pemilih::isLockedVoteStatus($presma_status);
         $himaLocked = \App\Models\Pemilih::isLockedVoteStatus($hima_status);
-        $allVotesLocked = $hasVisibleHimaVote ? ($presmaLocked && $himaLocked) : $presmaLocked;
+        $allVotesLocked = ($showPresma || $hasVisibleHimaVote)
+            && (! $showPresma || $presmaLocked)
+            && (! $hasVisibleHimaVote || $himaLocked);
     @endphp
 
     <div class="w-full max-w-4xl space-y-6">
@@ -43,16 +46,18 @@
                 Pastikan status sudah sesuai sebelum meninggalkan halaman.
             </p>
 
-            <div class="grid gap-4 mt-4 {{ $hasVisibleHimaVote ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1' }}">
-                <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">
-                    <div class="flex items-center justify-between gap-3">
-                        <p class="font-semibold text-slate-800">Presma</p>
-                        <span class="text-xs font-semibold px-3 py-1 rounded-full {{ $presmaMeta['badge'] }}">
-                            {{ $presmaMeta['label'] }}
-                        </span>
+            <div class="grid gap-4 mt-4 {{ $showPresma && $hasVisibleHimaVote ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1' }}">
+                @if ($showPresma)
+                    <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">
+                        <div class="flex items-center justify-between gap-3">
+                            <p class="font-semibold text-slate-800">Presma</p>
+                            <span class="text-xs font-semibold px-3 py-1 rounded-full {{ $presmaMeta['badge'] }}">
+                                {{ $presmaMeta['label'] }}
+                            </span>
+                        </div>
+                        <p class="text-sm text-slate-600 mt-2">{{ $presmaMeta['next'] }}</p>
                     </div>
-                    <p class="text-sm text-slate-600 mt-2">{{ $presmaMeta['next'] }}</p>
-                </div>
+                @endif
 
                 @if ($hasVisibleHimaVote)
                     <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">

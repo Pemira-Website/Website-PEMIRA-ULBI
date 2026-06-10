@@ -31,7 +31,7 @@ Route::get('/hasilvote', function () {
             ->toArray();
 
         $orderedTypes = array_values(array_intersect(
-            array_keys(PemiraConfig::voteTypes()),
+            PemiraConfig::publicResultTypes(),
             $availableTypes
         ));
 

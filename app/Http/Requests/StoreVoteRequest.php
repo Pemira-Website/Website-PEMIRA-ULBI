@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Paslon;
 use App\Models\Pemilih;
+use App\Support\PemiraConfig;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -27,7 +28,7 @@ class StoreVoteRequest extends FormRequest
             'jenis_vote' => [
                 'required',
                 'string',
-                Rule::in(array_keys(config('pemira.vote_types', []))),
+                Rule::in(PemiraConfig::enabledVoteTypes()),
             ],
         ];
     }

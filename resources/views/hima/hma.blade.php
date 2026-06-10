@@ -7,7 +7,7 @@
     <div class="flex-grow text-center">
         <span class="text-blue-800 text-3xl font-extrabold drop-shadow-md shadow-blue-600/50">Ketua Hma</span>
         <br>
-        <span class="text-blue-800 font-semibold">Periode 2025/2026</span>
+        <span class="text-blue-800 font-semibold">Periode {{ \App\Support\PemiraConfig::period() }}</span>
     </div>
     <button class="text-blue-600 font-extrabold py-2 px-6 rounded-full bg-yellow-400 hover:scale-110 hover:bg-yellow-300 duration-300">
         <a href="{{ $pml_hima > 0 ? '#' : route('vote.show', ['jenis_pemilihan' => 'hma']) }}" 

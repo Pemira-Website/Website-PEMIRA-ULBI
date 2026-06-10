@@ -35,6 +35,10 @@ class VoteController extends Controller
         $user = Session::get('prodi');
         $jenisVote = (string) $request->validated('jenis_vote');
 
+        if (!PemiraConfig::isVoteTypeEnabled($jenisVote)) {
+            return redirect()->back()->with('error', 'Jenis pemilihan sedang tidak aktif.');
+        }
+
         // Parse jenis_pemilihan (format: "presma,himatif" atau single value)
         $allowedVotes = array_map('trim', explode(',', $jenisPemilihanRaw));
         
@@ -100,7 +104,8 @@ class VoteController extends Controller
 
                 $lockedPemilih->presma_status = Pemilih::STATUS_PENDING;
                 $lockedPemilih->save();
-                $willBeFinished = Pemilih::isLockedVoteStatus($himaStatus);
+                $willBeFinished = !PemiraConfig::isVoteTypeEnabled($himaType)
+                    || Pemilih::isLockedVoteStatus($himaStatus);
                 return;
             }
 
@@ -114,7 +119,8 @@ class VoteController extends Controller
 
                 $lockedPemilih->hima_status = Pemilih::STATUS_PENDING;
                 $lockedPemilih->save();
-                $willBeFinished = Pemilih::isLockedVoteStatus($presmaStatus);
+                $willBeFinished = !PemiraConfig::isVoteTypeEnabled('presma')
+                    || Pemilih::isLockedVoteStatus($presmaStatus);
                 return;
             }
 

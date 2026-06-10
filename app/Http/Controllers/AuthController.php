@@ -45,28 +45,7 @@ class AuthController extends Controller
 
             $normalizedProdi = PemiraConfig::normalizeProdi($user->prodi);
 
-            // Parse jenis_pemilihan (format: "presma,himatif")
-            $allowedVotes = array_map('trim', explode(',', $user->jenis_pemilihan));
-            
-            // Get hima type (non-presma value)
-            $himaType = null;
-            foreach ($allowedVotes as $vote) {
-                if ($vote !== 'presma') {
-                    $himaType = $vote;
-                    break;
-                }
-            }
-
-            // Check special programs (only 1 vote allowed)
-            if (PemiraConfig::isSpecialHima($himaType) && Pemilih::isLockedVoteStatus($user->presma_status)) {
-                return redirect()->back()->withErrors(['error' => 'Anda sudah menggunakan hak suara Anda.']);
-            }
-
-            // Check if total_vote sudah mencapai 2
-            if (
-                Pemilih::isLockedVoteStatus($user->presma_status)
-                && Pemilih::isLockedVoteStatus($user->hima_status)
-            ) {
+            if (PemiraConfig::hasCompletedEnabledVotes($user)) {
                 return redirect()->back()->withErrors(['error' => 'Anda sudah menggunakan hak suara Anda.']);
             }
 

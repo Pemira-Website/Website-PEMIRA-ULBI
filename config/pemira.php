@@ -67,6 +67,22 @@ return [
         'hmmi' => 'Himpunan - HMMI',
     ],
 
+    'period' => env('PEMIRA_PERIOD', '2026/2027'),
+
+    /*
+    | Jenis pemilihan yang sementara dibuka dan hasilnya dipublikasikan.
+    | Nilai dipisahkan koma, contoh: presma,himatif
+    */
+    'enabled_vote_types' => array_values(array_filter(array_map(
+        'trim',
+        explode(',', env('PEMIRA_ENABLED_VOTE_TYPES', 'himatif'))
+    ))),
+
+    'public_result_types' => array_values(array_filter(array_map(
+        'trim',
+        explode(',', env('PEMIRA_PUBLIC_RESULT_TYPES', 'himatif'))
+    ))),
+
     /*
     |--------------------------------------------------------------------------
     | Result Visibility Mode

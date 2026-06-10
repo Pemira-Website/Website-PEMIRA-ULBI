@@ -11,6 +11,13 @@ class MenuVoteVisibilityTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['pemira.enabled_vote_types' => array_keys(config('pemira.vote_types'))]);
+    }
+
     public function test_hima_section_is_hidden_when_hima_has_no_paslon(): void
     {
         $pemilih = $this->createPemilih([

@@ -38,12 +38,16 @@ class MenuVoteController extends Controller
         $himaStatus = $pemilih->hima_status ?: ($pemilih->pml_hima ? Pemilih::STATUS_COMPLETED : Pemilih::STATUS_NOT_VOTED);
 
         $himaType = PemiraConfig::himaForProdi($userProdi);
-        $showHima = filled($himaType) && Paslon::where('jenis_pemilihan', $himaType)->exists();
+        $showPresma = PemiraConfig::isVoteTypeEnabled('presma');
+        $showHima = filled($himaType)
+            && PemiraConfig::isVoteTypeEnabled($himaType)
+            && Paslon::where('jenis_pemilihan', $himaType)->exists();
 
         // Kirim prodi ke view
         return view('menu_vote', [
             'prodi' => $userProdi,
             'hima_type' => $himaType,
+            'show_presma' => $showPresma,
             'show_hima' => $showHima,
             'presma_status' => $presmaStatus,
             'hima_status' => $himaStatus,

@@ -15,6 +15,13 @@ class VoteFlowTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['pemira.enabled_vote_types' => array_keys(config('pemira.vote_types'))]);
+    }
+
     public function test_rejects_tampered_payload_when_paslon_type_does_not_match_jenis_vote(): void
     {
         $pemilih = $this->createPemilih([

@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use App\Models\Pemilih;
+
 class PemiraConfig
 {
     public static function normalizeProdi(?string $prodi): ?string
@@ -65,19 +67,69 @@ class PemiraConfig
         return config('pemira.vote_types', []);
     }
 
+    public static function period(): string
+    {
+        return (string) config('pemira.period', '2026/2027');
+    }
+
+    public static function enabledVoteTypes(): array
+    {
+        return array_values(array_intersect(
+            array_keys(self::voteTypes()),
+            config('pemira.enabled_vote_types', [])
+        ));
+    }
+
+    public static function publicResultTypes(): array
+    {
+        return array_values(array_intersect(
+            array_keys(self::voteTypes()),
+            config('pemira.public_result_types', [])
+        ));
+    }
+
+    public static function isVoteTypeEnabled(?string $voteType): bool
+    {
+        return filled($voteType) && in_array($voteType, self::enabledVoteTypes(), true);
+    }
+
+    public static function hasCompletedEnabledVotes(Pemilih $pemilih): bool
+    {
+        $enabledVotes = array_values(array_intersect(
+            $pemilih->getAllowedVoteTypes(),
+            self::enabledVoteTypes()
+        ));
+
+        if ($enabledVotes === []) {
+            return false;
+        }
+
+        foreach ($enabledVotes as $voteType) {
+            $status = $voteType === 'presma'
+                ? $pemilih->presma_status
+                : $pemilih->hima_status;
+
+            if (!Pemilih::isLockedVoteStatus($status)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static function allowedVoteTypesForProdi(?string $prodi): array
     {
         $hima = self::himaForProdi($prodi);
 
         if ($hima === null) {
-            return ['presma'];
+            $allowedTypes = ['presma'];
+        } elseif (self::isSpecialHima($hima)) {
+            $allowedTypes = ['presma'];
+        } else {
+            $allowedTypes = ['presma', $hima];
         }
 
-        if (self::isSpecialHima($hima)) {
-            return ['presma'];
-        }
-
-        return ['presma', $hima];
+        return array_values(array_intersect($allowedTypes, self::enabledVoteTypes()));
     }
 
     public static function resultVisibilityMode(): string

@@ -11,6 +11,13 @@ class PaslonDetailViewTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['pemira.enabled_vote_types' => array_keys(config('pemira.vote_types'))]);
+    }
+
     public function test_paslon_profile_card_renders_clickable_detail_trigger(): void
     {
         $pemilih = $this->createPemilih();

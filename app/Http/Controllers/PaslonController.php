@@ -27,10 +27,9 @@ class PaslonController extends Controller
             return redirect()->route('login')->with('error', 'Data pemilih tidak ditemukan. Silakan login ulang.');
         }
 
-        $voteTypes = array_keys(PemiraConfig::voteTypes());
-        if (!in_array($jenis_pemilihan, $voteTypes, true)) {
+        if (!PemiraConfig::isVoteTypeEnabled($jenis_pemilihan)) {
             return redirect()->route('menuvote', ['prodi' => $userProdi])
-                ->with('error', 'Jenis pemilihan tidak tersedia.');
+                ->with('error', 'Jenis pemilihan sedang tidak aktif.');
         }
 
         // Presma bisa diakses semua prodi

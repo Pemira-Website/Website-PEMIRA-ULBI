@@ -1,5 +1,7 @@
 <div class="space-y-8 w-full max-w-2xl">
-    @include('presma.presma')
+    @if ($show_presma ?? true)
+        @include('presma.presma')
+    @endif
 
     @if (($show_hima ?? false) && $hima_type && \Illuminate\Support\Facades\View::exists('hima.' . $hima_type))
         @include('hima.' . $hima_type)

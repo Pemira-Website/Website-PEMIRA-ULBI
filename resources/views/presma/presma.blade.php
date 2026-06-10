@@ -11,7 +11,7 @@
             Presma Kema ULBI
         </span>                   
         <br>
-        <span class="text-gray-200 font-semibold">Periode 2025/2026</span>
+        <span class="text-gray-200 font-semibold">Periode {{ \App\Support\PemiraConfig::period() }}</span>
     </div>
     <button 
     class="text-white font-extrabold py-2 px-6 rounded-full bg-orange-600 hover:bg-orange-500 hover:scale-110 duration-300">
