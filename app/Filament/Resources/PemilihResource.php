@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PemilihResource\Pages;
 use App\Filament\Resources\PemilihResource\RelationManagers;
 use App\Models\Pemilih;
+use App\Models\User;
 use App\Support\PemiraConfig;
 use Carbon\Carbon;
 use Filament\Forms;
@@ -20,6 +21,11 @@ class PemilihResource extends Resource
     protected static ?string $model = Pemilih::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    public static function canAccess(): bool
+    {
+        return auth()->user() instanceof User && auth()->user()->isSuperAdmin();
+    }
 
     public static function form(Form $form): Form
     {

@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\UserResource\Pages;
+use App\Models\User;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+
+class UserResource extends Resource
+{
+    protected static ?string $model = User::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+
+    protected static ?string $navigationLabel = 'Akun Admin';
+
+    protected static ?string $modelLabel = 'Akun Admin';
+
+    protected static ?string $pluralModelLabel = 'Akun Admin';
+
+    protected static ?string $navigationGroup = 'Pengaturan';
+
+    public static function canAccess(): bool
+    {
+        return auth()->user() instanceof User && auth()->user()->isSuperAdmin();
+    }
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->label('Nama')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->label('Email')
+                    ->email()
+                    ->required()
+                    ->unique(ignoreRecord: true)
+                    ->maxLength(255),
+                Forms\Components\Select::make('role')
+                    ->label('Role')
+                    ->options([
+                        User::ROLE_ADMIN => 'Admin',
+                        User::ROLE_SUPER_ADMIN => 'Super Admin',
+                    ])
+                    ->required()
+                    ->disabled(fn (?User $record): bool => $record?->is(auth()->user()) ?? false)
+                    ->default(User::ROLE_ADMIN),
+                Forms\Components\TextInput::make('password')
+                    ->label('Password')
+                    ->password()
+                    ->revealable()
+                    ->required(fn (string $operation): bool => $operation === 'create')
+                    ->dehydrated(fn (?string $state): bool => filled($state))
+                    ->maxLength(255),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nama')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('role')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => $state === User::ROLE_SUPER_ADMIN ? 'Super Admin' : 'Admin')
+                    ->color(fn (string $state): string => $state === User::ROLE_SUPER_ADMIN ? 'danger' : 'info'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Dibuat')
+                    ->dateTime()
+                    ->sortable(),
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->hidden(fn (User $record): bool => $record->is(auth()->user())),
+            ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListUsers::route('/'),
+            'create' => Pages\CreateUser::route('/create'),
+            'edit' => Pages\EditUser::route('/{record}/edit'),
+        ];
+    }
+}

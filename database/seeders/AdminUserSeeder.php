@@ -16,6 +16,7 @@ class AdminUserSeeder extends Seeder
             ['email' => 'admin@pemira.com'],
             [
                 'name' => 'Admin PEMIRA',
+                'role' => User::ROLE_SUPER_ADMIN,
                 'password' => bcrypt('pemira2026'),
             ]
         );

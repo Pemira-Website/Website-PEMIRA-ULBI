@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Pemilih;
+use App\Models\User;
 use App\Support\PemiraConfig;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -41,6 +42,14 @@ class GenerateKodePage extends Page implements HasForms
     public function mount(): void
     {
         $this->form->fill();
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+
+        return $user instanceof User
+            && in_array($user->role, [User::ROLE_ADMIN, User::ROLE_SUPER_ADMIN], true);
     }
 
     public function form(Form $form): Form

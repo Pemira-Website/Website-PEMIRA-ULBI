@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaslonResource\Pages;
 use App\Models\Paslon;
+use App\Models\User;
 use App\Support\PemiraConfig;
 use Filament\Forms;
 use Filament\Resources\Resource;
@@ -14,6 +15,11 @@ class PaslonResource extends Resource
     protected static ?string $model = Paslon::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
+
+    public static function canAccess(): bool
+    {
+        return auth()->user() instanceof User && auth()->user()->isSuperAdmin();
+    }
 
     public static function form(Forms\Form $form): Forms\Form
     {
